@@ -1,0 +1,634 @@
+{
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_api_version",
+                "description": "Returns the semantic version of the API.\n\nResponse: string with semantic version, or an error message if backend is not configured.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_collections",
+                "description": "Lists available data collections.\n\nResponse: JSON object listing available collections",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_collection_summary",
+                "description": "Returns the number of posts and harvesting start/end dates for a collection.\n\nParams:\n- collection: The collection name, such as \"twitter\"\n\nResponse: { startDate: ISO date, endDate: ISO date, count: integer }",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "aggregate_by_time",
+                "description": "Returns aggregate counts or sentiment by time.\nThe date interval cannot be greater than 365 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection: The collection name\n- aggregation_level: One of [day, month]\n- startdate: The start date (YYYY-MM-DD)\n- enddate: The end date (YYYY-MM-DD)\n- sentiment: If true, aggregate sentiment instead of counts\n- request: The FastMCP request object containing headers.\n\nResponse: list of buckets with time period and value(s).",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "aggregation_level": {
+                            "title": "Aggregation Level",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "title": "Enddate",
+                            "type": "string"
+                        },
+                        "sentiment": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": false,
+                            "title": "Sentiment",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "aggregation_level",
+                        "startdate",
+                        "enddate"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "aggregate_seasonality",
+                "description": "Returns aggregate counts or sentiment by seasonality (day of week or hour of day).\nThe date interval cannot be greater than 365 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- aggregationLevel (one of [dayofweek, hourofday])\n- startdate (the date is expressed as YYYY-MM-DD)\n- enddate (the date is expressed as YYYY-MM-DD)\n- sentiment (optional, if true, returns sentiment aggregates instead of counts)\n\nResponse: list of buckets keyed by seasonality group with values.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "aggregation_level": {
+                            "title": "Aggregation Level",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "title": "Enddate",
+                            "type": "string"
+                        },
+                        "sentiment": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": false,
+                            "title": "Sentiment",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "aggregation_level",
+                        "startdate",
+                        "enddate"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "analyze_terms_in_collection",
+                "description": "Returns an analysis of terms in a collection.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- startdate (the date is expressed as YYYY-MM-DD)\n- enddate (the date is expressed as YYYY-MM-DD)\n\nResponse: JSON object with term frequencies across the filtered range.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Enddate",
+                            "type": "string"
+                        },
+                        "limit": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "bookmark": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Bookmark",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_all_terms",
+                "description": "Returns available stemmed terms and aggregated counts in a date range.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- startdate (the date is expressed as YYYY-MM-DD),\n- enddate (the date is expressed as YYYY-MM-DD)\n\nResponse: JSON object containing a \"terms\" field with aggregated term counts.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "title": "Enddate",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "startdate",
+                        "enddate"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_term_daily_counts",
+                "description": "Returns daily counts for specific terms in a collection.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- terms (comma-separated list of terms)\n- startdate (optional, the date is expressed as YYYY-MM-DD)\n- enddate  (optional, the date is expressed as YYYY-MM-DD)\n\nResponse: JSON object with a \"terms\" field, each term containing daily time series.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "terms": {
+                            "title": "Terms",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Enddate",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "terms"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_nlp_terms_for_day",
+                "description": "Returns NLP terms analysis for a specific date.\n\nParams:\n- collection\n- date (the date is expressed as YYYY-MM-DD)\n\nResponse: JSON object with term metrics for the day.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "day": {
+                            "title": "Day",
+                            "type": "string"
+                        },
+                        "limit": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "bookmark": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Bookmark",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "day"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_nlp_term_analysis",
+                "description": "Returns detailed NLP analysis for a specific term on a specific date.\n\nParams:\n- collection\n- date (the date is expressed as YYYY-MM-DD)\n- term\n\nResponse: JSON object with detailed metrics for the term on the date.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "day": {
+                            "title": "Day",
+                            "type": "string"
+                        },
+                        "term": {
+                            "title": "Term",
+                            "type": "string"
+                        },
+                        "limit": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "bookmark": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Bookmark",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "day",
+                        "term"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_nlp_topics",
+                "description": "Returns topic clusters with top terms in a date range.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- startdate (the date is expressed as YYYY-MM-DD)\n- enddate (the date is expressed as YYYY-MM-DD)\n\nResponse: list of days; each day includes topic clusters with size and top terms.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "title": "Enddate",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "startdate",
+                        "enddate"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_topic_groupings",
+                "description": "Returns topic groupings network for a date range with optional threshold.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- startdate (the date is expressed as YYYY-MM-DD)\n- enddate (the date is expressed as YYYY-MM-DD)\n- threshold (optional, integer to prune edges)\n\nResponse: JSON graph structure (nodes/edges) representing topic similarity.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "title": "Enddate",
+                            "type": "string"
+                        },
+                        "threshold": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Threshold",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "startdate",
+                        "enddate"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_nlp_metadata",
+                "description": "Returns metadata for NLP models used in a collection, optionally scoped to a date range.\nThe date interval cannot be greater than 28 days.\nThe end date of the interval must not exceed yesterday's date\n\nParams:\n- collection\n- startdate (the date is expressed as YYYY-MM-DD)\n- enddate (the date is expressed as YYYY-MM-DD)\n\nResponse: list of metadata objects describing topic modelling configuration (e.g., model, version, parameters).",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "startdate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Startdate",
+                            "type": "string"
+                        },
+                        "enddate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Enddate",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "text_search",
+                "description": "Performs full-text search on a collection using a Lucene query and returns the total number of results.\n\nParams:\n- collection\n- query (the fields that can be used in the Lucene query are:\n    [text (social; media post text), language (post language), date (post creation timestamp, in UTC), author (post author's handle), hashtags (list of hashtags associated with the post)]).\n\nResponse: count of total results.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "collection": {
+                            "title": "Collection",
+                            "type": "string"
+                        },
+                        "query": {
+                            "title": "Query",
+                            "type": "string"
+                        },
+                        "limit": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Limit",
+                            "type": "integer"
+                        },
+                        "bookmark": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Bookmark",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "collection",
+                        "query"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "generate_chart",
+                "description": "Draws a chart using the JSON QuickChart schema and returns an URL to its bitmap image.\n\nParams:\n- chart (the chart configuration as a JSON object that follows the QuickChart schema - required)\n- width (the width of the chart in pixels - default 200)\n- height (the height of the chart in pixels - default 150)\n- format (the output format ('png', 'jpg', 'svg', 'webp') - default 'png')\n- backgroundColor (the background color of the chart - optional)\n\nResponse: Returns URL to the generated chart image",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "chart": {
+                            "additionalProperties": true,
+                            "title": "Chart",
+                            "type": "object"
+                        },
+                        "width": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": 200,
+                            "title": "Width",
+                            "type": "integer"
+                        },
+                        "height": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": 150,
+                            "title": "Height",
+                            "type": "integer"
+                        },
+                        "format": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": "png",
+                            "title": "Format",
+                            "type": "string"
+                        },
+                        "backgroundColor": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null,
+                            "title": "Backgroundcolor",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "chart"
+                    ]
+                }
+            }
+        }
+    ]
+}

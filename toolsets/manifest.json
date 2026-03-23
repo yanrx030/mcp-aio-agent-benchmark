@@ -1,0 +1,20 @@
+// under development, not final version!
+{
+    "experiment_id": "aio_benchmark_v1",
+    "description": "30-task MCP benchmark for AIO",
+    "task_count": 30,
+    "runs_per_model": 3,
+    "models": [
+        "openai/gpt-5",
+        "anthropic/claude-3.7",
+        "qwen/qwen3"
+    ],
+    "metrics": [
+        "task_completion_rate",
+        "invocation_parameter_accuracy",
+        "execution_success_rate",
+        "orchestration_depth",
+        "latency",
+        "pass_at_k"
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "id": "task-test",
+    "query": "How many Reddit posts are currently available in the database from January to March 2025?",
+    "category": 1,
+    "gold_invocations": [
+        {
+            "tool_name": "aggregate_by_time",
+            "params": {
+                "collection": "reddit",
+                "aggregation_level": "month",
+                "startdate": "2025-01-01",
+                "enddate": "2025-03-31",
+                "sentiment": false
+            }
+        }
+    ]
+}
