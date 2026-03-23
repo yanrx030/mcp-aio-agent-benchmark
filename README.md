@@ -1,16 +1,15 @@
-***run the project
+\*\*\*run the project
 
 uv run --env-file .env main.py
-
-
-
+uv run --env-file .env manual_ground_truth_collector.py
 
 Tool: aggregate_by_time
-   Returns aggregate counts or sentiment by time.
+Returns aggregate counts or sentiment by time.
 The date interval cannot be greater than 365 days.
 The end date of the interval must not exceed yesterday's date
 
 Params:
+
 - collection: The collection name
 - aggregation_level: One of [day, month]
 - startdate: The start date (YYYY-MM-DD)

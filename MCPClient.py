@@ -385,13 +385,32 @@ class MCPClient:
     #         if tool.description:
     #             print(f"   {tool.description}")
 
+    def get_tool_parameters(self, tool_name: str) -> dict:
+        """Retrieve the parameters for a specific tool."""
+        if not hasattr(self, "mcp_raw_tool_map"):
+            raise RuntimeError("Tools not loaded. Call load_tools(toolset_path) first.")
 
-    
+        tool = self.mcp_raw_tool_map.get(tool_name)
+        if not tool:
+            raise ValueError(f"Tool '{tool_name}' not found in the loaded toolset.")
+
+        input_schema = tool.get("inputSchema", {}).get("properties", {})
+        parameters = {
+            param: {
+                "description": details.get("description", "No description available"),
+                "type": details.get("type", "unknown")
+            }
+            for param, details in input_schema.items()
+        }
+        return parameters
 
 
-        
 
 
-    
 
-    
+
+
+
+
+
+
