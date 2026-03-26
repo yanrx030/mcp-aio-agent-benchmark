@@ -1,0 +1,388 @@
+{
+  "generated_at": "2026-03-25T11:04:46Z",
+  "source_csv": "task\\benchmark task.csv",
+  "summary": {
+    "total_tasks": 7,
+    "completed_tasks": 7,
+    "failed_tasks": 0,
+    "placeholder_matches": 2,
+    "placeholder_review_required": 5
+  },
+  "results": [
+    {
+      "task_id": "1",
+      "prompt": "How many Twitter posts used the hashtag #auspol during first quarter 2023?",
+      "status": "completed",
+      "started_at": "2026-03-25T10:58:54Z",
+      "finished_at": "2026-03-25T10:59:35Z",
+      "query_trace": {
+        "query_id": "query_fea389b1f55b",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "1",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "How many Twitter posts used the hashtag #auspol during first quarter 2023?",
+        "final_answer": "During the first quarter of 2023 (January 1 – March 31), there were **91,002** Twitter posts that included the hashtag **#auspol**.",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 12282,
+        "output_tokens": 610,
+        "total_tokens": 12892,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\1.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "91002",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "twitter",
+            "query": "hashtags:\"auspol\" AND date:[2023-01-01T00:00:00Z TO 2023-03-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "2",
+      "prompt": "How many English-language Mastodon posts mention unimelb in 2025?",
+      "status": "completed",
+      "started_at": "2026-03-25T10:59:35Z",
+      "finished_at": "2026-03-25T11:00:15Z",
+      "query_trace": {
+        "query_id": "query_c813496bd3e2",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "2",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "How many English-language Mastodon posts mention unimelb in 2025?",
+        "final_answer": "In the Mastodon collection, there are **20 English‑language posts** that mention “unimelb” and were created in 2025 (from 2025‑01‑01 up to today’s date).",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 12278,
+        "output_tokens": 724,
+        "total_tokens": 13002,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\2.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "34",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "mastodon",
+            "query": "text:\"unimelb\" AND language:en AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "3",
+      "prompt": "Can you find the number of posts by @AlboMP that mention 'renewable energy' in twitter?",
+      "status": "completed",
+      "started_at": "2026-03-25T11:00:15Z",
+      "finished_at": "2026-03-25T11:00:34Z",
+      "query_trace": {
+        "query_id": "query_ee21ec5f2831",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "3",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "Can you find the number of posts by @AlboMP that mention 'renewable energy' in twitter?",
+        "final_answer": "The search for tweets from**@AlboMP** that contain the phrase **“renewable energy”** returned **30,415** matching posts.",
+        "total_steps": 2,
+        "total_tool_calls": 1,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "text_search"
+        ],
+        "input_tokens": 8108,
+        "output_tokens": 373,
+        "total_tokens": 8481,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\3.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "65",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "twitter",
+            "query": "author:\"@AlboMP\" AND text:\"renewable energy\"",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "4",
+      "prompt": "Add together the number of Reddit and Twitter posts mentioning unemployment in June 2023.",
+      "status": "completed",
+      "started_at": "2026-03-25T11:00:34Z",
+      "finished_at": "2026-03-25T11:01:14Z",
+      "query_trace": {
+        "query_id": "query_1c355a2a288d",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "4",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "Add together the number of Reddit and Twitter posts mentioning unemployment in June 2023.",
+        "final_answer": "The number of Reddit posts mentioning unemployment in June 2023 was **22**, and the number of Twitter posts was **0**. Adding them together gives a total of **22** posts.",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "text_search"
+        ],
+        "input_tokens": 12322,
+        "output_tokens": 835,
+        "total_tokens": 13157,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\4.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_match",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "22",
+        "expected_tool_call_count": 2,
+        "expected_tool_calls": [
+          {
+            "collection": "twitter",
+            "query": "text:\"unemployment\" AND date:[2023-06-01T00:00:00Z TO 2023-06-30T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "reddit",
+            "query": "text:\"unemployment\" AND date:[2023-06-01T00:00:00Z TO 2023-06-30T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": true
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "5",
+      "prompt": "Calculate the total volume of posts mentioning 'inflation' across all available collections for 2025",
+      "status": "completed",
+      "started_at": "2026-03-25T11:01:14Z",
+      "finished_at": "2026-03-25T11:02:57Z",
+      "query_trace": {
+        "query_id": "query_335babca41cf",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "5",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "Calculate the total volume of posts mentioning 'inflation' across all available collections for 2025",
+        "final_answer": "I searched each available collection for posts containing the term **inflation** from January 1 2025 through August 26 2025 (the most recent date for which data is available). The counts returned were:\n\n| Collection | Posts mentioning “inflation” |\n|------------|-----------------------------|\n| Bluesky    | 63,248 |\n| GDELT      | 67,349 |\n| Flickr     | 2 |\n| Mastodon   | 13,659 |\n| Reddit     | 932 |\n| Twitter    | 0 |\n| YouTube    | 249 |\n\n**Total volume:** 63,248 + 67,349 + 2 + 13,659 + 932 + 0 + 249 = **145,439 posts**.\n\n*Note: The search covers the portion of 2025 for which data is currently available (up to 2025‑08‑26). If you need the full‑year total once more data is ingested, the same query can be re‑run for the complete date range.*",
+        "total_steps": 9,
+        "total_tool_calls": 8,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 39367,
+        "output_tokens": 2824,
+        "total_tokens": 42191,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\5.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "193205",
+        "expected_tool_call_count": 7,
+        "expected_tool_calls": [
+          {
+            "collection": "gdelt",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "bluesky",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "twitter",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "mastodon",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "flickr",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "reddit",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          },
+          {
+            "collection": "youtube",
+            "query": "text:\"inflation\" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "6",
+      "prompt": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+      "status": "completed",
+      "started_at": "2026-03-25T11:02:57Z",
+      "finished_at": "2026-03-25T11:04:12Z",
+      "query_trace": {
+        "query_id": "query_2d1f748741a0",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "6",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+        "final_answer": "In February 2024, there were **102 Bluesky posts** that mentioned either “bulk billing” or “Medicare”.",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 12293,
+        "output_tokens": 611,
+        "total_tokens": 12904,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\6.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_match",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "102",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "bluesky",
+            "query": "date:[2024-02-01T00:00:00Z TO 2024-02-29T23:59:59Z] AND (text:\"bulk billing\" OR text:\"Medicare\")",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": true
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "7",
+      "prompt": "How many Bluesky posts in 2024 mentioned ??cost of living?? and did not mention mortgage?",
+      "status": "completed",
+      "started_at": "2026-03-25T11:04:12Z",
+      "finished_at": "2026-03-25T11:04:46Z",
+      "query_trace": {
+        "query_id": "query_507b2f316051",
+        "task_set_id": "taskset_20260325T105853Z_1a437a",
+        "task_id": "7",
+        "session_id": "session_d39c7b51f306",
+        "user_query": "How many Bluesky posts in 2024 mentioned ??cost of living?? and did not mention mortgage?",
+        "final_answer": "There were **35,045,826** Bluesky posts in 2024 that mentioned the phrase \"cost of living\" and did **not** mention the word \"mortgage\".",
+        "total_steps": 2,
+        "total_tool_calls": 1,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "text_search"
+        ],
+        "input_tokens": 8135,
+        "output_tokens": 438,
+        "total_tokens": 8573,
+        "query_runs_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260325T105853Z_1a437a\\tool_calls\\7.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "4195",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "bluesky",
+            "query": "date:[2024-01-01T00:00:00Z TO 2024-12-31T23:59:59Z] AND text:\"cost of living\" AND NOT text:\"mortgage\"",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    }
+  ]
+}

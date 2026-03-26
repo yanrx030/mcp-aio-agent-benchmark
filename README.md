@@ -1,7 +1,12 @@
 \*\*\*run the project
 
-uv run --env-file .env main.py
+
 uv run --env-file .env manual_ground_truth_collector.py
+uv run --env-file .env main.py --prompt "How many Reddit posts are currently available in the database from January to March 2025?"
+uv run --env-file .env main.py --limit 2
+uv run --env-file .env main.py --task-id 1 --task-id 4
+uv run --env-file .env main.py --prompt "How many Reddit posts are currently available in the database from January to March 2025?"
+
 
 Tool: aggregate_by_time
 Returns aggregate counts or sentiment by time.

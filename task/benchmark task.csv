@@ -1,0 +1,89 @@
+task_id,prompt,note,ground_truth_tool_call,ground_truth,aux_toolset,core_toolset,category,source_scope,temporal_req,complexity,feasibility
+1,How many Twitter posts used the hashtag #auspol during first quarter 2023?,,"{
+  ""collection"": ""twitter"",
+  ""query"": ""hashtags:\""auspol\"" AND date:[2023-01-01T00:00:00Z TO 2023-03-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+}",91002,,text_search,B,single,Fixed interval,single,supported
+2,How many English-language Mastodon posts mention unimelb in 2025?,,"{
+  ""collection"": ""mastodon"",
+  ""query"": ""text:\""unimelb\"" AND language:en AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+}",34,,text_search,B,single,Fixed interval,single,supported
+3,Can you find the number of posts by @AlboMP that mention 'renewable energy' in twitter?,,"{
+  ""collection"": ""twitter"",
+  ""query"": ""author:\""@AlboMP\"" AND text:\""renewable energy\"""",
+  ""limit"": null,
+  ""bookmark"": null
+}",65,,text_search,B,single,None,single,supported
+4,Add together the number of Reddit and Twitter posts mentioning unemployment in June 2023.,"twitter=0, 
+reddit = 22, 
+so total = 22","{
+  ""collection"": ""twitter"",
+  ""query"": ""text:\""unemployment\"" AND date:[2023-06-01T00:00:00Z TO 2023-06-30T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""reddit"",
+  ""query"": ""text:\""unemployment\"" AND date:[2023-06-01T00:00:00Z TO 2023-06-30T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+}",22,,text_search,B,multi,Fixed interval,multi,supported
+5,Calculate the total volume of posts mentioning 'inflation' across all available collections for 2025,"gdelt = 96753
+reddit = 1187
+bluesky = 75904
+flickr = 0
+mastodon = 19212
+twitter = 0
+youtube = 149
+
+so total =193205","{
+  ""collection"": ""gdelt"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""bluesky"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""twitter"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""mastodon"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""flickr"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""reddit"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+},{
+  ""collection"": ""youtube"",
+  ""query"": ""text:\""inflation\"" AND date:[2025-01-01T00:00:00Z TO 2025-12-31T23:59:59Z]"",
+  ""limit"": null,
+  ""bookmark"": null
+}",193205,get_collection_summary,"text_search,
+get_collections",B,multi,Fixed interval,multi,supported
+6,Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.,,"{
+  ""collection"": ""bluesky"",
+  ""query"": ""date:[2024-02-01T00:00:00Z TO 2024-02-29T23:59:59Z] AND (text:\""bulk billing\"" OR text:\""Medicare\"")"",
+  ""limit"": null,
+  ""bookmark"": null
+}",102,,text_search,B,single,Fixed interval,single,supported
+7,How many Bluesky posts in 2024 mentioned ??cost of living?? and did not mention mortgage?,,"{
+  ""collection"": ""bluesky"",
+  ""query"": ""date:[2024-01-01T00:00:00Z TO 2024-12-31T23:59:59Z] AND text:\""cost of living\"" AND NOT text:\""mortgage\"""",
+  ""limit"": null,
+  ""bookmark"": null
+}",4195,,text_search,B,single,Fixed interval,single,supported

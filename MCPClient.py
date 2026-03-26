@@ -3,6 +3,7 @@ from contextlib import AsyncExitStack
 import json
 import time
 
+from constraint_validator import has_explicit_constraints, validate_tool_arguments
 from eval_logger import JSONLLogger, utc_now_iso
 from mcp_result_analyzer import analyze_tool_result
 from mcp import ClientSession
@@ -28,9 +29,15 @@ class MCPClient:
     LOGIN_URL = "https://api.aio.eresearch.unimelb.edu.au/login"
     MCP_URL = "https://mcp.aio.eresearch.unimelb.edu.au/mcp"
     
-    def __init__(self, auth_key: str, openrouter_api_key: str, openrouter_model: str):
+    def __init__(
+        self,
+        auth_key: str,
+        openrouter_api_key: str,
+        openrouter_model: str,
+        logger: JSONLLogger | None = None,
+    ):
         self.auth_key = auth_key
-        self.logger = JSONLLogger()
+        self.logger = logger or JSONLLogger()
         self.session_id = self.logger.new_session_id()
 
         self.jwt_token: Optional[str] = None
@@ -50,6 +57,11 @@ class MCPClient:
 
         # Conversation memory for LLM side
         self.messages: list[dict[str, Any]] = []
+        self.system_prompt = (
+            "You are a tool-using assistant. "
+            "When you need server data, call the provided tools with valid JSON arguments. "
+            "If helpful, briefly state your next action in one short sentence before using tools."
+        )
 
     
     def prepare_headers(self):
@@ -168,26 +180,41 @@ class MCPClient:
             self.mcp_raw_tool_map[name] = t
 
 
-    async def process_query(self, query: str) -> str:
+    async def process_query(
+        self,
+        query: str,
+        *,
+        task_id: str | None = None,
+        return_trace: bool = False,
+    ) -> str | dict[str, Any]:
         """Process a user query and log query-level and tool-level behavior."""
-        max_steps = 10  # safety to prevent infinite loops; adjust as needed
+        max_steps = 20  # safety to prevent infinite loops; adjust as needed
         if not self.session:
             raise RuntimeError("Not connected to MCP server. Call connect_to_server() first.")
 
         query_record = self.logger.build_query_run(
             query_id=self.logger.new_query_id(),
+            task_id=task_id,
             session_id=self.session_id,
             user_query=query,
             model=self.model,
             toolset_id=getattr(self, "toolset_id", None),
         )
         query_id = query_record.query_id
+        total_steps = 0
         tool_call_count = 0
+        schema_valid_true_count = 0
+        ccr_applicable_calls = 0
+        ccr_true_calls = 0
         final_answer = ""
         tools_used: list[str] = []
         input_tokens = 0
         output_tokens = 0
         total_tokens = 0
+        query_status = "completed"
+        query_error_type: str | None = None
+        query_error_message: str | None = None
+        messages: list[dict[str, Any]] = [{"role": "system", "content": self.system_prompt}]
 
         def add_usage(resp: Any) -> None:
             nonlocal input_tokens, output_tokens, total_tokens
@@ -199,25 +226,14 @@ class MCPClient:
             total_tokens += int(getattr(usage, "total_tokens", 0) or 0)
         
         try:
-            # System prompt: keep it short; you can later replace with your benchmark prompt template.
-            if not self.messages:
-                self.messages.append(
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a tool-using assistant. "
-                            "When you need server data, call the provided tools with valid JSON arguments. "
-                            "If helpful, briefly state your next action in one short sentence before using tools."
-                        ),
-                    }
-                )
-            self.messages.append({"role": "user", "content": query})
+            messages.append({"role": "user", "content": query})
 
             # Step loop: model may call tool(s), then we execute, then model may call again, etc.
             for step in range(1, max_steps + 1):
+                total_steps = step
                 resp = self.llm.chat.completions.create(
                     model=self.model,
-                    messages=self.messages,
+                    messages=messages,
                     tools=self.openai_tools_all
                 )
                 add_usage(resp)
@@ -228,12 +244,12 @@ class MCPClient:
 
                 msg = resp.choices[0].message
                 # Save assistant message to history (important for tool_call_id linking)
-                self.messages.append(msg.model_dump())
+                messages.append(msg.model_dump())
 
                 # If no tool calls, we're done.
                 if not msg.tool_calls:
                     final_answer = msg.content or ""
-                    return final_answer
+                    break
 
                 # Execute all tool calls in this message
                 for tc in msg.tool_calls:
@@ -244,6 +260,7 @@ class MCPClient:
                     raw_args = tc.function.arguments or "{}"
                     tool_record = self.logger.build_tool_call(
                         query_id=query_id,
+                        task_id=task_id,
                         tool_name=tool_name,
                         step_index=step,
                         tool_call_id=tc.id,
@@ -263,15 +280,19 @@ class MCPClient:
                     except Exception as e:
                         tool_record.parse_success = False
                         tool_record.schema_valid = False
-                        tool_record.constraint_valid = False
-                        tool_record.ipa_pass = False
+                        tool_record.schema_errors = ["Tool arguments must be valid JSON."]
+                        if has_explicit_constraints(tool_name):
+                            tool_record.constraint_valid = False
+                            ccr_applicable_calls += 1
+                        else:
+                            tool_record.constraint_valid = None
                         tool_record.output_schema_valid = None
                         tool_record.failure_stage = "parse"
                         tool_record.error_type = type(e).__name__
                         tool_record.error_message = str(e)
 
                         err_text = f"Tool arguments JSON parse failed for {tool_name}: {e}. raw={raw_args}"
-                        self.messages.append(
+                        messages.append(
                             {
                                 "role": "tool",
                                 "tool_call_id": tc.id,
@@ -282,10 +303,20 @@ class MCPClient:
                         self.logger.log_tool_call(tool_record)
                         continue
 
-                    # Schema/constraint validation is not wired yet; keep the fields explicit in the logs.
-                    tool_record.schema_valid = None
-                    tool_record.constraint_valid = None
-                    tool_record.ipa_pass = None
+                    validation = validate_tool_arguments(
+                        tool_name=tool_name,
+                        arguments=tool_args,
+                        openai_tool_def=self.openai_tool_map.get(tool_name),
+                    )
+                    tool_record.schema_valid = validation.schema_valid
+                    tool_record.schema_errors = validation.schema_errors
+                    tool_record.constraint_valid = validation.constraint_valid
+                    if tool_record.schema_valid is True:
+                        schema_valid_true_count += 1
+                    if has_explicit_constraints(tool_name):
+                        ccr_applicable_calls += 1
+                        if tool_record.constraint_valid is True:
+                            ccr_true_calls += 1
 
                     # Call MCP tool
                     t0 = time.time()
@@ -317,7 +348,7 @@ class MCPClient:
                             )
 
                         # Append tool result to messages
-                        self.messages.append(
+                        messages.append(
                             {
                                 "role": "tool",
                                 "tool_call_id": tc.id,
@@ -336,7 +367,7 @@ class MCPClient:
 
                         # Tool execution error
                         err_text = f"MCP tool call failed: {tool_name} args={tool_args} error={e}"
-                        self.messages.append(
+                        messages.append(
                             {
                                 "role": "tool",
                                 "tool_call_id": tc.id,
@@ -348,25 +379,72 @@ class MCPClient:
                         self.logger.log_tool_call(tool_record)
 
             # If we hit max_steps, ask model to summarize anyway (no more tool calling).
-            final = self.llm.chat.completions.create(
-                model=self.model,
-                messages=self.messages,
-            )
-            add_usage(final)
-            if not final or not getattr(final, "choices", None):
-                raise RuntimeError(
-                    f"LLM returned no choices during final summarization for model={self.model}"
+            if not final_answer:
+                final = self.llm.chat.completions.create(
+                    model=self.model,
+                    messages=messages,
                 )
-            final_msg = final.choices[0].message
-            self.messages.append(final_msg.model_dump())
-            final_answer = final_msg.content or ""
+                add_usage(final)
+                if not final or not getattr(final, "choices", None):
+                    raise RuntimeError(
+                        f"LLM returned no choices during final summarization for model={self.model}"
+                    )
+                final_msg = final.choices[0].message
+                messages.append(final_msg.model_dump())
+                final_answer = final_msg.content or ""
+
+            self.messages = messages
+            parameter_schema_valid_rate = (
+                schema_valid_true_count / tool_call_count if tool_call_count > 0 else None
+            )
+            constraint_compliance_rate = (
+                ccr_true_calls / ccr_applicable_calls if ccr_applicable_calls > 0 else None
+            )
+            if return_trace:
+                return {
+                    "query_id": query_id,
+                    "task_set_id": self.logger.task_set_id,
+                    "task_id": task_id,
+                    "session_id": self.session_id,
+                    "user_query": query,
+                    "final_answer": final_answer,
+                    "total_steps": total_steps,
+                    "total_tool_calls": tool_call_count,
+                    "parameter_schema_valid_rate": parameter_schema_valid_rate,
+                    "ccr_applicable_calls": ccr_applicable_calls,
+                    "ccr_true_calls": ccr_true_calls,
+                    "constraint_compliance_rate": constraint_compliance_rate,
+                    "tools_used": tools_used,
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "total_tokens": total_tokens,
+                    "query_runs_path": str(self.logger.query_runs_path),
+                    "tool_calls_path": str(
+                        self.logger.task_tool_calls_path(task_id=task_id, query_id=query_id)
+                    ),
+                }
             return final_answer
-        except Exception:
+        except Exception as exc:
+            query_status = "failed"
+            query_error_type = type(exc).__name__
+            query_error_message = str(exc)
             raise
         finally:
+            query_record.status = query_status
+            query_record.error_type = query_error_type
+            query_record.error_message = query_error_message
             query_record.end_time = utc_now_iso()
             query_record.final_answer = final_answer
+            query_record.total_steps = total_steps
             query_record.total_tool_calls = tool_call_count
+            query_record.parameter_schema_valid_rate = (
+                schema_valid_true_count / tool_call_count if tool_call_count > 0 else None
+            )
+            query_record.ccr_applicable_calls = ccr_applicable_calls
+            query_record.ccr_true_calls = ccr_true_calls
+            query_record.constraint_compliance_rate = (
+                ccr_true_calls / ccr_applicable_calls if ccr_applicable_calls > 0 else None
+            )
             query_record.tools_used = tools_used
             query_record.input_tokens = input_tokens
             query_record.output_tokens = output_tokens
