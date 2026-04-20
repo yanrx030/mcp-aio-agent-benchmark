@@ -36,6 +36,7 @@ class TaskRunResult:
     finished_at: str
     query_trace: dict[str, Any] | None = None
     ground_truth_validation: dict[str, Any] | None = None
+    tool_appropriateness: dict[str, Any] | None = None
     error_type: str | None = None
     error_message: str | None = None
 
@@ -106,6 +107,7 @@ async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> li
                 return_trace=True,
             )
             validation = validate_ground_truth_placeholder(task, query_trace)
+            tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
             results.append(
                 TaskRunResult(
                     task_id=task.task_id,
@@ -115,6 +117,7 @@ async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> li
                     finished_at=utc_now_iso(),
                     query_trace=query_trace,
                     ground_truth_validation=validation,
+                    tool_appropriateness=tool_appropriateness,
                 )
             )
             print(f"[task {task.task_id}] completed")
@@ -158,6 +161,58 @@ def validate_ground_truth_placeholder(
     }
 
 
+def calculate_tool_appropriateness(
+    task: BenchmarkTask,
+    query_trace: dict[str, Any],
+) -> dict[str, Any]:
+    core_tools = {_normalize_tool_name(name) for name in task.core_toolset}
+    aux_tools = {_normalize_tool_name(name) for name in task.aux_toolset}
+
+    tool_calls_path_raw = query_trace.get("tool_calls_path")
+    tool_calls_path = Path(tool_calls_path_raw) if tool_calls_path_raw else None
+    tool_names = _load_tool_names_from_jsonl(tool_calls_path)
+
+    scored_calls: list[dict[str, Any]] = []
+    total_score = 0.0
+
+    for index, tool_name in enumerate(tool_names, start=1):
+        normalized_name = _normalize_tool_name(tool_name)
+        if normalized_name in core_tools:
+            label = "core"
+            score = 1.0
+        elif normalized_name in aux_tools:
+            label = "auxiliary"
+            score = 0.5
+        else:
+            label = "inappropriate"
+            score = 0.0
+
+        total_score += score
+        scored_calls.append(
+            {
+                "call_index": index,
+                "tool_name": tool_name,
+                "appropriateness": label,
+                "score": score,
+            }
+        )
+
+    call_count = len(scored_calls)
+    average_score = total_score / call_count if call_count else None
+
+    return {
+        "metric": "tool_appropriateness",
+        "formula": "TA = sum(call_scores) / number_of_calls",
+        "core_toolset": task.core_toolset,
+        "aux_toolset": task.aux_toolset,
+        "tool_calls_path": str(tool_calls_path) if tool_calls_path else None,
+        "tool_call_count": call_count,
+        "total_score": total_score,
+        "average_score": average_score,
+        "scored_calls": scored_calls,
+    }
+
+
 def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     result_list = list(results)
     completed = sum(1 for result in result_list if result.status == "completed")
@@ -167,6 +222,13 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         for result in result_list
         if (result.ground_truth_validation or {}).get("status") == "placeholder_match"
     )
+    tool_appropriateness_scores = [
+        score
+        for result in result_list
+        if result.tool_appropriateness is not None
+        for score in [result.tool_appropriateness.get("average_score")]
+        if score is not None
+    ]
 
     return {
         "total_tasks": len(result_list),
@@ -174,6 +236,11 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         "failed_tasks": failed,
         "placeholder_matches": placeholder_matches,
         "placeholder_review_required": completed - placeholder_matches,
+        "average_tool_appropriateness": (
+            sum(tool_appropriateness_scores) / len(tool_appropriateness_scores)
+            if tool_appropriateness_scores
+            else None
+        ),
     }
 
 
@@ -243,3 +310,27 @@ def _clean_field(value: str | None) -> str | None:
         return None
     cleaned = value.strip()
     return cleaned or None
+
+
+def _load_tool_names_from_jsonl(path: Path | None) -> list[str]:
+    if path is None or not path.exists():
+        return []
+
+    tool_names: list[str] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            try:
+                record = json.loads(stripped)
+            except json.JSONDecodeError:
+                continue
+            tool_name = _clean_field(str(record.get("tool_name") or ""))
+            if tool_name:
+                tool_names.append(tool_name)
+    return tool_names
+
+
+def _normalize_tool_name(value: str) -> str:
+    return value.strip().lower()
