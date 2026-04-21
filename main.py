@@ -2,8 +2,10 @@ import argparse
 import asyncio
 import json
 import os
+from pathlib import Path
 
 from MCPClient import MCPClient
+from manifest_loader import resolve_runner_manifest
 from prompts import resolve_system_prompt
 from task_runner import (
     load_benchmark_tasks,
@@ -17,10 +19,20 @@ from task_runner import (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run AIRED evaluation tasks.")
     parser.add_argument(
+        "--manifest",
+        default="manifest.yaml",
+        help="Runner manifest YAML path.",
+    )
+    parser.add_argument(
+        "--profile",
+        default="default",
+        help="Manifest profile to use.",
+    )
+    parser.add_argument(
         "--task-file",
-        default="task/taskv3.csv",
+        default="task/tasksmall.csv",
         nargs="?",
-        const="task/taskv3.csv",
+        const="task/tasksmall.csv",
         help="CSV file containing benchmark tasks.",
     )
     parser.add_argument(
@@ -51,9 +63,19 @@ def parse_args() -> argparse.Namespace:
         help="Frozen toolset JSON to load before running tasks.",
     )
     parser.add_argument(
+        "--tool-agent-model",
+        default=None,
+        help="Override selected tool-agent model id from manifest.",
+    )
+    parser.add_argument(
+        "--judge-model",
+        default=None,
+        help="Override selected judge model id from manifest.",
+    )
+    parser.add_argument(
         "--model",
-        default="nvidia/nemotron-3-super-120b-a12b:free",
-        help="OpenRouter model name.",
+        default=None,
+        help="Legacy alias for --tool-agent-model.",
     )
     return parser.parse_args()
 
@@ -61,12 +83,42 @@ def parse_args() -> argparse.Namespace:
 async def main() -> None:
     args = parse_args()
 
+    default_tool_agent_model = "nvidia/nemotron-3-super-120b-a12b:free"
+    tool_agent_override = args.tool_agent_model or args.model
+    selected_model = tool_agent_override or default_tool_agent_model
+    selected_judge_model: str | None = args.judge_model
+    selected_openrouter_params: dict | None = None
+
+    manifest_path = Path(args.manifest)
+    if manifest_path.exists():
+        manifest_config = resolve_runner_manifest(
+            manifest_path,
+            profile=args.profile,
+            tool_agent_model_override=tool_agent_override,
+            judge_model_override=args.judge_model,
+        )
+        selected_model = manifest_config.tool_agent.model_id
+        selected_openrouter_params = manifest_config.tool_agent.openrouter_params
+        selected_judge_model = manifest_config.judge.model_id if manifest_config.judge else None
+
+        print(
+            f"Using manifest profile '{manifest_config.profile}' from {manifest_config.source_path}"
+        )
+        print(f"Selected tool-agent model: {selected_model}")
+        if selected_judge_model:
+            print(f"Selected judge model: {selected_judge_model}")
+    elif args.manifest != "manifest.yaml":
+        raise RuntimeError(f"Manifest file not found: {manifest_path}")
+    elif selected_model:
+        print(f"Manifest not found. Falling back to tool-agent model: {selected_model}")
+
     aio_key = os.environ["AIO_AUTH_KEY"]
     openrouter_key = os.environ["OPENROUTER_API_KEY"]
     client = MCPClient(
         auth_key=aio_key,
         openrouter_api_key=openrouter_key,
-        openrouter_model=args.model,
+        openrouter_model=selected_model,
+        openrouter_params=selected_openrouter_params,
     )
 
     try:

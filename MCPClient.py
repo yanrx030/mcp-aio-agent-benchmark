@@ -35,6 +35,7 @@ class MCPClient:
         auth_key: str,
         openrouter_api_key: str,
         openrouter_model: str,
+        openrouter_params: dict[str, Any] | None = None,
         logger: JSONLLogger | None = None,
     ):
         self.auth_key = auth_key
@@ -50,6 +51,7 @@ class MCPClient:
         # OpenRouter (OpenAI-compatible) client
         self.api_key = openrouter_api_key
         self.model = openrouter_model
+        self.openrouter_params = dict(openrouter_params or {})
         self.llm = OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=self.api_key,
@@ -92,6 +94,48 @@ class MCPClient:
             if name:
                 names.add(name)
         return names
+
+    def _build_completion_kwargs(
+        self,
+        messages: list[dict[str, Any]],
+        *,
+        include_tools: bool,
+    ) -> dict[str, Any]:
+        completion_kwargs: dict[str, Any] = {
+            "model": self.model,
+            "messages": messages,
+        }
+        if include_tools:
+            completion_kwargs["tools"] = self.openai_tools_all
+
+        params = dict(self.openrouter_params)
+        if not include_tools:
+            params.pop("tool_choice", None)
+            params.pop("parallel_tool_calls", None)
+
+        direct_kwargs = {
+            "temperature",
+            "top_p",
+            "max_tokens",
+            "frequency_penalty",
+            "presence_penalty",
+            "stream",
+            "tool_choice",
+            "parallel_tool_calls",
+        }
+        extra_body: dict[str, Any] = {}
+
+        for key, value in params.items():
+            if value is None:
+                continue
+            if key in direct_kwargs:
+                completion_kwargs[key] = value
+            else:
+                extra_body[key] = value
+
+        if extra_body:
+            completion_kwargs["extra_body"] = extra_body
+        return completion_kwargs
     
 
     async def connect_to_server(self):
@@ -239,9 +283,7 @@ class MCPClient:
             for step in range(1, max_steps + 1):
                 total_steps = step
                 resp = self.llm.chat.completions.create(
-                    model=self.model,
-                    messages=messages,
-                    tools=self.openai_tools_all
+                    **self._build_completion_kwargs(messages, include_tools=True)
                 )
                 add_usage(resp)
 
@@ -388,8 +430,7 @@ class MCPClient:
             # If we hit max_steps, ask model to summarize anyway (no more tool calling).
             if not final_answer:
                 final = self.llm.chat.completions.create(
-                    model=self.model,
-                    messages=messages,
+                    **self._build_completion_kwargs(messages, include_tools=False),
                 )
                 add_usage(final)
                 if not final or not getattr(final, "choices", None):

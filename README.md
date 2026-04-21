@@ -34,9 +34,11 @@ uv run --env-file .env main.py
 ```
 
 Default behavior:
-- Task file: `task/taskv3.csv`
+- Task file: `task/tasksmall.csv`
 - Toolset: `toolsets/aio_mcp_toolset_v2.json`
-- Model: `nvidia/nemotron-3-super-120b-a12b:free`
+- Manifest: `manifest.yaml`
+- Profile: `default`
+- Tool-agent model: first enabled model in `profiles.default.tool_agent_candidates`
 
 ## Common Commands
 
@@ -76,11 +78,49 @@ Supported `--answer-type` values:
 - `text`
 - `chart`
 
-Override model/toolset:
+Run with a specific manifest profile:
 
 ```bash
-uv run --env-file .env main.py --model "openai/gpt-4.1-mini" --toolset toolsets/aio_mcp_toolset_v2.json
+uv run --env-file .env main.py --profile default
 ```
+
+Override tool-agent model (legacy `--model` still works):
+
+```bash
+uv run --env-file .env main.py --tool-agent-model "openai/gpt-5.4-mini"
+```
+
+Override judge model:
+
+```bash
+uv run --env-file .env main.py --judge-model "openai/gpt-5.4-mini"
+```
+
+Use a non-default manifest path:
+
+```bash
+uv run --env-file .env main.py --manifest path/to/manifest.yaml
+```
+
+Override toolset:
+
+```bash
+uv run --env-file .env main.py --toolset toolsets/aio_mcp_toolset_v2.json
+```
+
+## Manifest-Driven Model Selection
+
+`main.py` now reads model and OpenRouter runtime settings from `manifest.yaml`:
+- `openrouter.defaults`
+- `model_catalog[*].openrouter`
+- `profiles.<name>.openrouter_override`
+
+Runtime merge order:
+1. `openrouter.defaults`
+2. selected model `openrouter`
+3. selected profile `openrouter_override`
+
+If `manifest.yaml` is missing, runner falls back to `nvidia/nemotron-3-super-120b-a12b:free` unless `--tool-agent-model`/`--model` is provided.
 
 ## Task CSV Format
 
