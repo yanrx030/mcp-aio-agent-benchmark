@@ -18,6 +18,7 @@ from requests.auth import HTTPBasicAuth
 
 
 from openai import OpenAI
+from prompts import prompts
 
 
 class MCPClient:
@@ -57,11 +58,7 @@ class MCPClient:
 
         # Conversation memory for LLM side
         self.messages: list[dict[str, Any]] = []
-        self.system_prompt = (
-            "You are a tool-using assistant. "
-            "When you need server data, call the provided tools with valid JSON arguments. "
-            "If helpful, briefly state your next action in one short sentence before using tools."
-        )
+        self.system_prompt = prompts.MAIN_SYSTEM_PROMPT.strip()
 
     
     def prepare_headers(self):
@@ -185,12 +182,20 @@ class MCPClient:
         query: str,
         *,
         task_id: str | None = None,
+        system_prompt: str | None = None,
+        system_prompt_label: str | None = None,
         return_trace: bool = False,
     ) -> str | dict[str, Any]:
         """Process a user query and log query-level and tool-level behavior."""
-        max_steps = 20  # safety to prevent infinite loops; adjust as needed
+        max_steps = 30  # safety to prevent infinite loops; adjust as needed
         if not self.session:
             raise RuntimeError("Not connected to MCP server. Call connect_to_server() first.")
+
+        effective_system_prompt = (system_prompt or self.system_prompt).strip()
+        effective_prompt_label = (
+            system_prompt_label
+            or ("override" if system_prompt else "default")
+        )
 
         query_record = self.logger.build_query_run(
             query_id=self.logger.new_query_id(),
@@ -199,6 +204,8 @@ class MCPClient:
             user_query=query,
             model=self.model,
             toolset_id=getattr(self, "toolset_id", None),
+            system_prompt_label=effective_prompt_label,
+            system_prompt_overridden=bool(system_prompt),
         )
         query_id = query_record.query_id
         total_steps = 0
@@ -214,7 +221,7 @@ class MCPClient:
         query_status = "completed"
         query_error_type: str | None = None
         query_error_message: str | None = None
-        messages: list[dict[str, Any]] = [{"role": "system", "content": self.system_prompt}]
+        messages: list[dict[str, Any]] = [{"role": "system", "content": effective_system_prompt}]
 
         def add_usage(resp: Any) -> None:
             nonlocal input_tokens, output_tokens, total_tokens
@@ -418,6 +425,8 @@ class MCPClient:
                     "input_tokens": input_tokens,
                     "output_tokens": output_tokens,
                     "total_tokens": total_tokens,
+                    "system_prompt_label": effective_prompt_label,
+                    "system_prompt_overridden": bool(system_prompt),
                     "query_runs_path": str(self.logger.query_runs_path),
                     "tool_calls_path": str(
                         self.logger.task_tool_calls_path(task_id=task_id, query_id=query_id)

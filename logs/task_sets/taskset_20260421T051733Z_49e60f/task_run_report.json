@@ -1,0 +1,366 @@
+{
+  "generated_at": "2026-04-21T05:28:19Z",
+  "source_csv": "task\\tasksmall.csv",
+  "summary": {
+    "total_tasks": 9,
+    "completed_tasks": 6,
+    "failed_tasks": 3,
+    "placeholder_matches": 1,
+    "placeholder_review_required": 5
+  },
+  "results": [
+    {
+      "task_id": "1",
+      "prompt": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+      "status": "completed",
+      "started_at": "2026-04-21T05:17:34Z",
+      "finished_at": "2026-04-21T05:17:49Z",
+      "answer_type": "scalar",
+      "query_trace": {
+        "query_id": "query_461236170deb",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "1",
+        "session_id": "session_953f529513e2",
+        "user_query": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Scalar\",\n  \"answer\": {\n    \"value\": 102,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Bluesky posts in February 2024 mentioning bulk billing or Medicare\"\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 3,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search",
+          "get_api_version"
+        ],
+        "input_tokens": 18487,
+        "output_tokens": 768,
+        "total_tokens": 19255,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\1.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_match",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "102",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "bluesky",
+            "query": "date:[2024-02-01T00:00:00Z TO 2024-02-29T23:59:59Z] AND (text:\"bulk billing\" OR text:\"Medicare\")",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": true
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "2",
+      "prompt": "How many Bluesky posts in 2024 mentioned \"cost of living\" and did not mention mortgage?",
+      "status": "completed",
+      "started_at": "2026-04-21T05:17:49Z",
+      "finished_at": "2026-04-21T05:18:07Z",
+      "answer_type": "scalar",
+      "query_trace": {
+        "query_id": "query_f7271eb90f97",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "2",
+        "session_id": "session_953f529513e2",
+        "user_query": "How many Bluesky posts in 2024 mentioned \"cost of living\" and did not mention mortgage?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Scalar\",\n  \"answer\": {\n    \"value\": 5466,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Bluesky posts in 2024 mentioning 'cost of living' and not mentioning mortgage\"\n  }\n}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 13778,
+        "output_tokens": 702,
+        "total_tokens": 14480,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\2.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "4195",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "bluesky",
+            "query": "date:[2024-01-01T00:00:00Z TO 2024-12-31T23:59:59Z] AND text:\"cost of living\" AND NOT text:\"mortgage\"",
+            "limit": null,
+            "bookmark": null
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "3",
+      "prompt": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+      "status": "completed",
+      "started_at": "2026-04-21T05:18:07Z",
+      "finished_at": "2026-04-21T05:19:13Z",
+      "answer_type": "timeseries",
+      "query_trace": {
+        "query_id": "query_ec8fd2816cf7",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "3",
+        "session_id": "session_953f529513e2",
+        "user_query": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Timeseries\",\n  \"answer\": {\n    \"granularity\": \"day\",\n    \"series_label\": \"Twitter post count\",\n    \"points\": [\n      {\n        \"time\": \"2021-06-21\",\n        \"value\": 227781\n      },\n      {\n        \"time\": \"2021-06-22\",\n        \"value\": 266920\n      },\n      {\n        \"time\": \"2021-06-23\",\n        \"value\": 270177\n      },\n      {\n        \"time\": \"2021-06-24\",\n        \"value\": 255432\n      },\n      {\n        \"time\": \"2021-06-28\",\n        \"value\": 2\n      },\n      {\n        \"time\": \"2021-06-29\",\n        \"value\": 299017\n      },\n      {\n        \"time\": \"2021-06-30\",\n        \"value\": 302848\n      }\n    ],\n    \"comment\": \"First 10 days of Twitter collection data (showing only days with non-zero counts)\"\n  }\n}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 1,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collection_summary",
+          "aggregate_by_time"
+        ],
+        "input_tokens": 14138,
+        "output_tokens": 2013,
+        "total_tokens": 16151,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\3.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "{\n  \"granularity\": \"daily\",\n  \"series_label\": \"Daily Counts\",\n  \"points\": [\n    {\n      \"time\": \"2021-06-21\",\n      \"value\": 227781\n    },\n    {\n      \"time\": \"2021-06-22\",\n      \"value\": 266920\n    },\n    {\n      \"time\": \"2021-06-23\",\n      \"value\": 270177\n    },\n    {\n      \"time\": \"2021-06-24\",\n      \"value\": 255432\n    },\n    {\n      \"time\": \"2021-06-28\",\n      \"value\": 2\n    },\n    {\n      \"time\": \"2021-06-29\",\n      \"value\": 299017\n    },\n    {\n      \"time\": \"2021-06-30\",\n      \"value\": 302848\n    }\n  ],\n  \"comment\": \"daily activity for first 10 days of data\"\n}",
+        "expected_tool_call_count": 2,
+        "expected_tool_calls": [
+          {
+            "collection": "Twitter"
+          },
+          {
+            "collection": "twitter",
+            "aggregation_level": "day",
+            "startdate": "2021-06-21",
+            "enddate": "2021-06-30"
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "4",
+      "prompt": "Can you show me the weekly number of posts tagged “melbourne” in the Mastodon collection in Jan 2024?",
+      "status": "completed",
+      "started_at": "2026-04-21T05:19:13Z",
+      "finished_at": "2026-04-21T05:20:34Z",
+      "answer_type": "timeseries",
+      "query_trace": {
+        "query_id": "query_fff0b6cc20c8",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "4",
+        "session_id": "session_953f529513e2",
+        "user_query": "Can you show me the weekly number of posts tagged “melbourne” in the Mastodon collection in Jan 2024?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Timeseries\",\n  \"answer\": {\n    \"granularity\": \"week\",\n    \"series_label\": \"Weekly count of Mastodon posts with hashtag melbourne\",\n    \"points\": [\n      {\n        \"time\": \"2024-01-01\",\n        \"value\": 69\n      },\n      {\n        \"time\": \"2024-01-08\",\n        \"value\": 52\n      },\n      {\n        \"time\": \"2024-01-15\",\n        \"value\": 64\n      },\n      {\n        \"time\": \"2024-01-22\",\n        \"value\": 57\n      },\n      {\n        \"time\": \"2024-01-29\",\n        \"value\": 20\n      }\n    ],\n    \"comment\": \"Counts for weeks of January 2024 (partial week for Jan 29-31).\"\n  }\n}",
+        "total_steps": 11,
+        "total_tool_calls": 10,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 3,
+        "ccr_true_calls": 2,
+        "constraint_compliance_rate": 0.6666666666666666,
+        "tools_used": [
+          "get_term_daily_counts",
+          "get_all_terms",
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 55816,
+        "output_tokens": 4409,
+        "total_tokens": 60225,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\4.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "{\r\n  \"granularity\": \"weekly\",\r\n  \"series_label\": \"Weekly Counts\",\r\n  \"points\": [\r\n    {\r\n      \"time\": \"2024-01-01\",\r\n      \"value\": 69\r\n    },\r\n    {\r\n      \"time\": \"2024-01-08\",\r\n      \"value\": 53\r\n    },\r\n    {\r\n      \"time\": \"2024-01-15\",\r\n      \"value\": 64\r\n    },\r\n    {\r\n      \"time\": \"2024-01-22\",\r\n      \"value\": 57\r\n    },\r\n    {\r\n      \"time\": \"2024-01-29\",\r\n      \"value\": 69\r\n    }\r\n  ],\r\n  \"comment\": \"Weekly data for January 2024. The counts show a dip mid-month before returning to the initial level of 69 by the final week.\"\r\n}",
+        "expected_tool_call_count": 0,
+        "expected_tool_calls": [],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "5",
+      "prompt": "For the Reddit dataset, was posting activity generally higher on Sundays than on Mondays during 2023-2025?",
+      "status": "completed",
+      "started_at": "2026-04-21T05:20:34Z",
+      "finished_at": "2026-04-21T05:22:41Z",
+      "answer_type": "text",
+      "query_trace": {
+        "query_id": "query_310c994252f9",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "5",
+        "session_id": "session_953f529513e2",
+        "user_query": "For the Reddit dataset, was posting activity generally higher on Sundays than on Mondays during 2023-2025?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Text\",\n  \"answer\": {\n    \"summary\": \"During 2023-2025, Reddit posting activity was generally higher on Mondays than on Sundays.\",\n    \"key_points\": [\n      \"In 2023, Sunday posts: 233,125 vs Monday posts: 237,584 (Monday higher by 4,459).\",\n      \"In 2024, Sunday posts: 248,384 vs Monday posts: 255,963 (Monday higher by 7,579).\",\n      \"In 2025 (Jan 1–Aug 19), Sunday posts: 137,047 vs Monday posts: 146,234 (Monday higher by 9,187).\",\n      \"Combined totals: Sunday 618,556 posts vs Monday 639,781 posts (Monday higher by 21,225).\"\n    ]\n  }\n}",
+        "total_steps": 10,
+        "total_tool_calls": 9,
+        "parameter_schema_valid_rate": 0.8888888888888888,
+        "ccr_applicable_calls": 6,
+        "ccr_true_calls": 3,
+        "constraint_compliance_rate": 0.5,
+        "tools_used": [
+          "get_collection_summary",
+          "aggregate_seasonality"
+        ],
+        "input_tokens": 51650,
+        "output_tokens": 4939,
+        "total_tokens": 56589,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\5.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "{\r\n  \"reference answer\": \"No. Across 2023–2025, aggregated Reddit posting activity was lower on Sundays than on Mondays, with 700,102 posts on Sundays versus 718,943 on Mondays.\",\r\n  \"facts\": [\r\n    \"In 2023, Monday post count was 237,584 and Sunday post count was 233,125.\",\r\n    \"In 2023, the daily counts were: Friday: 238,666; Saturday: 226,939; Thursday: 243,426; Tuesday: 237,255; Wednesday: 242,988.\",\r\n    \"In 2024, Monday post count was 255,963 and Sunday post count was 248,384.\",\r\n    \"In 2024, the daily counts were: Friday: 245,407; Saturday: 228,447; Thursday: 257,217; Tuesday: 250,350; Wednesday: 253,741.\",\r\n    \"In 2025, Monday post count was 225,396 and Sunday post count was 218,593.\",\r\n    \"In 2025, the daily counts were: Friday: 227,328; Saturday: 208,848; Thursday: 226,884; Tuesday: 238,761; Wednesday: 235,571.\",\r\n    \"The total aggregated post count for Sundays across 2023–2025 was 700,102.\",\r\n    \"The total aggregated post count for Mondays across 2023–2025 was 718,943.\"\r\n  ]\r\n}",
+        "expected_tool_call_count": 3,
+        "expected_tool_calls": [
+          {
+            "collection": "reddit",
+            "aggregation_level": "dayofweek",
+            "startdate": "2023-01-01",
+            "enddate": "2023-12-31"
+          },
+          {
+            "collection": "reddit",
+            "aggregation_level": "dayofweek",
+            "startdate": "2024-01-01",
+            "enddate": "2024-12-30"
+          },
+          {
+            "collection": "reddit",
+            "aggregation_level": "dayofweek",
+            "startdate": "2024-12-31",
+            "enddate": "2025-12-31"
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "6",
+      "prompt": "I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2026?",
+      "status": "completed",
+      "started_at": "2026-04-21T05:22:41Z",
+      "finished_at": "2026-04-21T05:23:04Z",
+      "answer_type": "text",
+      "query_trace": {
+        "query_id": "query_2998dbe983e3",
+        "task_set_id": "taskset_20260421T051733Z_49e60f",
+        "task_id": "6",
+        "session_id": "session_953f529513e2",
+        "user_query": "I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2026?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer_type\": \"Text\",\n  \"answer\": {\n    \"summary\": \"Mastodon post volume in February 2026 peaks in the mid‑afternoon, with the highest activity around 15:00–16:00 UTC.\",\n    \"key_points\": [\n      \"The highest hourly post count occurs at hour 16 (16:00–16:59) with 68,292 posts.\",\n      \"The second highest is at hour 15 with 67,888 posts, followed closely by hour 17 with 67,237 posts.\",\n      \"The lowest hourly volume is at hour 4 (04:00–04:59) with 32,569 posts.\",\n      \"Post volume rises steadily from early morning, peaks in the mid‑afternoon, and then declines toward evening.\"\n    ]\n  }\n}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 1,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "aggregate_seasonality"
+        ],
+        "input_tokens": 14025,
+        "output_tokens": 1267,
+        "total_tokens": 15292,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260421T051733Z_49e60f\\tool_calls\\6.jsonl"
+      },
+      "ground_truth_validation": {
+        "status": "placeholder_review_required",
+        "placeholder": true,
+        "reason": "Detailed ground-truth validation is not implemented yet. This placeholder only checks whether the expected ground-truth string appears in the final answer and records the parsed reference tool calls for future validation.",
+        "expected_ground_truth": "{\n  \"ref_answer\": \"Yes. In the Mastodon collection during February 2026, post volume typically peaked in the late afternoon, specifically between 14:00 and 18:00 UTC.\",\n  \"facts\": [\n    {\"time\": 0, \"count\": 41980},\n    {\"time\": 1, \"count\": 39281},\n    {\"time\": 2, \"count\": 44216},\n    {\"time\": 3, \"count\": 36669},\n    {\"time\": 4, \"count\": 32568},\n    {\"time\": 5, \"count\": 32638},\n    {\"time\": 6, \"count\": 34766},\n    {\"time\": 7, \"count\": 38747},\n    {\"time\": 8, \"count\": 42836},\n    {\"time\": 9, \"count\": 42569},\n    {\"time\": 10, \"count\": 45961},\n    {\"time\": 11, \"count\": 48588},\n    {\"time\": 12, \"count\": 53978},\n    {\"time\": 13, \"count\": 56523},\n    {\"time\": 14, \"count\": 64411},\n    {\"time\": 15, \"count\": 67843},\n    {\"time\": 16, \"count\": 68245},\n    {\"time\": 17, \"count\": 67218},\n    {\"time\": 18, \"count\": 64088},\n    {\"time\": 19, \"count\": 61437},\n    {\"time\": 20, \"count\": 59423},\n    {\"time\": 21, \"count\": 56844},\n    {\"time\": 22, \"count\": 51310},\n    {\"time\": 23, \"count\": 45715}\n  ]\n}",
+        "expected_tool_call_count": 1,
+        "expected_tool_calls": [
+          {
+            "collection": "mastodon",
+            "aggregation_level": "hourofday",
+            "startdate": "2026-02-01",
+            "enddate": "2026-02-28"
+          }
+        ],
+        "heuristic_answer_contains_ground_truth": false
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "7",
+      "prompt": "Determine whether average sentiment in the Flickr collection was more positive on weekends or weekdays during its first year of data",
+      "status": "failed",
+      "started_at": "2026-04-21T05:23:04Z",
+      "finished_at": "2026-04-21T05:28:14Z",
+      "answer_type": "text",
+      "query_trace": null,
+      "ground_truth_validation": null,
+      "error_type": "RuntimeError",
+      "error_message": "LLM returned no choices for model=nvidia/nemotron-3-super-120b-a12b:free"
+    },
+    {
+      "task_id": "8",
+      "prompt": "Can you draw a chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?",
+      "status": "failed",
+      "started_at": "2026-04-21T05:28:14Z",
+      "finished_at": "2026-04-21T05:28:17Z",
+      "answer_type": "chart",
+      "query_trace": null,
+      "ground_truth_validation": null,
+      "error_type": "RateLimitError",
+      "error_message": "Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1776816000000'}, 'provider_name': None}}, 'user_id': 'user_3AYmw5fEASblaxoadOZ3Xck11UV'}"
+    },
+    {
+      "task_id": "9",
+      "prompt": "How did the general sentiment of the BlueSky collection fluctuate on a daily basis during January 2026? draw a line graph",
+      "status": "failed",
+      "started_at": "2026-04-21T05:28:17Z",
+      "finished_at": "2026-04-21T05:28:19Z",
+      "answer_type": "chart",
+      "query_trace": null,
+      "ground_truth_validation": null,
+      "error_type": "RateLimitError",
+      "error_message": "Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1776816000000'}, 'provider_name': None}}, 'user_id': 'user_3AYmw5fEASblaxoadOZ3Xck11UV'}"
+    }
+  ]
+}

@@ -7,12 +7,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from eval_logger import utc_now_iso
+from prompts import resolve_system_prompt
 
 
 @dataclass(slots=True)
 class BenchmarkTask:
     task_id: str
     prompt: str
+    answer_type: str | None = None
     note: str | None = None
     ground_truth_tool_call_raw: str | None = None
     ground_truth_tool_calls: list[dict[str, Any]] = field(default_factory=list)
@@ -34,6 +36,7 @@ class TaskRunResult:
     status: str
     started_at: str
     finished_at: str
+    answer_type: str | None = None
     query_trace: dict[str, Any] | None = None
     ground_truth_validation: dict[str, Any] | None = None
     tool_appropriateness: dict[str, Any] | None = None
@@ -53,10 +56,13 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
             if not task_id or not prompt:
                 continue
 
-            raw_tool_calls = _clean_field(row.get("ground_truth_tool_call"))
+            raw_tool_calls = _clean_field(row.get("ref_tool_call")) or _clean_field(
+                row.get("ground_truth_tool_call")
+            )
             task = BenchmarkTask(
                 task_id=task_id,
                 prompt=prompt,
+                answer_type=_clean_field(row.get("answer_type")),
                 note=_clean_field(row.get("note")),
                 ground_truth_tool_call_raw=raw_tool_calls,
                 ground_truth_tool_calls=_parse_ground_truth_tool_calls(raw_tool_calls),
@@ -75,7 +81,9 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
                     not in {
                         "task_id",
                         "prompt",
+                        "answer_type",
                         "note",
+                        "ref_tool_call",
                         "ground_truth_tool_call",
                         "ground_truth",
                         "aux_toolset",
@@ -101,10 +109,13 @@ async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> li
         started_at = utc_now_iso()
         print(f"[task {task.task_id}] {task.prompt}")
         try:
+            system_prompt, resolved_answer_type = resolve_system_prompt(task.answer_type)
             query_trace = await client.process_query(
                 task.prompt,
                 task_id=task.task_id,
                 return_trace=True,
+                system_prompt=system_prompt,
+                system_prompt_label=resolved_answer_type or "default",
             )
             validation = validate_ground_truth_placeholder(task, query_trace)
             tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
@@ -112,6 +123,7 @@ async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> li
                 TaskRunResult(
                     task_id=task.task_id,
                     prompt=task.prompt,
+                    answer_type=task.answer_type,
                     status="completed",
                     started_at=started_at,
                     finished_at=utc_now_iso(),
@@ -126,6 +138,7 @@ async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> li
                 TaskRunResult(
                     task_id=task.task_id,
                     prompt=task.prompt,
+                    answer_type=task.answer_type,
                     status="failed",
                     started_at=started_at,
                     finished_at=utc_now_iso(),

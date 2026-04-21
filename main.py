@@ -4,6 +4,7 @@ import json
 import os
 
 from MCPClient import MCPClient
+from prompts import resolve_system_prompt
 from task_runner import (
     load_benchmark_tasks,
     run_benchmark_tasks,
@@ -17,9 +18,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run AIRED evaluation tasks.")
     parser.add_argument(
         "--task-file",
-        default="task/benchmark task.csv",
+        default="task/taskv3.csv",
         nargs="?",
-        const="task/benchmark task.csv",
+        const="task/taskv3.csv",
         help="CSV file containing benchmark tasks.",
     )
     parser.add_argument(
@@ -38,6 +39,11 @@ def parse_args() -> argparse.Namespace:
         "--prompt",
         default=None,
         help="Run a single ad hoc prompt instead of the task CSV.",
+    )
+    parser.add_argument(
+        "--answer-type",
+        default=None,
+        help="Optional answer type for --prompt (scalar, timeseries, text, chart).",
     )
     parser.add_argument(
         "--toolset",
@@ -69,7 +75,13 @@ async def main() -> None:
         await client.connect_to_server()
 
         if args.prompt:
-            result = await client.process_query(args.prompt, return_trace=True)
+            system_prompt, resolved_answer_type = resolve_system_prompt(args.answer_type)
+            result = await client.process_query(
+                args.prompt,
+                return_trace=True,
+                system_prompt=system_prompt,
+                system_prompt_label=resolved_answer_type or "default",
+            )
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return
 
