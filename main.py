@@ -4,7 +4,8 @@ import json
 import os
 from pathlib import Path
 
-from MCPClient import MCPClient
+from MCPClient import MCPClient, JwtTokenManager, is_authentication_error, is_transport_error
+from eval_logger import JSONLLogger
 from manifest_loader import resolve_runner_manifest
 from prompts import resolve_system_prompt
 from task_runner import (
@@ -46,6 +47,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=None,
         help="Run only the first N selected tasks.",
+    )
+    parser.add_argument(
+        "--max-concurrency",
+        type=int,
+        default=3,
+        help="Maximum number of benchmark tasks to run concurrently.",
     )
     parser.add_argument(
         "--prompt",
@@ -114,53 +121,92 @@ async def main() -> None:
 
     aio_key = os.environ["AIO_AUTH_KEY"]
     openrouter_key = os.environ["OPENROUTER_API_KEY"]
-    client = MCPClient(
+    shared_logger = JSONLLogger()
+    shared_logger.write_run_metadata(
+        tool_agent_model=selected_model,
+        judge_model=selected_judge_model,
+    )
+    jwt_manager = JwtTokenManager(auth_key=aio_key, login_url=MCPClient.LOGIN_URL)
+    await jwt_manager.initialize()
+
+    if args.prompt:
+        system_prompt, resolved_answer_type = resolve_system_prompt(args.answer_type)
+        max_prompt_attempts = 2
+        for attempt in range(1, max_prompt_attempts + 1):
+            token = await jwt_manager.get_token()
+            prompt_client = MCPClient(
+                auth_key=aio_key,
+                openrouter_api_key=openrouter_key,
+                openrouter_model=selected_model,
+                openrouter_params=selected_openrouter_params,
+                logger=shared_logger,
+                jwt_token=token,
+            )
+            cleanup_warning: str | None = None
+            try:
+                prompt_client.load_tools(args.toolset)
+                await prompt_client.connect_to_server()
+                result = await prompt_client.process_query(
+                    args.prompt,
+                    return_trace=True,
+                    system_prompt=system_prompt,
+                    system_prompt_label=resolved_answer_type or "default",
+                )
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+                return
+            except Exception as exc:
+                retryable = is_authentication_error(exc) or is_transport_error(exc)
+                if retryable and attempt < max_prompt_attempts:
+                    if is_authentication_error(exc):
+                        await jwt_manager.refresh_if_stale_or_forced(force=True, failed_token=token)
+                    await asyncio.sleep(0.75 * (2 ** (attempt - 1)))
+                    continue
+                raise
+            finally:
+                cleanup_warning = await prompt_client.cleanup()
+                if cleanup_warning:
+                    print(f"Prompt cleanup warning: {cleanup_warning}")
+
+    tasks = load_benchmark_tasks(args.task_file)
+    selected_tasks = select_tasks(
+        tasks,
+        task_ids=set(args.task_ids or []),
+        limit=args.limit,
+    )
+
+    if not selected_tasks:
+        raise RuntimeError("No tasks selected. Check --task-id, --limit, or the input CSV.")
+
+    print(f"Loaded {len(tasks)} tasks from {args.task_file}. Running {len(selected_tasks)} task(s).")
+    results = await run_benchmark_tasks(
+        selected_tasks,
         auth_key=aio_key,
         openrouter_api_key=openrouter_key,
         openrouter_model=selected_model,
+        toolset_path=args.toolset,
+        jwt_manager=jwt_manager,
+        shared_logger=shared_logger,
         openrouter_params=selected_openrouter_params,
+        max_concurrency=args.max_concurrency,
+        max_retries=1,
+    )
+    report_path = write_task_run_report(
+        results,
+        source_csv=args.task_file,
+        output_dir=shared_logger.task_set_dir,
+        extra_summary={
+            "jwt_login_count": jwt_manager.login_count,
+            "jwt_refresh_count": jwt_manager.refresh_count,
+        },
     )
 
-    try:
-        client.authenticate()
-        client.load_tools(args.toolset)
-        await client.connect_to_server()
-
-        if args.prompt:
-            system_prompt, resolved_answer_type = resolve_system_prompt(args.answer_type)
-            result = await client.process_query(
-                args.prompt,
-                return_trace=True,
-                system_prompt=system_prompt,
-                system_prompt_label=resolved_answer_type or "default",
-            )
-            print(json.dumps(result, ensure_ascii=False, indent=2))
-            return
-
-        tasks = load_benchmark_tasks(args.task_file)
-        selected_tasks = select_tasks(
-            tasks,
-            task_ids=set(args.task_ids or []),
-            limit=args.limit,
-        )
-
-        if not selected_tasks:
-            raise RuntimeError("No tasks selected. Check --task-id, --limit, or the input CSV.")
-
-        print(f"Loaded {len(tasks)} tasks from {args.task_file}. Running {len(selected_tasks)} task(s).")
-        results = await run_benchmark_tasks(client, selected_tasks)
-        report_path = write_task_run_report(
-            results,
-            source_csv=args.task_file,
-            output_dir=client.logger.task_set_dir,
-        )
-
-        print(json.dumps(summarize_results(results), ensure_ascii=False, indent=2))
-        print(f"Detailed report written to {report_path}")
-        print(f"Query run log written to {client.logger.query_runs_path}")
-        print(f"Per-task tool call logs written under {client.logger.tool_calls_dir}")
-    finally:
-        await client.cleanup()
+    print(json.dumps(summarize_results(results), ensure_ascii=False, indent=2))
+    print(f"Detailed report written to {report_path}")
+    print(f"Query run log written to {shared_logger.query_runs_path}")
+    print(f"Per-task tool call logs written under {shared_logger.tool_calls_dir}")
+    print(
+        f"JWT login count: {jwt_manager.login_count}, refresh count: {jwt_manager.refresh_count}"
+    )
 
 
 if __name__ == "__main__":

@@ -1,12 +1,20 @@
 from __future__ import annotations
 
+import asyncio
 import csv
 import json
+import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
-from eval_logger import utc_now_iso
+from MCPClient import (
+    MCPClient,
+    JwtTokenManager,
+    is_authentication_error,
+    is_transport_error,
+)
+from eval_logger import JSONLLogger, utc_now_iso
 from prompts import resolve_system_prompt
 
 
@@ -37,6 +45,15 @@ class TaskRunResult:
     started_at: str
     finished_at: str
     answer_type: str | None = None
+    parameter_schema_valid_rate: float | None = None
+    constraint_compliance_rate: float | None = None
+    total_tokens: int | None = None
+    total_steps: int | None = None
+    total_tool_calls: int | None = None
+    latency: float | None = None
+    attempt_count: int = 1
+    auth_refreshed: bool = False
+    cleanup_warning: str | None = None
     query_trace: dict[str, Any] | None = None
     ground_truth_validation: dict[str, Any] | None = None
     tool_appropriateness: dict[str, Any] | None = None
@@ -102,76 +119,201 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
     return tasks
 
 
-async def run_benchmark_tasks(client: Any, tasks: Iterable[BenchmarkTask]) -> list[TaskRunResult]:
-    results: list[TaskRunResult] = []
+async def run_benchmark_tasks(
+    tasks: Iterable[BenchmarkTask],
+    *,
+    auth_key: str,
+    openrouter_api_key: str,
+    openrouter_model: str,
+    toolset_path: str,
+    jwt_manager: JwtTokenManager,
+    shared_logger: JSONLLogger,
+    openrouter_params: dict[str, Any] | None = None,
+    max_concurrency: int = 5,
+    max_retries: int = 1,
+) -> list[TaskRunResult]:
+    task_list = list(tasks)
+    if not task_list:
+        return []
 
-    for task in tasks:
-        started_at = utc_now_iso()
-        print(f"[task {task.task_id}] {task.prompt}")
-        try:
+    concurrency = max(1, max_concurrency)
+    semaphore = asyncio.Semaphore(concurrency)
+    results_by_index: list[TaskRunResult | None] = [None] * len(task_list)
+    retry_attempts = max(0, max_retries)
+    total_attempts = retry_attempts + 1
+
+    async def run_single(index: int, task: BenchmarkTask) -> None:
+        async with semaphore:
+            started_at = utc_now_iso()
+            started_perf = time.perf_counter()
+            print(f"[task {task.task_id}] started")
+            attempt_count = 0
+            auth_refreshed = False
+            cleanup_warnings: list[str] = []
+            final_exc: Exception | None = None
+            query_trace: dict[str, Any] | None = None
             system_prompt, resolved_answer_type = resolve_system_prompt(task.answer_type)
-            query_trace = await client.process_query(
-                task.prompt,
-                task_id=task.task_id,
-                return_trace=True,
-                system_prompt=system_prompt,
-                system_prompt_label=resolved_answer_type or "default",
-            )
-            validation = validate_ground_truth_placeholder(task, query_trace)
-            tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
-            results.append(
-                TaskRunResult(
-                    task_id=task.task_id,
-                    prompt=task.prompt,
-                    answer_type=task.answer_type,
-                    status="completed",
-                    started_at=started_at,
-                    finished_at=utc_now_iso(),
-                    query_trace=query_trace,
-                    ground_truth_validation=validation,
-                    tool_appropriateness=tool_appropriateness,
+
+            for attempt in range(1, total_attempts + 1):
+                attempt_count = attempt
+                token = await jwt_manager.get_token()
+                client = MCPClient(
+                    auth_key=auth_key,
+                    openrouter_api_key=openrouter_api_key,
+                    openrouter_model=openrouter_model,
+                    openrouter_params=openrouter_params,
+                    logger=shared_logger,
+                    jwt_token=token,
                 )
-            )
-            print(f"[task {task.task_id}] completed")
-        except Exception as exc:
-            results.append(
-                TaskRunResult(
+                client.load_tools(toolset_path)
+                attempt_exc: Exception | None = None
+
+                try:
+                    await client.connect_to_server()
+                    query_trace = await client.process_query(
+                        task.prompt,
+                        task_id=task.task_id,
+                        return_trace=True,
+                        system_prompt=system_prompt,
+                        system_prompt_label=resolved_answer_type or "default",
+                    )
+                except Exception as exc:
+                    attempt_exc = exc
+                finally:
+                    cleanup_warning = await client.cleanup()
+                    if cleanup_warning:
+                        cleanup_warnings.append(f"attempt {attempt}: {cleanup_warning}")
+
+                if attempt_exc is None and query_trace is not None:
+                    validation = validate_ground_truth_placeholder(task, query_trace)
+                    tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
+                    finished_at = utc_now_iso()
+                    latency = time.perf_counter() - started_perf
+                    cleanup_warning = " | ".join(cleanup_warnings) if cleanup_warnings else None
+                    results_by_index[index] = TaskRunResult(
+                        task_id=task.task_id,
+                        prompt=task.prompt,
+                        answer_type=task.answer_type,
+                        status="completed",
+                        started_at=started_at,
+                        finished_at=finished_at,
+                        parameter_schema_valid_rate=query_trace.get("parameter_schema_valid_rate"),
+                        constraint_compliance_rate=query_trace.get("constraint_compliance_rate"),
+                        total_tokens=query_trace.get("total_tokens"),
+                        total_steps=query_trace.get("total_steps"),
+                        total_tool_calls=query_trace.get("total_tool_calls"),
+                        latency=latency,
+                        attempt_count=attempt_count,
+                        auth_refreshed=auth_refreshed,
+                        cleanup_warning=cleanup_warning,
+                        query_trace=query_trace,
+                        ground_truth_validation=validation,
+                        tool_appropriateness=tool_appropriateness,
+                    )
+                    print(f"[task {task.task_id}] completed (attempt {attempt_count})")
+                    return
+
+                final_exc = attempt_exc
+                retryable = bool(attempt_exc) and (
+                    is_authentication_error(attempt_exc) or is_transport_error(attempt_exc)
+                )
+                if retryable and attempt < total_attempts:
+                    if attempt_exc and is_authentication_error(attempt_exc):
+                        auth_refreshed = True
+                        try:
+                            await jwt_manager.refresh_if_stale_or_forced(
+                                force=True,
+                                failed_token=token,
+                            )
+                        except Exception as refresh_exc:
+                            final_exc = refresh_exc
+                            break
+
+                    backoff_seconds = 0.75 * (2 ** (attempt - 1))
+                    print(
+                        f"[task {task.task_id}] retrying after {type(attempt_exc).__name__} "
+                        f"(attempt {attempt + 1}/{total_attempts})"
+                    )
+                    await asyncio.sleep(backoff_seconds)
+                    continue
+
+                break
+
+            try:
+                finished_at = utc_now_iso()
+                latency = time.perf_counter() - started_perf
+                cleanup_warning = " | ".join(cleanup_warnings) if cleanup_warnings else None
+                results_by_index[index] = TaskRunResult(
                     task_id=task.task_id,
                     prompt=task.prompt,
                     answer_type=task.answer_type,
                     status="failed",
                     started_at=started_at,
-                    finished_at=utc_now_iso(),
+                    finished_at=finished_at,
+                    latency=latency,
+                    attempt_count=attempt_count,
+                    auth_refreshed=auth_refreshed,
+                    cleanup_warning=cleanup_warning,
+                    error_type=type(final_exc).__name__ if final_exc else "RuntimeError",
+                    error_message=str(final_exc) if final_exc else "Task failed without explicit exception.",
+                )
+                if final_exc:
+                    print(f"[task {task.task_id}] failed: {type(final_exc).__name__}: {final_exc}")
+                else:
+                    print(f"[task {task.task_id}] failed: unknown error")
+            except Exception as exc:
+                # Keep worker alive even if result-construction has an unexpected error.
+                finished_at = utc_now_iso()
+                latency = time.perf_counter() - started_perf
+                results_by_index[index] = TaskRunResult(
+                    task_id=task.task_id,
+                    prompt=task.prompt,
+                    answer_type=task.answer_type,
+                    status="failed",
+                    started_at=started_at,
+                    finished_at=finished_at,
+                    latency=latency,
+                    attempt_count=attempt_count,
+                    auth_refreshed=auth_refreshed,
+                    cleanup_warning=" | ".join(cleanup_warnings) if cleanup_warnings else None,
                     error_type=type(exc).__name__,
                     error_message=str(exc),
                 )
-            )
-            print(f"[task {task.task_id}] failed: {type(exc).__name__}: {exc}")
+                print(f"[task {task.task_id}] failed while building result: {type(exc).__name__}: {exc}")
 
-    return results
+    await asyncio.gather(
+        *(run_single(index, task) for index, task in enumerate(task_list))
+    )
+
+    return [result for result in results_by_index if result is not None]
 
 
 def validate_ground_truth_placeholder(
     task: BenchmarkTask,
     query_trace: dict[str, Any],
 ) -> dict[str, Any]:
-    expected_answer = (task.ground_truth or "").strip()
-    final_answer = str(query_trace.get("final_answer") or "").strip()
-    heuristic_match = bool(expected_answer) and expected_answer in final_answer
+    return {"placeholder":"TODO: implement llm as judge"}
+    # expected_answer = (task.ground_truth or "").strip()
+    # final_answer = str(query_trace.get("final_answer") or "").strip()
+    # heuristic_match = bool(expected_answer) and expected_answer in final_answer
 
-    return {
-        "status": "placeholder_match" if heuristic_match else "placeholder_review_required",
-        "placeholder": True,
-        "reason": (
-            "Detailed ground-truth validation is not implemented yet. "
-            "This placeholder only checks whether the expected ground-truth string appears in the final answer "
-            "and records the parsed reference tool calls for future validation."
-        ),
-        "expected_ground_truth": task.ground_truth,
-        "expected_tool_call_count": len(task.ground_truth_tool_calls),
-        "expected_tool_calls": task.ground_truth_tool_calls,
-        "heuristic_answer_contains_ground_truth": heuristic_match,
-    }
+    # return {
+    #     "status": "placeholder_match" if heuristic_match else "placeholder_review_required",
+    #     "placeholder": True,
+    #     "reason": (
+    #         "Detailed ground-truth validation is not implemented yet. "
+    #         "This placeholder only checks whether the expected ground-truth string appears in the final answer "
+    #         "and records the parsed reference tool calls for future validation."
+    #     ),
+    #     "expected_ground_truth": task.ground_truth,
+    #     "expected_tool_call_count": len(task.ground_truth_tool_calls),
+    #     "expected_tool_calls": task.ground_truth_tool_calls,
+    #     "heuristic_answer_contains_ground_truth": heuristic_match,
+    # }
+
+
+
+#==========================HELPER FUNCTIONS TO CALCULATE EVALUATION SCORES AND WRITE REPORT=============================
 
 
 def calculate_tool_appropriateness(
@@ -230,11 +372,7 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     result_list = list(results)
     completed = sum(1 for result in result_list if result.status == "completed")
     failed = sum(1 for result in result_list if result.status == "failed")
-    placeholder_matches = sum(
-        1
-        for result in result_list
-        if (result.ground_truth_validation or {}).get("status") == "placeholder_match"
-    )
+
     tool_appropriateness_scores = [
         score
         for result in result_list
@@ -242,16 +380,92 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         for score in [result.tool_appropriateness.get("average_score")]
         if score is not None
     ]
+    parameter_schema_valid_rates = [
+        value
+        for result in result_list
+        for value in [result.parameter_schema_valid_rate]
+        if value is not None
+    ]
+    constraint_compliance_rates = [
+        value
+        for result in result_list
+        for value in [result.constraint_compliance_rate]
+        if value is not None
+    ]
+    total_tokens_values = [
+        value
+        for result in result_list
+        for value in [result.total_tokens]
+        if value is not None
+    ]
+    total_steps_values = [
+        value
+        for result in result_list
+        for value in [result.total_steps]
+        if value is not None
+    ]
+    total_tool_calls_values = [
+        value
+        for result in result_list
+        for value in [result.total_tool_calls]
+        if value is not None
+    ]
+    latency_values = [
+        value
+        for result in result_list
+        for value in [result.latency]
+        if value is not None
+    ]
+    attempt_counts = [result.attempt_count for result in result_list if result.attempt_count is not None]
+    retried_tasks = [result for result in result_list if result.attempt_count > 1]
+    auth_refreshed_tasks = [result for result in result_list if result.auth_refreshed]
+    cleanup_warning_tasks = [result for result in result_list if result.cleanup_warning]
 
     return {
         "total_tasks": len(result_list),
         "completed_tasks": completed,
         "failed_tasks": failed,
-        "placeholder_matches": placeholder_matches,
-        "placeholder_review_required": completed - placeholder_matches,
+        "tasks_retried": len(retried_tasks),
+        "tasks_with_auth_refresh": len(auth_refreshed_tasks),
+        "tasks_with_cleanup_warning": len(cleanup_warning_tasks),
         "average_tool_appropriateness": (
             sum(tool_appropriateness_scores) / len(tool_appropriateness_scores)
             if tool_appropriateness_scores
+            else None
+        ),
+        "average_parameter_schema_valid_rate": (
+            sum(parameter_schema_valid_rates) / len(parameter_schema_valid_rates)
+            if parameter_schema_valid_rates
+            else None
+        ),
+        "average_constraint_compliance_rate": (
+            sum(constraint_compliance_rates) / len(constraint_compliance_rates)
+            if constraint_compliance_rates
+            else None
+        ),
+        "average_total_tokens": (
+            sum(total_tokens_values) / len(total_tokens_values)
+            if total_tokens_values
+            else None
+        ),
+        "average_total_steps": (
+            sum(total_steps_values) / len(total_steps_values)
+            if total_steps_values
+            else None
+        ),
+        "average_total_tool_calls": (
+            sum(total_tool_calls_values) / len(total_tool_calls_values)
+            if total_tool_calls_values
+            else None
+        ),
+        "average_latency": (
+            sum(latency_values) / len(latency_values)
+            if latency_values
+            else None
+        ),
+        "average_attempt_count": (
+            sum(attempt_counts) / len(attempt_counts)
+            if attempt_counts
             else None
         ),
     }
@@ -263,16 +477,20 @@ def write_task_run_report(
     source_csv: str | Path,
     output_dir: str | Path = "logs",
     filename: str = "task_run_report.json",
+    extra_summary: Mapping[str, Any] | None = None,
 ) -> Path:
     result_list = list(results)
     output_root = Path(output_dir)
     output_root.mkdir(parents=True, exist_ok=True)
 
     output_path = output_root / filename
+    summary = summarize_results(result_list)
+    if extra_summary:
+        summary = {**summary, **dict(extra_summary)}
     payload = {
         "generated_at": utc_now_iso(),
         "source_csv": str(Path(source_csv)),
-        "summary": summarize_results(result_list),
+        "summary": summary,
         "results": [asdict(result) for result in result_list],
     }
 

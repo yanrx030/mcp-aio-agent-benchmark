@@ -1,0 +1,7 @@
+{
+  "task_set_id": "taskset_20260422T103115Z_8dec03",
+  "created_at": "2026-04-22T10:31:15Z",
+  "tool_agent_model": "nvidia/nemotron-3-super-120b-a12b",
+  "judge_model": "openai/gpt-5.4-mini",
+  "updated_at": "2026-04-22T10:31:15Z"
+}

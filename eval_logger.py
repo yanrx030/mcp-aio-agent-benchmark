@@ -113,6 +113,7 @@ class JSONLLogger:
       - one task-set directory per run under `logs/task_sets/<task_set_id>/`
       - one query-level record per query in `query_runs.jsonl`
       - one record per attempted tool call in `tool_calls/<task_id>.jsonl`
+      - one run-level metadata file in `run_metadata.json`
     """
 
     def __init__(
@@ -133,10 +134,20 @@ class JSONLLogger:
         self.query_runs_path = self.task_set_dir / query_runs_filename
         self.tool_calls_dir = self.task_set_dir / tool_calls_dirname
         self.tool_calls_dir.mkdir(parents=True, exist_ok=True)
+        self.run_metadata_path = self.task_set_dir / "run_metadata.json"
 
         self._query_lock = threading.Lock()
         self._tool_locks: dict[Path, threading.Lock] = {}
         self._tool_locks_guard = threading.Lock()
+        self._run_metadata_lock = threading.Lock()
+
+        self._run_metadata: dict[str, Any] = {
+            "task_set_id": self.task_set_id,
+            "created_at": utc_now_iso(),
+            "tool_agent_model": None,
+            "judge_model": None,
+        }
+        self._write_run_metadata_file()
 
     def new_query_id(self) -> str:
         return generate_id("query")
@@ -193,6 +204,24 @@ class JSONLLogger:
             metadata=metadata,
         )
 
+    def write_run_metadata(
+        self,
+        *,
+        tool_agent_model: str | None = None,
+        judge_model: str | None = None,
+        extra: Mapping[str, Any] | None = None,
+    ) -> Path:
+        with self._run_metadata_lock:
+            if tool_agent_model is not None:
+                self._run_metadata["tool_agent_model"] = tool_agent_model
+            if judge_model is not None:
+                self._run_metadata["judge_model"] = judge_model
+            if extra:
+                self._run_metadata.update(dict(extra))
+            self._run_metadata["updated_at"] = utc_now_iso()
+            self._write_run_metadata_file()
+            return self.run_metadata_path
+
     def build_tool_call(
         self,
         *,
@@ -229,3 +258,9 @@ class JSONLLogger:
             with path.open("a", encoding="utf-8") as handle:
                 handle.write(line)
                 handle.write("\n")
+
+    def _write_run_metadata_file(self) -> None:
+        self.run_metadata_path.write_text(
+            json.dumps(self._run_metadata, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )

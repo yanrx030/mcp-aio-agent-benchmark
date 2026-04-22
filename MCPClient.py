@@ -21,6 +21,126 @@ from openai import OpenAI
 from prompts import prompts
 
 
+class MCPAuthenticationError(RuntimeError):
+    """Raised when MCP authentication fails or token is invalid/expired."""
+
+
+class MCPTransportError(RuntimeError):
+    """Raised when MCP transport/connectivity fails."""
+
+
+def _exception_text(exc: BaseException) -> str:
+    parts: list[str] = []
+    current: BaseException | None = exc
+    visited: set[int] = set()
+    while current is not None and id(current) not in visited:
+        visited.add(id(current))
+        parts.append(f"{type(current).__name__}: {current}")
+        next_exc = current.__cause__ or current.__context__
+        current = next_exc if isinstance(next_exc, BaseException) else None
+    return " | ".join(parts).lower()
+
+
+def is_authentication_error(exc: BaseException) -> bool:
+    if isinstance(exc, MCPAuthenticationError):
+        return True
+    text = _exception_text(exc)
+    auth_markers = (
+        "401",
+        "unauthorized",
+        "forbidden",
+        "not authenticated",
+        "authentication failed",
+        "invalid token",
+        "token expired",
+        "jwt",
+        "credential",
+    )
+    return any(marker in text for marker in auth_markers)
+
+
+def is_transport_error(exc: BaseException) -> bool:
+    if isinstance(exc, MCPTransportError):
+        return True
+    text = _exception_text(exc)
+    transport_markers = (
+        "connecterror",
+        "connection",
+        "all connection attempts failed",
+        "timed out",
+        "timeout",
+        "network",
+        "transport",
+        "temporarily unavailable",
+    )
+    return any(marker in text for marker in transport_markers)
+
+
+class JwtTokenManager:
+    """Process-wide JWT cache/refresh manager for concurrent workers."""
+
+    def __init__(self, auth_key: str, login_url: str) -> None:
+        self.auth_key = auth_key
+        self.login_url = login_url
+        self._jwt_token: str | None = None
+        self._lock = asyncio.Lock()
+        self._login_count = 0
+        self._refresh_count = 0
+
+    @property
+    def login_count(self) -> int:
+        return self._login_count
+
+    @property
+    def refresh_count(self) -> int:
+        return self._refresh_count
+
+    async def initialize(self) -> str:
+        return await self.get_token()
+
+    async def get_token(self) -> str:
+        async with self._lock:
+            if self._jwt_token:
+                return self._jwt_token
+            token = await asyncio.to_thread(
+                MCPClient.request_jwt_token,
+                self.auth_key,
+                self.login_url,
+            )
+            self._jwt_token = token
+            self._login_count += 1
+            print("Authentication successful.")
+            return token
+
+    async def refresh_if_stale_or_forced(
+        self,
+        *,
+        force: bool = False,
+        failed_token: str | None = None,
+    ) -> str:
+        async with self._lock:
+            if self._jwt_token and not force:
+                return self._jwt_token
+            # Another worker already refreshed; reuse latest token.
+            if force and failed_token and self._jwt_token and self._jwt_token != failed_token:
+                return self._jwt_token
+
+            had_token = self._jwt_token is not None
+            token = await asyncio.to_thread(
+                MCPClient.request_jwt_token,
+                self.auth_key,
+                self.login_url,
+            )
+            self._jwt_token = token
+            self._login_count += 1
+            if had_token:
+                self._refresh_count += 1
+                print("JWT refreshed.")
+            else:
+                print("Authentication successful.")
+            return token
+
+
 class MCPClient:
     """
     A client class for interacting with the AIRED MCP server.
@@ -37,6 +157,7 @@ class MCPClient:
         openrouter_model: str,
         openrouter_params: dict[str, Any] | None = None,
         logger: JSONLLogger | None = None,
+        jwt_token: str | None = None,
     ):
         self.auth_key = auth_key
         self.logger = logger or JSONLLogger()
@@ -61,27 +182,36 @@ class MCPClient:
         # Conversation memory for LLM side
         self.messages: list[dict[str, Any]] = []
         self.system_prompt = prompts.MAIN_SYSTEM_PROMPT.strip()
+        if jwt_token:
+            self.set_jwt_token(jwt_token)
 
     
     def prepare_headers(self):
         if not self.jwt_token:
-            raise Exception("JWT token not available. Please authenticate first.")
+            raise MCPAuthenticationError("JWT token not available. Please authenticate first.")
         self.headers = {
             "Authorization": f"Bearer {self.jwt_token}",
             "Content-Type": "application/json",
             "Accept": "application/json, text/event-stream"
         }
 
-    def authenticate(self):
-        url = self.LOGIN_URL
-        res = requests.post(url, auth=HTTPBasicAuth('apikey', self.auth_key),timeout=15)
-        if res.ok:
-            # Assumes the API returns the raw JWT as plain text
-            self.jwt_token = res.text
-            self.prepare_headers()
-            print("Authentication successful.")
-        else:
-            raise RuntimeError(f"Authentication failed: {res.status_code} {res.text}")
+    @staticmethod
+    def request_jwt_token(auth_key: str, login_url: str | None = None) -> str:
+        url = login_url or MCPClient.LOGIN_URL
+        res = requests.post(url, auth=HTTPBasicAuth("apikey", auth_key), timeout=15)
+        if not res.ok:
+            raise MCPAuthenticationError(f"Authentication failed: {res.status_code} {res.text}")
+        return res.text
+
+    def set_jwt_token(self, jwt_token: str) -> None:
+        self.jwt_token = jwt_token
+        self.prepare_headers()
+
+    def authenticate(self) -> str:
+        token = self.request_jwt_token(self.auth_key, self.LOGIN_URL)
+        self.set_jwt_token(token)
+        print("Authentication successful.")
+        return token
         
     def _get_openai_tool_names(self) -> set[str]:
         """Extract tool names from cached OpenAI tools."""
@@ -136,41 +266,59 @@ class MCPClient:
         if extra_body:
             completion_kwargs["extra_body"] = extra_body
         return completion_kwargs
+
+    async def _create_chat_completion(self, **kwargs: Any) -> Any:
+        # OpenAI client is synchronous; move network I/O off the event loop.
+        return await asyncio.to_thread(
+            self.llm.chat.completions.create,
+            **kwargs,
+        )
     
 
     async def connect_to_server(self):
         if not self.headers:
-            raise RuntimeError("Not authenticated. Call authenticate() first.")
-        
-        transport = await self.exit_stack.enter_async_context(
-        streamablehttp_client(self.MCP_URL, headers=self.headers))
-        read_stream, write_stream, _ = transport
+            raise MCPAuthenticationError("Not authenticated. Call authenticate() or set_jwt_token() first.")
+        try:
+            transport = await self.exit_stack.enter_async_context(
+                streamablehttp_client(self.MCP_URL, headers=self.headers)
+            )
+            read_stream, write_stream, _ = transport
 
-        self.session = await self.exit_stack.enter_async_context(
-        ClientSession(read_stream, write_stream))
-        await self.session.initialize()
+            self.session = await self.exit_stack.enter_async_context(
+                ClientSession(read_stream, write_stream)
+            )
+            await self.session.initialize()
 
-        # check available tools 
-        live = await self.session.list_tools()
-        live_names = {t.name for t in live.tools if getattr(t, "name", None)}
+            # check available tools
+            live = await self.session.list_tools()
+            live_names = {t.name for t in live.tools if getattr(t, "name", None)}
 
-        # 2) loaded names from toolset
-        loaded_names = self._get_openai_tool_names()
+            # loaded names from toolset
+            loaded_names = self._get_openai_tool_names()
 
-        missing_in_loaded = sorted(list(live_names - loaded_names))
-        extra_in_loaded = sorted(list(loaded_names - live_names))
+            missing_in_loaded = sorted(list(live_names - loaded_names))
+            extra_in_loaded = sorted(list(loaded_names - live_names))
 
-        ok = (len(missing_in_loaded) == 0 and len(extra_in_loaded) == 0)
-        if ok:
-            print("Connected to MCP server. All tools in loaded toolset are available on server.")
-            return True
-        else:
+            ok = (len(missing_in_loaded) == 0 and len(extra_in_loaded) == 0)
+            if ok:
+                print("Connected to MCP server. All tools in loaded toolset are available on server.")
+                return True
+
             print("toolset mismatch with server")
             return False
+        except Exception as exc:
+            if is_authentication_error(exc):
+                raise MCPAuthenticationError(f"MCP authentication failed during connect: {exc}") from exc
+            if is_transport_error(exc):
+                raise MCPTransportError(f"MCP transport failed during connect: {exc}") from exc
+            raise
 
-
-    async def cleanup(self):
-        await self.exit_stack.aclose()
+    async def cleanup(self) -> str | None:
+        try:
+            await self.exit_stack.aclose()
+            return None
+        except Exception as exc:
+            return f"{type(exc).__name__}: {exc}"
 
     def load_tools(self, toolset_path: str) -> None:
         """
@@ -282,7 +430,7 @@ class MCPClient:
             # Step loop: model may call tool(s), then we execute, then model may call again, etc.
             for step in range(1, max_steps + 1):
                 total_steps = step
-                resp = self.llm.chat.completions.create(
+                resp = await self._create_chat_completion(
                     **self._build_completion_kwargs(messages, include_tools=True)
                 )
                 add_usage(resp)
@@ -429,7 +577,7 @@ class MCPClient:
 
             # If we hit max_steps, ask model to summarize anyway (no more tool calling).
             if not final_answer:
-                final = self.llm.chat.completions.create(
+                final = await self._create_chat_completion(
                     **self._build_completion_kwargs(messages, include_tools=False),
                 )
                 add_usage(final)
@@ -476,9 +624,17 @@ class MCPClient:
             return final_answer
         except Exception as exc:
             query_status = "failed"
-            query_error_type = type(exc).__name__
-            query_error_message = str(exc)
-            raise
+            mapped_exc: Exception = exc
+            if is_authentication_error(exc):
+                mapped_exc = MCPAuthenticationError(f"MCP authentication failed during query: {exc}")
+            elif is_transport_error(exc):
+                mapped_exc = MCPTransportError(f"MCP transport failed during query: {exc}")
+
+            query_error_type = type(mapped_exc).__name__
+            query_error_message = str(mapped_exc)
+            if mapped_exc is exc:
+                raise
+            raise mapped_exc from exc
         finally:
             query_record.status = query_status
             query_record.error_type = query_error_type
