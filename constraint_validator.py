@@ -202,7 +202,7 @@ def _check_allowed_values(
     if value is None:
         return _make_check(
             rule=f"{field_name}_allowed_values",
-            status="na",
+            status="fail",
             message=f"Cannot evaluate '{field_name}' allowed values because no value was provided.",
         )
     if not isinstance(value, str):
@@ -228,7 +228,7 @@ def _check_date_format(*, arguments: dict[str, Any], field_name: str) -> dict[st
     if field_name not in arguments or arguments.get(field_name) is None:
         return _make_check(
             rule=f"{field_name}_date_format",
-            status="na",
+            status="fail",
             message=f"Cannot evaluate '{field_name}' date format because no value was provided.",
         )
     parsed = _parse_iso_date(arguments[field_name])
@@ -255,7 +255,7 @@ def _check_date_interval(
     if arguments.get(start_key) is None or arguments.get(end_key) is None:
         return _make_check(
             rule="date_interval_limit",
-            status="na",
+            status="fail",
             message=f"Cannot evaluate the date interval limit without both '{start_key}' and '{end_key}'.",
         )
 
@@ -297,7 +297,7 @@ def _check_enddate_not_after_yesterday(
     if arguments.get(end_key) is None:
         return _make_check(
             rule="enddate_not_after_yesterday",
-            status="na",
+            status="fail",
             message=f"Cannot evaluate yesterday cutoff without '{end_key}'.",
         )
 

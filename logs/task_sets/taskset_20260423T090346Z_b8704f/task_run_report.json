@@ -1,0 +1,987 @@
+{
+  "generated_at": "2026-04-23T09:09:54Z",
+  "source_csv": "task\\tasksmall.csv",
+  "summary": {
+    "total_tasks": 9,
+    "completed_tasks": 9,
+    "failed_tasks": 0,
+    "tasks_retried": 0,
+    "tasks_with_auth_refresh": 0,
+    "tasks_with_cleanup_warning": 0,
+    "average_tool_appropriateness": 0.7388888888888888,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": 0.9,
+    "average_total_tokens": 26668.333333333332,
+    "average_total_steps(temp)": 5.222222222222222,
+    "average_total_tool_calls": 5.0,
+    "average_latency": 80.75646163333698,
+    "average_end_to_end_latency": 80.75661795555789,
+    "average_attempt_count": 1.0,
+    "jwt_login_count": 1,
+    "jwt_refresh_count": 0
+  },
+  "results": [
+    {
+      "task_id": "1",
+      "prompt": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+      "status": "completed",
+      "started_at": "2026-04-23T09:03:47Z",
+      "finished_at": "2026-04-23T09:04:10Z",
+      "answer_type": "scalar",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 16721,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 23.84813810000196,
+      "end_to_end_latency": 23.84840709999844,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_bade3fa2a907",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "1",
+        "session_id": "session_a84d742d6794",
+        "user_query": "Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.",
+        "final_answer": "{\n \"status\": \"success\",\n  \"answer\": {\n    \"value\": 121,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Bluesky posts from February 2024 mentioning either 'bulk billing' or 'Medicare'\"\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 3,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search",
+          "get_collection_summary"
+        ],
+        "input_tokens": 15990,
+        "output_tokens": 731,
+        "total_tokens": 16721,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\1.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\1.jsonl",
+        "query_id": "query_bade3fa2a907",
+        "tool_call_count": 3,
+        "core_call_count": 1,
+        "helper_call_count": 2,
+        "other_call_count": 0,
+        "weighted_score": 2.0,
+        "average_score": 0.6666666666666666,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "2",
+      "prompt": "How many Bluesky posts in 2024 mentioned \"cost of living\" and did not mention mortgage?",
+      "status": "completed",
+      "started_at": "2026-04-23T09:03:47Z",
+      "finished_at": "2026-04-23T09:04:11Z",
+      "answer_type": "scalar",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 12599,
+      "total_steps": 3,
+      "total_tool_calls": 2,
+      "latency": 24.27846080000745,
+      "end_to_end_latency": 24.278636000002734,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_9260c93aa3b6",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "2",
+        "session_id": "session_d63a761ecc3f",
+        "user_query": "How many Bluesky posts in 2024 mentioned \"cost of living\" and did not mention mortgage?",
+        "final_answer": "```json\n{\n  \"status\": \"success\",\n  \"answer\": {\n    \"value\": 5467,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Bluesky posts in 2024 that mentioned \\\"cost of living\\\" and did not mention mortgage\"\n  }\n}\n```",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search"
+        ],
+        "input_tokens": 11849,
+        "output_tokens": 750,
+        "total_tokens": 12599,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\2.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\2.jsonl",
+        "query_id": "query_9260c93aa3b6",
+        "tool_call_count": 2,
+        "core_call_count": 1,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 1.5,
+        "average_score": 0.75,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "3",
+      "prompt": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+      "status": "completed",
+      "started_at": "2026-04-23T09:03:47Z",
+      "finished_at": "2026-04-23T09:05:01Z",
+      "answer_type": "timeseries",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 36632,
+      "total_steps": 7,
+      "total_tool_calls": 6,
+      "latency": 74.12273119999736,
+      "end_to_end_latency": 74.12282600000617,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_bbc696c614b4",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "3",
+        "session_id": "session_2423f8749a4a",
+        "user_query": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"x_axis_type\": \"time\",\n    \"granularity\": \"day\",\n    \"value_unit\": \"count\",\n    \"series\": [\n      {\n        \"label\": \"Daily Twitter Activity\",\n        \"points\": [\n          {\n            \"x\": \"2021-06-21\",\n            \"value\": 227781\n          },\n          {\n            \"x\": \"2021-06-22\",\n            \"value\": 266920\n          },\n          {\n            \"x\": \"2021-06-23\",\n            \"value\": 270177\n          },\n          {\n            \"x\": \"2021-06-24\",\n            \"value\": 255432\n          },\n          {\n            \"x\": \"2021-06-28\",\n            \"value\": 2\n          },\n          {\n            \"x\": \"2021-06-29\",\n            \"value\": 299017\n          },\n          {\n            \"x\": \"2021-06-30\",\n            \"value\": 302848\n          },\n          {\n            \"x\": \"2021-07-01\",\n            \"value\": 256741\n          },\n          {\n            \"x\": \"2021-07-04\",\n            \"value\": 66064\n          },\n          {\n            \"x\": \"2021-07-05\",\n            \"value\": 10655\n          }\n        ]\n      }\n    ],\n    \"comment\": \"The Twitter collection started on 2021-06-21. The first 10 days with available data are shown. Note there are gaps in the data (e.g., June 25-27, July 2-3) where no posts were recorded.\"\n  }\n}",
+        "total_steps": 7,
+        "total_tool_calls": 6,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 5,
+        "ccr_true_calls": 5,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collection_summary",
+          "aggregate_by_time"
+        ],
+        "input_tokens": 33686,
+        "output_tokens": 2946,
+        "total_tokens": 36632,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\3.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "get_collection_summary",
+          "aggregate_by_time"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\3.jsonl",
+        "query_id": "query_bbc696c614b4",
+        "tool_call_count": 6,
+        "core_call_count": 6,
+        "helper_call_count": 0,
+        "other_call_count": 0,
+        "weighted_score": 6.0,
+        "average_score": 1.0,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collection_summary",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 6,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "4",
+      "prompt": "Can you show me the weekly number of posts tagged “melbourne” in the Mastodon collection in Jan 2024?",
+      "status": "completed",
+      "started_at": "2026-04-23T09:04:10Z",
+      "finished_at": "2026-04-23T09:06:06Z",
+      "answer_type": "timeseries",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.8333333333333334,
+      "total_tokens": 50946,
+      "total_steps": 10,
+      "total_tool_calls": 14,
+      "latency": 115.9318590000039,
+      "end_to_end_latency": 115.93203589999757,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_54c2f480ec30",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "4",
+        "session_id": "session_1a6b5ba18895",
+        "user_query": "Can you show me the weekly number of posts tagged “melbourne” in the Mastodon collection in Jan 2024?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"x_axis_type\": \"time\",\n    \"granularity\": \"week\",\n    \"value_unit\": \"count\",\n    \"series\": [\n      {\n        \"label\": \"Posts tagged 'melbourne'\",\n        \"points\": [\n          {\n            \"x\": \"2024-01-01\",\n            \"value\": 69\n          },\n          {\n            \"x\": \"2024-01-08\",\n            \"value\": 52\n          },\n          {\n            \"x\": \"2024-01-15\",\n            \"value\": 64\n          },\n          {\n            \"x\": \"2024-01-22\",\n            \"value\": 57\n          },\n          {\n            \"x\": \"2024-01-29\",\n            \"value\": 20\n          }\n        ]\n      }\n    ],\n    \"comment\": \"Weekly counts of Mastodon posts with the hashtag #melbourne in January 2024. The last week (Jan 29-31) is a partial 3-day week.\"\n  }\n}",
+        "total_steps": 10,
+        "total_tool_calls": 14,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 6,
+        "ccr_true_calls": 5,
+        "constraint_compliance_rate": 0.8333333333333334,
+        "tools_used": [
+          "get_term_daily_counts",
+          "text_search",
+          "get_all_terms",
+          "get_collections",
+          "get_collection_summary",
+          "aggregate_by_time",
+          "analyze_terms_in_collection"
+        ],
+        "input_tokens": 47255,
+        "output_tokens": 3691,
+        "total_tokens": 50946,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\4.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\4.jsonl",
+        "query_id": "query_54c2f480ec30",
+        "tool_call_count": 14,
+        "core_call_count": 6,
+        "helper_call_count": 2,
+        "other_call_count": 6,
+        "weighted_score": 7.0,
+        "average_score": 0.5,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_term_daily_counts",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_term_daily_counts",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "get_all_terms",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 6,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 7,
+            "tool_name": "aggregate_by_time",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 8,
+            "tool_name": "analyze_terms_in_collection",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 9,
+            "tool_name": "analyze_terms_in_collection",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 10,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 11,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 12,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 13,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 14,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "5",
+      "prompt": "For the Reddit dataset, was posting activity generally higher on Sundays than on Mondays during 2023-2025?",
+      "status": "completed",
+      "started_at": "2026-04-23T09:04:11Z",
+      "finished_at": "2026-04-23T09:04:44Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.6666666666666666,
+      "total_tokens": 17797,
+      "total_steps": 4,
+      "total_tool_calls": 5,
+      "latency": 32.465353999999934,
+      "end_to_end_latency": 32.46550279999792,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_3ab341755734",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "5",
+        "session_id": "session_b6a4e35f670a",
+        "user_query": "For the Reddit dataset, was posting activity generally higher on Sundays than on Mondays during 2023-2025?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"No, posting activity on Reddit was not generally higher on Sundays than on Mondays during 2023-2025. In fact, Monday posting activity was consistently higher than Sunday posting activity across all three years.\",\n    \"key_points\": [\n      \"In 2023, Monday had 237,584 posts compared to Sunday's 233,125 posts.\",\n      \"In 2024, Monday had 255,963 posts compared to Sunday's 248,384 posts.\",\n      \"In 2025 (through April 22), Monday had 77,505 posts compared to Sunday's 75,937 posts.\",\n      \"Monday posting activity exceeded Sunday posting activity in each year of the 2023-2025 period.\"\n    ]\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 5,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 3,
+        "ccr_true_calls": 2,
+        "constraint_compliance_rate": 0.6666666666666666,
+        "tools_used": [
+          "get_collections",
+          "get_collection_summary",
+          "aggregate_seasonality"
+        ],
+        "input_tokens": 16412,
+        "output_tokens": 1385,
+        "total_tokens": 17797,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\5.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "get_collection_summary",
+          "aggregate_seasonality"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\5.jsonl",
+        "query_id": "query_3ab341755734",
+        "tool_call_count": 5,
+        "core_call_count": 4,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 4.5,
+        "average_score": 0.9,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_collection_summary",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "6",
+      "prompt": "I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2026?",
+      "status": "completed",
+      "started_at": "2026-04-23T09:04:44Z",
+      "finished_at": "2026-04-23T09:05:11Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 13293,
+      "total_steps": 3,
+      "total_tool_calls": 2,
+      "latency": 26.90365790000942,
+      "end_to_end_latency": 26.90374460000021,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_06a883e4b4ea",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "6",
+        "session_id": "session_9606bfd659d5",
+        "user_query": "I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2026?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"Yes, Mastodon post volume in February 2026 shows a clear daily pattern, peaking in the mid-to-late afternoon (UTC). The highest activity occurs at 16:00 UTC (4 PM) with 68,293 posts, followed closely by 15:00 UTC (67,892 posts) and 17:00 UTC (67,237 posts). Activity is lowest in the early morning hours, with the minimum at 04:00 UTC (32,569 posts).\",\n    \"key_points\": [\n      \"Peak hour: 16:00 UTC with 68,293 posts\",\n      \"Second peak: 15:00 UTC with 67,892 posts\",\n      \"Third peak: 17:00 UTC with 67,237 posts\",\n      \"Lowest activity: 04:00 UTC with 32,569 posts\",\n      \"Post volume roughly doubles from the early morning low (04:00) to the afternoon peak (16:00)\",\n      \"Activity gradually rises from 05:00 UTC through the morning, accelerates around midday, and declines after 17:00 UTC through the evening\"\n    ]\n  }\n}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 1,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "aggregate_seasonality"
+        ],
+        "input_tokens": 12094,
+        "output_tokens": 1199,
+        "total_tokens": 13293,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\6.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "aggregate_seasonality"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\6.jsonl",
+        "query_id": "query_06a883e4b4ea",
+        "tool_call_count": 2,
+        "core_call_count": 1,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 1.5,
+        "average_score": 0.75,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "7",
+      "prompt": "Determine whether average sentiment in the Flickr collection was more positive on weekends or weekdays during its first year of data",
+      "status": "completed",
+      "started_at": "2026-04-23T09:05:01Z",
+      "finished_at": "2026-04-23T09:09:54Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.8,
+      "total_tokens": 45523,
+      "total_steps": 7,
+      "total_tool_calls": 6,
+      "latency": 292.8361394000094,
+      "end_to_end_latency": 292.83632500001113,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_16e4c9054f24",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "7",
+        "session_id": "session_a3705d38faa0",
+        "user_query": "Determine whether average sentiment in the Flickr collection was more positive on weekends or weekdays during its first year of data",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"During the first year of the Flickr collection (April 27, 2021 to April 26, 2022), average sentiment was the same on weekends and weekdays. The aggregate sentiment counts were identical to the post counts for every day of the week, indicating no difference in average sentiment between weekend and weekday posts.\",\n    \"key_points\": [\n      \"The Flickr collection's first year of data spans from 2021-04-27 to 2022-04-26.\",\n      \"Aggregate sentiment by day of week returned sentimentcount values identical to post counts for all seven days.\",\n      \"Weekend sentiment counts: Saturday (5596) + Sunday (7708) = 13,304; Weekend post counts: 5596 + 7708 = 13,304.\",\n      \"Weekday sentiment counts: Monday (7174) + Tuesday (6885) + Wednesday (4746) + Thursday (5192) + Friday (6075) = 30,072; Weekday post counts: 7174 + 6885 + 4746 + 5192 + 6075 = 30,072.\",\n      \"The sentiment-to-count ratio is 1.0 for both weekends and weekdays, indicating equal average sentiment.\"\n    ]\n  }\n}",
+        "total_steps": 7,
+        "total_tool_calls": 6,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 5,
+        "ccr_true_calls": 4,
+        "constraint_compliance_rate": 0.8,
+        "tools_used": [
+          "get_collection_summary",
+          "aggregate_seasonality",
+          "aggregate_by_time",
+          "get_nlp_metadata"
+        ],
+        "input_tokens": 30864,
+        "output_tokens": 14659,
+        "total_tokens": 45523,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\7.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "get_collection_summary",
+          "aggregate_seasonality"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\7.jsonl",
+        "query_id": "query_16e4c9054f24",
+        "tool_call_count": 6,
+        "core_call_count": 3,
+        "helper_call_count": 0,
+        "other_call_count": 3,
+        "weighted_score": 3.0,
+        "average_score": 0.5,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collection_summary",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "aggregate_seasonality",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "aggregate_by_time",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "get_nlp_metadata",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 6,
+            "tool_name": "aggregate_by_time",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "8",
+      "prompt": "Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?",
+      "status": "completed",
+      "started_at": "2026-04-23T09:05:11Z",
+      "finished_at": "2026-04-23T09:06:11Z",
+      "answer_type": "chart",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 24228,
+      "total_steps": 5,
+      "total_tool_calls": 4,
+      "latency": 60.83691129999352,
+      "end_to_end_latency": 60.83704280000529,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_fee117df9cdc",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "8",
+        "session_id": "session_7e6dd4469be3",
+        "user_query": "Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?",
+        "final_answer": "{\n  \"status\": \"partial\",\n  \"answer\": {\n    \"chart_type\": \"bar\",\n    \"title\": \"Reddit Monthly Post Counts - 2025\",\n    \"labels\": [\"2025-01\", \"2025-02\", \"2025-03\", \"2025-04\", \"2025-05\", \"2025-06\", \"2025-07\", \"2025-08\", \"2025-09\", \"2025-10\", \"2025-11\", \"2025-12\"],\n    \"datasets\": [\n      {\n        \"label\": \"Monthly Post Counts\",\n        \"data\": [152074, 141916, 159511, 132151, 133610, 117729, 118185, 113837, 118194, 122222, 132369, 135096]\n      }\n    ],\n    \"summary\": \"Bar chart showing monthly Reddit post counts for all 12 months of 2025. The highest activity was in March (159,511 posts) and the lowest in August (113,837 posts). Chart image generation failed due to a network error.\",\n    \"render_url\": null\n  }\n}",
+        "total_steps": 5,
+        "total_tool_calls": 4,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 2,
+        "ccr_true_calls": 2,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "get_collection_summary",
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "input_tokens": 22414,
+        "output_tokens": 1814,
+        "total_tokens": 24228,
+        "system_prompt_label": "chart",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\8.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\8.jsonl",
+        "query_id": "query_fee117df9cdc",
+        "tool_call_count": 4,
+        "core_call_count": 2,
+        "helper_call_count": 2,
+        "other_call_count": 0,
+        "weighted_score": 3.0,
+        "average_score": 0.75,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 3,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "generate_chart",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "9",
+      "prompt": "How did the general sentiment of the BlueSky collection fluctuate on a daily basis during January 2026? draw a line graph",
+      "status": "completed",
+      "started_at": "2026-04-23T09:06:06Z",
+      "finished_at": "2026-04-23T09:07:22Z",
+      "answer_type": "chart",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 22276,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 75.58490300000994,
+      "end_to_end_latency": 75.5850414000015,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_ac3a2be22241",
+        "task_set_id": "taskset_20260423T090346Z_b8704f",
+        "task_id": "9",
+        "session_id": "session_f8368e3e8238",
+        "user_query": "How did the general sentiment of the BlueSky collection fluctuate on a daily basis during January 2026? draw a line graph",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"chart_type\": \"line\",\n    \"title\": \"BlueSky Daily Sentiment - January 2026\",\n    \"labels\": [\"2026-01-01\", \"2026-01-02\", \"2026-01-03\", \"2026-01-04\", \"2026-01-05\", \"2026-01-06\", \"2026-01-07\", \"2026-01-08\", \"2026-01-09\", \"2026-01-10\", \"2026-01-11\", \"2026-01-12\", \"2026-01-13\", \"2026-01-14\", \"2026-01-15\", \"2026-01-16\", \"2026-01-17\", \"2026-01-18\", \"2026-01-19\", \"2026-01-20\", \"2026-01-21\", \"2026-01-22\", \"2026-01-23\", \"2026-01-24\", \"2026-01-25\", \"2026-01-26\", \"2026-01-27\", \"2026-01-28\", \"2026-01-29\", \"2026-01-30\", \"2026-01-31\"],\n    \"datasets\": [\n      {\n        \"label\": \"Sentiment Count\",\n        \"data\": [248240, 251928, 407846, 325136, 322229, 327059, 370449, 409649, 383787, 344623, 332604, 356158, 360713, 361315, 372273, 358176, 323487, 330979, 342427, 367378, 390624, 354986, 343430, 408054, 422639, 382409, 381329, 365105, 337166, 350424, 313957]\n      }\n    ],\n    \"summary\": \"The BlueSky collection sentiment fluctuated throughout January 2026, starting at 248,240 on Jan 1, peaking at 422,639 on Jan 25, and ending at 313,957 on Jan 31. Notable spikes occurred on Jan 3 (407,846), Jan 8 (409,649), Jan 24 (408,054), and Jan 25 (422,639).\",\n    \"render_url\": \"https://quickchart.io/chart/render/zf-844bd8a2-a660-48c8-aca1-8c5c17b0468d\"\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 3,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 2,
+        "ccr_true_calls": 2,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "input_tokens": 19916,
+        "output_tokens": 2360,
+        "total_tokens": 22276,
+        "system_prompt_label": "chart",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\query_runs.jsonl",
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\9.jsonl"
+      },
+      "ground_truth_validation": {
+        "placeholder": "TODO: implement llm as judge"
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\task_sets\\taskset_20260423T090346Z_b8704f\\tool_calls\\9.jsonl",
+        "query_id": "query_ac3a2be22241",
+        "tool_call_count": 3,
+        "core_call_count": 2,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 2.5,
+        "average_score": 0.8333333333333334,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "generate_chart",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    }
+  ]
+}

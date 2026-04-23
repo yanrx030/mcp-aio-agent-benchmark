@@ -27,7 +27,6 @@ class BenchmarkTask:
     ground_truth_tool_call_raw: str | None = None
     ground_truth_tool_calls: list[dict[str, Any]] = field(default_factory=list)
     ground_truth: str | None = None
-    aux_toolset: list[str] = field(default_factory=list)
     core_toolset: list[str] = field(default_factory=list)
     category: str | None = None
     source_scope: str | None = None
@@ -51,6 +50,7 @@ class TaskRunResult:
     total_steps: int | None = None
     total_tool_calls: int | None = None
     latency: float | None = None
+    end_to_end_latency: float | None = None
     attempt_count: int = 1
     auth_refreshed: bool = False
     cleanup_warning: str | None = None
@@ -59,6 +59,16 @@ class TaskRunResult:
     tool_appropriateness: dict[str, Any] | None = None
     error_type: str | None = None
     error_message: str | None = None
+
+
+HELPER_CAPABLE_TOOLS: tuple[str, ...] = (
+    "get_api_version",
+    "get_collections",
+    "get_collection_summary",
+)
+_HELPER_CAPABLE_TOOLS_NORMALIZED = frozenset(
+    tool_name.lower() for tool_name in HELPER_CAPABLE_TOOLS
+)
 
 
 def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
@@ -84,7 +94,6 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
                 ground_truth_tool_call_raw=raw_tool_calls,
                 ground_truth_tool_calls=_parse_ground_truth_tool_calls(raw_tool_calls),
                 ground_truth=_clean_field(row.get("ground_truth")),
-                aux_toolset=_parse_toolset_names(row.get("aux_toolset")),
                 core_toolset=_parse_toolset_names(row.get("core_toolset")),
                 category=_clean_field(row.get("category")),
                 source_scope=_clean_field(row.get("source_scope")),
@@ -103,7 +112,6 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
                         "ref_tool_call",
                         "ground_truth_tool_call",
                         "ground_truth",
-                        "aux_toolset",
                         "core_toolset",
                         "category",
                         "source_scope",
@@ -152,10 +160,12 @@ async def run_benchmark_tasks(
             cleanup_warnings: list[str] = []
             final_exc: Exception | None = None
             query_trace: dict[str, Any] | None = None
+            attempt_started_perf = started_perf
             system_prompt, resolved_answer_type = resolve_system_prompt(task.answer_type)
 
             for attempt in range(1, total_attempts + 1):
                 attempt_count = attempt
+                attempt_started_perf = time.perf_counter()
                 token = await jwt_manager.get_token()
                 client = MCPClient(
                     auth_key=auth_key,
@@ -188,7 +198,8 @@ async def run_benchmark_tasks(
                     validation = validate_ground_truth_placeholder(task, query_trace)
                     tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
                     finished_at = utc_now_iso()
-                    latency = time.perf_counter() - started_perf
+                    latency = time.perf_counter() - attempt_started_perf
+                    end_to_end_latency = time.perf_counter() - started_perf
                     cleanup_warning = " | ".join(cleanup_warnings) if cleanup_warnings else None
                     results_by_index[index] = TaskRunResult(
                         task_id=task.task_id,
@@ -203,6 +214,7 @@ async def run_benchmark_tasks(
                         total_steps=query_trace.get("total_steps"),
                         total_tool_calls=query_trace.get("total_tool_calls"),
                         latency=latency,
+                        end_to_end_latency=end_to_end_latency,
                         attempt_count=attempt_count,
                         auth_refreshed=auth_refreshed,
                         cleanup_warning=cleanup_warning,
@@ -241,7 +253,8 @@ async def run_benchmark_tasks(
 
             try:
                 finished_at = utc_now_iso()
-                latency = time.perf_counter() - started_perf
+                latency = time.perf_counter() - attempt_started_perf
+                end_to_end_latency = time.perf_counter() - started_perf
                 cleanup_warning = " | ".join(cleanup_warnings) if cleanup_warnings else None
                 results_by_index[index] = TaskRunResult(
                     task_id=task.task_id,
@@ -251,6 +264,7 @@ async def run_benchmark_tasks(
                     started_at=started_at,
                     finished_at=finished_at,
                     latency=latency,
+                    end_to_end_latency=end_to_end_latency,
                     attempt_count=attempt_count,
                     auth_refreshed=auth_refreshed,
                     cleanup_warning=cleanup_warning,
@@ -264,7 +278,8 @@ async def run_benchmark_tasks(
             except Exception as exc:
                 # Keep worker alive even if result-construction has an unexpected error.
                 finished_at = utc_now_iso()
-                latency = time.perf_counter() - started_perf
+                latency = time.perf_counter() - attempt_started_perf
+                end_to_end_latency = time.perf_counter() - started_perf
                 results_by_index[index] = TaskRunResult(
                     task_id=task.task_id,
                     prompt=task.prompt,
@@ -273,6 +288,7 @@ async def run_benchmark_tasks(
                     started_at=started_at,
                     finished_at=finished_at,
                     latency=latency,
+                    end_to_end_latency=end_to_end_latency,
                     attempt_count=attempt_count,
                     auth_refreshed=auth_refreshed,
                     cleanup_warning=" | ".join(cleanup_warnings) if cleanup_warnings else None,
@@ -321,48 +337,74 @@ def calculate_tool_appropriateness(
     query_trace: dict[str, Any],
 ) -> dict[str, Any]:
     core_tools = {_normalize_tool_name(name) for name in task.core_toolset}
-    aux_tools = {_normalize_tool_name(name) for name in task.aux_toolset}
+    helper_tools = _HELPER_CAPABLE_TOOLS_NORMALIZED
+    helper_tools_in_core = core_tools & helper_tools
 
     tool_calls_path_raw = query_trace.get("tool_calls_path")
     tool_calls_path = Path(tool_calls_path_raw) if tool_calls_path_raw else None
-    tool_names = _load_tool_names_from_jsonl(tool_calls_path)
+    query_id = _clean_field(str(query_trace.get("query_id") or ""))
+    tool_names = _load_tool_names_from_jsonl(tool_calls_path, query_id=query_id)
 
     scored_calls: list[dict[str, Any]] = []
-    total_score = 0.0
+    weighted_score = 0.0
+    core_call_count = 0
+    helper_call_count = 0
+    other_call_count = 0
+    consumed_helper_core_first_occurrence: set[str] = set()
 
     for index, tool_name in enumerate(tool_names, start=1):
         normalized_name = _normalize_tool_name(tool_name)
-        if normalized_name in core_tools:
+        if normalized_name in helper_tools_in_core:
+            if normalized_name in consumed_helper_core_first_occurrence:
+                label = "helper"
+                score = 0.5
+            else:
+                consumed_helper_core_first_occurrence.add(normalized_name)
+                label = "core"
+                score = 1.0
+        elif normalized_name in core_tools:
             label = "core"
             score = 1.0
-        elif normalized_name in aux_tools:
-            label = "auxiliary"
+        elif normalized_name in helper_tools:
+            label = "helper"
             score = 0.5
         else:
-            label = "inappropriate"
+            label = "other"
             score = 0.0
 
-        total_score += score
+        if label == "core":
+            core_call_count += 1
+        elif label == "helper":
+            helper_call_count += 1
+        else:
+            other_call_count += 1
+
+        weighted_score += score
         scored_calls.append(
             {
                 "call_index": index,
                 "tool_name": tool_name,
+                "category": label,
                 "appropriateness": label,
                 "score": score,
             }
         )
 
     call_count = len(scored_calls)
-    average_score = total_score / call_count if call_count else None
+    average_score = weighted_score / call_count if call_count else None
 
     return {
         "metric": "tool_appropriateness",
-        "formula": "TA = sum(call_scores) / number_of_calls",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
         "core_toolset": task.core_toolset,
-        "aux_toolset": task.aux_toolset,
+        "helper_capable_tools": list(HELPER_CAPABLE_TOOLS),
         "tool_calls_path": str(tool_calls_path) if tool_calls_path else None,
+        "query_id": query_id,
         "tool_call_count": call_count,
-        "total_score": total_score,
+        "core_call_count": core_call_count,
+        "helper_call_count": helper_call_count,
+        "other_call_count": other_call_count,
+        "weighted_score": weighted_score,
         "average_score": average_score,
         "scored_calls": scored_calls,
     }
@@ -416,6 +458,12 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         for value in [result.latency]
         if value is not None
     ]
+    end_to_end_latency_values = [
+        value
+        for result in result_list
+        for value in [result.end_to_end_latency]
+        if value is not None
+    ]
     attempt_counts = [result.attempt_count for result in result_list if result.attempt_count is not None]
     retried_tasks = [result for result in result_list if result.attempt_count > 1]
     auth_refreshed_tasks = [result for result in result_list if result.auth_refreshed]
@@ -433,12 +481,12 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
             if tool_appropriateness_scores
             else None
         ),
-        "average_parameter_schema_valid_rate": (
+        "macro_average_parameter_schema_valid_rate(PSV)": (
             sum(parameter_schema_valid_rates) / len(parameter_schema_valid_rates)
             if parameter_schema_valid_rates
             else None
         ),
-        "average_constraint_compliance_rate": (
+        "macro_average_constraint_compliance_rates(CCR)": (
             sum(constraint_compliance_rates) / len(constraint_compliance_rates)
             if constraint_compliance_rates
             else None
@@ -448,7 +496,7 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
             if total_tokens_values
             else None
         ),
-        "average_total_steps": (
+        "average_total_steps(temp)": (
             sum(total_steps_values) / len(total_steps_values)
             if total_steps_values
             else None
@@ -461,6 +509,11 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         "average_latency": (
             sum(latency_values) / len(latency_values)
             if latency_values
+            else None
+        ),
+        "average_end_to_end_latency": (
+            sum(end_to_end_latency_values) / len(end_to_end_latency_values)
+            if end_to_end_latency_values
             else None
         ),
         "average_attempt_count": (
@@ -543,7 +596,7 @@ def _clean_field(value: str | None) -> str | None:
     return cleaned or None
 
 
-def _load_tool_names_from_jsonl(path: Path | None) -> list[str]:
+def _load_tool_names_from_jsonl(path: Path | None, *, query_id: str | None = None) -> list[str]:
     if path is None or not path.exists():
         return []
 
@@ -557,6 +610,10 @@ def _load_tool_names_from_jsonl(path: Path | None) -> list[str]:
                 record = json.loads(stripped)
             except json.JSONDecodeError:
                 continue
+            if query_id:
+                record_query_id = _clean_field(str(record.get("query_id") or ""))
+                if record_query_id != query_id:
+                    continue
             tool_name = _clean_field(str(record.get("tool_name") or ""))
             if tool_name:
                 tool_names.append(tool_name)

@@ -1,16 +1,24 @@
-task_id,prompt,note,ref_tool_call,answer_type,ground_truth,aux_toolset,core_toolset,category,source_scope,temporal_req,complexity,,
+task_id,prompt,note,ref_tool_call,answer_type,ground_truth,core_toolset,category,source_scope,temporal_req,complexity,,
 1,Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.,,"{
   ""collection"": ""bluesky"",
   ""query"": ""date:[2024-02-01T00:00:00Z TO 2024-02-29T23:59:59Z] AND (text:\""bulk billing\"" OR text:\""Medicare\"")"",
   ""limit"": null,
   ""bookmark"": null
-}",scalar,102,,text_search,B,single,Fixed interval,single,,
+}",scalar,"{
+    ""value"": 102,
+    ""unit"": posts,
+    ""comment"": null
+  }",text_search,B,single,Fixed interval,single,,
 2,"How many Bluesky posts in 2024 mentioned ""cost of living"" and did not mention mortgage?",,"{
   ""collection"": ""bluesky"",
   ""query"": ""date:[2024-01-01T00:00:00Z TO 2024-12-31T23:59:59Z] AND text:\""cost of living\"" AND NOT text:\""mortgage\"""",
   ""limit"": null,
   ""bookmark"": null
-}",scalar,4195,,text_search,B,single,Fixed interval,single,,
+}",scalar,"{
+    ""value"": 4195,
+    ""unit"": posts,
+    ""comment"": null
+  }",text_search,B,single,Fixed interval,single,,
 3,"Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data","{'result': [{'time': '2021-06-21', 'count': 227781}, {'time': '2021-06-22', 'count': 266920}, {'time': '2021-06-23', 'count': 270177}, {'time': '2021-06-24', 'count': 255432}, {'time': '2021-06-28', 'count': 
 2}, {'time': '2021-06-29', 'count': 299017}, {'time': '2021-06-30', 'count': 302848}]}","{
   ""collection"": ""Twitter""
@@ -20,47 +28,52 @@ task_id,prompt,note,ref_tool_call,answer_type,ground_truth,aux_toolset,core_tool
   ""startdate"": ""2021-06-21"", 
   ""enddate"": ""2021-06-30"" 
 }",timeseries,"{
-  ""granularity"": ""daily"",
-  ""series_label"": ""Daily Counts"",
-  ""points"": [
+  ""x_axis_type"": ""time"",
+  ""granularity"": ""day"",
+  ""value_unit"": ""posts"",
+  ""series"": [
     {
-      ""time"": ""2021-06-21"",
-      ""value"": 227781
-    },
-    {
-      ""time"": ""2021-06-22"",
-      ""value"": 266920
-    },
-    {
-      ""time"": ""2021-06-23"",
-      ""value"": 270177
-    },
-    {
-      ""time"": ""2021-06-24"",
-      ""value"": 255432
-    },
-    {
-      ""time"": ""2021-06-28"",
-      ""value"": 2
-    },
-    {
-      ""time"": ""2021-06-29"",
-      ""value"": 299017
-    },
-    {
-      ""time"": ""2021-06-30"",
-      ""value"": 302848
+      ""label"": ""Daily Counts"",
+      ""points"": [
+        {
+          ""x"": ""2021-06-21"",
+          ""value"": 227781
+        },
+        {
+          ""x"": ""2021-06-22"",
+          ""value"": 266920
+        },
+        {
+          ""x"": ""2021-06-23"",
+          ""value"": 270177
+        },
+        {
+          ""x"": ""2021-06-24"",
+          ""value"": 255432
+        },
+        {
+          ""x"": ""2021-06-28"",
+          ""value"": 2
+        },
+        {
+          ""x"": ""2021-06-29"",
+          ""value"": 299017
+        },
+        {
+          ""x"": ""2021-06-30"",
+          ""value"": 302848
+        }
+      ]
     }
   ],
-  ""comment"": ""daily activity for first 10 days of data""
-}",get_collections,"get_collection_summary, aggregate_by_time",C,single,Fixed interval,multi,,
+  ""comment"": ""daily activity for first 10 days of data. note there is no data for 25,26,27""
+}","get_collection_summary, aggregate_by_time",C,single,Fixed interval,multi,,
 4,Can you show me the weekly number of posts tagged “melbourne” in the Mastodon collection in Jan 2024?," {""week_start"": ""2024-01-01"", ""count"": 69},
     {""week_start"": ""2024-01-08"", ""count"": 53},
     {""week_start"": ""2024-01-15"", ""count"": 64},   
  {""week_start"": ""2024-01-22"", ""count"": 57},
     {""week_start"": ""2024-01-29"", ""count"": 69},
-","[
-  {
+","  {
     ""tool_name"": ""text_search"",
     ""arguments"": {
       ""collection"": ""mastodon"",
@@ -95,32 +108,38 @@ task_id,prompt,note,ref_tool_call,answer_type,ground_truth,aux_toolset,core_tool
       ""query"": ""hashtags:melbourne AND date:[2024-01-29 TO 2024-02-04]""
     }
   }",timeseries,"{
-  ""granularity"": ""weekly"",
-  ""series_label"": ""Weekly Counts"",
-  ""points"": [
+  ""x_axis_type"": ""time"",
+  ""granularity"": ""week"",
+  ""value_unit"": ""posts"",
+  ""series"": [
     {
-      ""time"": ""2024-01-01"",
-      ""value"": 69
-    },
-    {
-      ""time"": ""2024-01-08"",
-      ""value"": 53
-    },
-    {
-      ""time"": ""2024-01-15"",
-      ""value"": 64
-    },
-    {
-      ""time"": ""2024-01-22"",
-      ""value"": 57
-    },
-    {
-      ""time"": ""2024-01-29"",
-      ""value"": 69
+      ""label"": ""Weekly Counts"",
+      ""points"": [
+        {
+          ""x"": ""2024-01-01"",
+          ""value"": 69
+        },
+        {
+          ""x"": ""2024-01-08"",
+          ""value"": 53
+        },
+        {
+          ""x"": ""2024-01-15"",
+          ""value"": 64
+        },
+        {
+          ""x"": ""2024-01-22"",
+          ""value"": 57
+        },
+        {
+          ""x"": ""2024-01-29"",
+          ""value"": 69
+        }
+      ]
     }
   ],
   ""comment"": ""Weekly data for January 2024. The counts show a dip mid-month before returning to the initial level of 69 by the final week.""
-}",get_collection_summary,text_search,C,single,FIxed interval,multi,,
+}",text_search,C,single,FIxed interval,multi,,
 5,"For the Reddit dataset, was posting activity generally higher on Sundays than on Mondays during 2023-2025?","text='[{""time"":""friday"",""count"":238666},{""time"":""monday"",""count"":237584},{""time"":""saturday"",""count"":226939},{""time"":""sunday"",""count"":233125},{""time"":""thursday"",""count"":243426},{""time"":""tuesday"",""count"":237255},{""time"":""wednesday"",""count"":242988}]', annotations=None, meta=None)]
 
 text='[{""time"":""friday"",""count"":245407},{""time"":""monday"",""count"":255963},{""time"":""saturday"",""count"":228447},{""time"":""sunday"",""count"":248384},{""time"":""thursday"",""count"":257217},{""time"":""tuesday"",""count"":250350},{""time"":""wednesday"",""count"":253741}]', annotations=None, meta=None)]
@@ -158,7 +177,7 @@ text='[{""time"":""friday"",""count"":227328},{""time"":""monday"",""count"":225
     ""The total aggregated post count for Sundays across 2023–2025 was 700,102."",
     ""The total aggregated post count for Mondays across 2023–2025 was 718,943.""
   ]
-}",,"get_collection_summary,
+}","get_collection_summary,
 aggregate_seasonality",,single,Fixed interval,multi,,
 6,I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2026?,"{""time"":0,""count"":41980},{""time"":1,""count"":39281},{""time"":2,""count"":44216},{""time"":3,""count"":36669},{""time"":4,""count"":32568},{""time"":5,""count"":32638},{""time"":6,""count"":34766},{""time"":7,""count"":38747},{""time"":8,""count"":42836},{""time"":9,""count"":42569},{""time"":10,""count"":45961},{""time"":11,""count"":48588},{""time"":12,""count"":53978},{""time"":13,""count"":56523},{""time"":14,""count"":64411},{""time"":15,""count"":67843},{""time"":16,""count"":68245},{""time"":17,""count"":67218},{""time"":18,""count"":64088},{""time"":19,""count"":61437},{""time"":20,""count"":59423},{""time"":21,""count"":56844},{""time"":22,""count"":51310},{""time"":23,""count"":45715}","{
   ""collection"": ""mastodon"",
@@ -193,7 +212,7 @@ aggregate_seasonality",,single,Fixed interval,multi,,
     {""time"": 22, ""count"": 51310},
     {""time"": 23, ""count"": 45715}
   ]
-}",,aggregate_seasonality,C,single,FIxed interval,single,,
+}",aggregate_seasonality,C,single,FIxed interval,single,,
 7,Determine whether average sentiment in the Flickr collection was more positive on weekends or weekdays during its first year of data,"Flickr collection startDate is 2021-04-27
 
 sentimentcount by days of week during 2021 is :
@@ -221,9 +240,9 @@ sentimentcount by days of week during 2021 is :
     ""The mean weekend sentiment aggregate was 6,652."",
     ""The mean weekday sentiment aggregate was 6,014.4.""
   ]
-}",,"get_collection_summary,
+}","get_collection_summary,
  aggregate_seasonality",C,single,Fixed interval,multi,,
-8,Can you draw a chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?,"{""time"":""2025-01"",""count"":152074},{""time"":""2025-02"",""count"":141916},{""time"":""2025-03"",""count"":159511},{""time"":""2025-04"",""count"":132151},{""time"":""2025-05"",""count"":133610},{""time"":""2025-06"",""count"":117729},{""time"":""2025-07"",""count"":118185},{""time"":""2025-08"",""count"":113837},{""time"":""2025-09"",""count"":118194},{""time"":""2025-10"",""count"":122222},{""time"":""2025-11"",""count"":132369},{""time"":""2025-12"",""count"":135096}","{
+8,Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?,"{""time"":""2025-01"",""count"":152074},{""time"":""2025-02"",""count"":141916},{""time"":""2025-03"",""count"":159511},{""time"":""2025-04"",""count"":132151},{""time"":""2025-05"",""count"":133610},{""time"":""2025-06"",""count"":117729},{""time"":""2025-07"",""count"":118185},{""time"":""2025-08"",""count"":113837},{""time"":""2025-09"",""count"":118194},{""time"":""2025-10"",""count"":122222},{""time"":""2025-11"",""count"":132369},{""time"":""2025-12"",""count"":135096}","{
   ""collection"": ""reddit"",
   ""aggregation_level"": ""month"",
   ""startdate"": ""2025-01-01"",
@@ -323,7 +342,7 @@ sentimentcount by days of week during 2021 is :
   ],
   ""summary"": ""In 2025, Reddit post activity peaked in March with 159,511 posts and hit a yearly low in August with 113,837 posts. The data shows a downward trend through the summer months followed by a steady recovery in the final quarter of the year."",
   ""render_url"": null
-}",get_collection_summary,"aggregate_by_time, generate_chart",C,single,Fixed interval,multi,,
+}","aggregate_by_time, generate_chart",C,single,Fixed interval,multi,,
 9,How did the general sentiment of the BlueSky collection fluctuate on a daily basis during January 2026? draw a line graph,"{""time"":""2026-01-01"",""sentimentcount"":244775},{""time"":""2026-01-02"",""sentimentcount"":248516},{""time"":""2026-01-03"",""sentimentcount"":404619},{""time"":""2026-01-04"",""sentimentcount"":321137},{""time"":""2026-01-05"",""sentimentcount"":318485},{""time"":""2026-01-06"",""sentimentcount"":323059},{""time"":""2026-01-07"",""sentimentcount"":365357},{""time"":""2026-01-08"",""sentimentcount"":405524},{""time"":""2026-01-09"",""sentimentcount"":379288},{""time"":""2026-01-10"",""sentimentcount"":340441},{""time"":""2026-01-11"",""sentimentcount"":328632},{""time"":""2026-01-12"",""sentimentcount"":350855},{""time"":""2026-01-13"",""sentimentcount"":356547},{""time"":""2026-01-14"",""sentimentcount"":356938},{""time"":""2026-01-15"",""sentimentcount"":367090},{""time"":""2026-01-16"",""sentimentcount"":352888},{""time"":""2026-01-17"",""sentimentcount"":319054},{""time"":""2026-01-18"",""sentimentcount"":326019},{""time"":""2026-01-19"",""sentimentcount"":336558},{""time"":""2026-01-20"",""sentimentcount"":360520},{""time"":""2026-01-21"",""sentimentcount"":383619},{""time"":""2026-01-22"",""sentimentcount"":347974},{""time"":""2026-01-23"",""sentimentcount"":336407},{""time"":""2026-01-24"",""sentimentcount"":401404},{""time"":""2026-01-25"",""sentimentcount"":415480},{""time"":""2026-01-26"",""sentimentcount"":375305},{""time"":""2026-01-27"",""sentimentcount"":373101},{""time"":""2026-01-28"",""sentimentcount"":357613},{""time"":""2026-01-29"",""sentimentcount"":330036},{""time"":""2026-01-30"",""sentimentcount"":342702},{""time"":""2026-01-31"",""sentimentcount"":306530}","{
   ""collection"": ""bluesky"",
   ""aggregation_level"": ""day"",
@@ -347,20 +366,20 @@ sentimentcount by days of week during 2021 is :
   ],
   ""summary"": ""Throughout January 2026, sentiment activity showed significant fluctuations, beginning at a monthly low of 244,775 on January 1st and reaching a peak of 415,480 on January 25th. The data reveals several spikes in engagement, notably during the first and last weeks of the month."",
   ""render_url"": null
-}",generate_chart,aggregate_by_time,C,single,Fixed interval,single,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,,
-,,,,,,,,,,,,, 
+}","aggregate_by_time,generate_chart",C,single,Fixed interval,single,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,, 

@@ -12,12 +12,12 @@ openrouter:
     # repetition_penalty: 1.0
     stream: false
     tool_choice: "auto"
-    parallel_tool_calls: false
+    #parallel_tool_calls: false
 
 model_catalog:
   # Tool-using agent candidates
 
-  - id: "qwen/qwen3.6-plus"
+  - id: "qwen/qwen3.6-plus" # doesn't support parameter "parallel_tool_calls"
     role: "tool_agent"
     openrouter:
       provider:
@@ -69,7 +69,7 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "nvidia/nemotron-3-super-120b-a12b"
+      - "qwen/qwen3.6-plus"
     judge_candidates:
       - "openai/gpt-5.4-mini" #not implemented yet
     openrouter_override: {}        # optional
