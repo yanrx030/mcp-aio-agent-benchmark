@@ -1,0 +1,9 @@
+{
+    "tool_name": "get_term_daily_counts",
+    "arguments": {
+        "collection": "reddit",
+        "terms": "new,year,australia",
+        "startdate": "2024-01-01",
+        "enddate": "2024-01-07"
+    }
+}

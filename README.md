@@ -157,6 +157,9 @@ For manual tool argument testing:
 
 ```bash
 uv run --env-file .env manual_ground_truth_collector.py
+
+uv run python tool_call.py --call-file call.json --pretty
+
 ```
 
 This launches an interactive prompt to select tools and provide JSON arguments.

@@ -15,6 +15,7 @@ from MCPClient import (
     is_transport_error,
 )
 from eval_logger import JSONLLogger, utc_now_iso
+from ground_truth_evaluation import build_evaluation_context, evaluate_ground_truth
 from prompts import resolve_system_prompt
 
 
@@ -133,6 +134,8 @@ async def run_benchmark_tasks(
     auth_key: str,
     openrouter_api_key: str,
     openrouter_model: str,
+    judge_model: str | None = None,
+    judge_openrouter_params: dict[str, Any] | None = None,
     toolset_path: str,
     jwt_manager: JwtTokenManager,
     shared_logger: JSONLLogger,
@@ -195,7 +198,13 @@ async def run_benchmark_tasks(
                         cleanup_warnings.append(f"attempt {attempt}: {cleanup_warning}")
 
                 if attempt_exc is None and query_trace is not None:
-                    validation = validate_ground_truth_placeholder(task, query_trace)
+                    validation = await validate_ground_truth(
+                        task,
+                        query_trace,
+                        openrouter_api_key=openrouter_api_key,
+                        judge_model=judge_model,
+                        judge_openrouter_params=judge_openrouter_params,
+                    )
                     tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
                     finished_at = utc_now_iso()
                     latency = time.perf_counter() - attempt_started_perf
@@ -304,28 +313,27 @@ async def run_benchmark_tasks(
     return [result for result in results_by_index if result is not None]
 
 
-def validate_ground_truth_placeholder(
+async def validate_ground_truth(
     task: BenchmarkTask,
     query_trace: dict[str, Any],
+    *,
+    openrouter_api_key: str,
+    judge_model: str | None = None,
+    judge_openrouter_params: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return {"placeholder":"TODO: implement llm as judge"}
-    # expected_answer = (task.ground_truth or "").strip()
-    # final_answer = str(query_trace.get("final_answer") or "").strip()
-    # heuristic_match = bool(expected_answer) and expected_answer in final_answer
-
-    # return {
-    #     "status": "placeholder_match" if heuristic_match else "placeholder_review_required",
-    #     "placeholder": True,
-    #     "reason": (
-    #         "Detailed ground-truth validation is not implemented yet. "
-    #         "This placeholder only checks whether the expected ground-truth string appears in the final answer "
-    #         "and records the parsed reference tool calls for future validation."
-    #     ),
-    #     "expected_ground_truth": task.ground_truth,
-    #     "expected_tool_call_count": len(task.ground_truth_tool_calls),
-    #     "expected_tool_calls": task.ground_truth_tool_calls,
-    #     "heuristic_answer_contains_ground_truth": heuristic_match,
-    # }
+    context = build_evaluation_context(
+        task_id=task.task_id,
+        prompt=task.prompt,
+        answer_type=task.answer_type,
+        ground_truth_raw=task.ground_truth,
+        final_answer_raw=_clean_field(str(query_trace.get("final_answer") or "")),
+        metadata=task.metadata,
+        openrouter_api_key=openrouter_api_key,
+        judge_model=judge_model,
+        judge_openrouter_params=judge_openrouter_params,
+    )
+    print(f"[task {task.task_id}] evaluating agent answer against ground truth")
+    return await evaluate_ground_truth(context)
 
 
 
@@ -412,7 +420,7 @@ def calculate_tool_appropriateness(
 
 def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     result_list = list(results)
-    completed = sum(1 for result in result_list if result.status == "completed")
+    finished_with_result = sum(1 for result in result_list if result.status == "completed")
     failed = sum(1 for result in result_list if result.status == "failed")
 
     tool_appropriateness_scores = [
@@ -421,6 +429,13 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
         if result.tool_appropriateness is not None
         for score in [result.tool_appropriateness.get("average_score")]
         if score is not None
+    ]
+    ground_truth_scores = [
+        int(score)
+        for result in result_list
+        if result.ground_truth_validation is not None
+        for score in [result.ground_truth_validation.get("score")]
+        if score in {0, 1, True, False}
     ]
     parameter_schema_valid_rates = [
         value
@@ -471,11 +486,17 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
 
     return {
         "total_tasks": len(result_list),
-        "completed_tasks": completed,
+        "finished_with_result_tasks": finished_with_result,
         "failed_tasks": failed,
         "tasks_retried": len(retried_tasks),
         "tasks_with_auth_refresh": len(auth_refreshed_tasks),
         "tasks_with_cleanup_warning": len(cleanup_warning_tasks),
+        "Evaluated tasks": len(ground_truth_scores),
+        "Task Completion Rate (TCR)": (
+            sum(ground_truth_scores) / len(ground_truth_scores)
+            if ground_truth_scores
+            else None
+        ),
         "average_tool_appropriateness": (
             sum(tool_appropriateness_scores) / len(tool_appropriateness_scores)
             if tool_appropriateness_scores

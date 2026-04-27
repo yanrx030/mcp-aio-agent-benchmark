@@ -94,6 +94,7 @@ async def main() -> None:
     tool_agent_override = args.tool_agent_model or args.model
     selected_model = tool_agent_override or default_tool_agent_model
     selected_judge_model: str | None = args.judge_model
+    selected_judge_openrouter_params: dict | None = None
     selected_openrouter_params: dict | None = None
 
     manifest_path = Path(args.manifest)
@@ -107,6 +108,9 @@ async def main() -> None:
         selected_model = manifest_config.tool_agent.model_id
         selected_openrouter_params = manifest_config.tool_agent.openrouter_params
         selected_judge_model = manifest_config.judge.model_id if manifest_config.judge else None
+        selected_judge_openrouter_params = (
+            manifest_config.judge.openrouter_params if manifest_config.judge else None
+        )
 
         print(
             f"Using manifest profile '{manifest_config.profile}' from {manifest_config.source_path}"
@@ -183,6 +187,8 @@ async def main() -> None:
         auth_key=aio_key,
         openrouter_api_key=openrouter_key,
         openrouter_model=selected_model,
+        judge_model=selected_judge_model,
+        judge_openrouter_params=selected_judge_openrouter_params,
         toolset_path=args.toolset,
         jwt_manager=jwt_manager,
         shared_logger=shared_logger,
