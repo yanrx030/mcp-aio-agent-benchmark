@@ -19,10 +19,22 @@ def generate_id(prefix: str) -> str:
     return f"{prefix}_{uuid4().hex[:12]}"
 
 
-def generate_task_set_id() -> str:
-    """Generate a readable identifier for a task-set run directory."""
-    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    return f"taskset_{timestamp}_{uuid4().hex[:6]}"
+def generate_task_set_timestamp() -> str:
+    """Generate a UTC timestamp for run identifiers and folder names."""
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+
+
+def generate_task_set_id(timestamp: str | None = None) -> str:
+    """Generate a stable internal identifier for a task-set run."""
+    run_timestamp = timestamp or generate_task_set_timestamp()
+    return f"taskset_{run_timestamp}_{uuid4().hex[:6]}"
+
+
+def generate_task_set_dirname(prefix: str | None = None, timestamp: str | None = None) -> str:
+    """Generate a human-readable run directory name."""
+    run_timestamp = timestamp or generate_task_set_timestamp()
+    safe_prefix = _safe_path_component(prefix) if prefix else "run"
+    return f"{safe_prefix}_{run_timestamp}"
 
 
 def _safe_path_component(value: str) -> str:
@@ -110,7 +122,7 @@ class JSONLLogger:
     Append-only JSONL logger for evaluation traces.
 
     Layout:
-      - one task-set directory per run under `logs/task_sets/<task_set_id>/`
+      - one task-set directory per run under `logs/results/<model>_<timestamp>/`
       - one query-level record per query in `query_runs.jsonl`
       - one record per attempted tool call in `tool_calls/<task_id>.jsonl`
       - one run-level metadata file in `run_metadata.json`
@@ -120,16 +132,21 @@ class JSONLLogger:
         self,
         log_dir: str | Path = "logs",
         task_set_id: str | None = None,
-        task_sets_dirname: str = "task_sets",
+        task_set_prefix: str | None = None,
+        task_sets_dirname: str = "results",
         query_runs_filename: str = "query_runs.jsonl",
         tool_calls_dirname: str = "tool_calls",
     ) -> None:
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
-        self.task_set_id = task_set_id or generate_task_set_id()
-        self.task_set_dir = self.log_dir / task_sets_dirname / self.task_set_id
-        self.task_set_dir.mkdir(parents=True, exist_ok=True)
+        run_timestamp = generate_task_set_timestamp()
+        self.task_set_id = task_set_id or generate_task_set_id(run_timestamp)
+        self.task_set_dir = self._create_task_set_dir(
+            task_sets_root=self.log_dir / task_sets_dirname,
+            task_set_prefix=task_set_prefix,
+            timestamp=run_timestamp,
+        )
 
         self.query_runs_path = self.task_set_dir / query_runs_filename
         self.tool_calls_dir = self.task_set_dir / tool_calls_dirname
@@ -143,6 +160,7 @@ class JSONLLogger:
 
         self._run_metadata: dict[str, Any] = {
             "task_set_id": self.task_set_id,
+            "task_set_dir": str(self.task_set_dir),
             "created_at": utc_now_iso(),
             "tool_agent_model": None,
             "judge_model": None,
@@ -251,6 +269,23 @@ class JSONLLogger:
                 lock = threading.Lock()
                 self._tool_locks[path] = lock
             return lock
+
+    def _create_task_set_dir(
+        self,
+        *,
+        task_sets_root: Path,
+        task_set_prefix: str | None,
+        timestamp: str,
+    ) -> Path:
+        task_sets_root.mkdir(parents=True, exist_ok=True)
+        base_name = generate_task_set_dirname(task_set_prefix, timestamp)
+        candidate = task_sets_root / base_name
+        suffix = 2
+        while candidate.exists():
+            candidate = task_sets_root / f"{base_name}_{suffix}"
+            suffix += 1
+        candidate.mkdir(parents=True, exist_ok=False)
+        return candidate
 
     def _append_jsonl(self, path: Path, record: Mapping[str, Any], lock: threading.Lock) -> None:
         line = json.dumps(record, ensure_ascii=False, default=str)

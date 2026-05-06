@@ -4,16 +4,18 @@ import asyncio
 import json
 import math
 import re
+from functools import lru_cache
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 import yaml
 from openai import OpenAI
 
-from prompts import normalize_answer_type
+from prompts import normalize_answer_type, Evaluator_PROMPT
 
 
-_JSON_CODE_FENCE_RE = re.compile(r"^\s*```(?:json)?\s*(.*?)\s*```\s*$", re.DOTALL | re.IGNORECASE)
+_JSON_CODE_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL | re.IGNORECASE)
+_EMBEDDED_JSON_CODE_FENCE_RE = re.compile(r"```json\s*(.*?)\s*```", re.DOTALL | re.IGNORECASE)
 _DIRECT_OPENROUTER_KWARGS = {
     "temperature",
     "top_p",
@@ -22,10 +24,13 @@ _DIRECT_OPENROUTER_KWARGS = {
     "presence_penalty",
     "stream",
 }
-_SERIES_ABS_TOLERANCE_DEFAULT = 0.0
-_SERIES_REL_TOLERANCE_DEFAULT = 0.0
-_SCALAR_ABS_TOLERANCE_DEFAULT = 0.0
-_SCALAR_REL_TOLERANCE_DEFAULT = 0.0
+# Default tolerance policy for count-like outputs:
+# - small absolute wiggle room for low-volume counts
+# - tiny relative wiggle room for high-volume counts with minor backfill
+_SERIES_ABS_TOLERANCE_DEFAULT = 1.0
+_SERIES_REL_TOLERANCE_DEFAULT = 1e-6
+_SCALAR_ABS_TOLERANCE_DEFAULT = 1.0
+_SCALAR_REL_TOLERANCE_DEFAULT = 1e-6
 
 
 @dataclass(slots=True)
@@ -147,9 +152,12 @@ def _strip_code_fences(raw: str | None) -> str | None:
     text = raw.strip()
     if not text:
         return None
-    match = _JSON_CODE_FENCE_RE.match(text)
+    match = _JSON_CODE_FENCE_RE.fullmatch(text)
     if match:
         return match.group(1).strip()
+    embedded_match = _EMBEDDED_JSON_CODE_FENCE_RE.search(text)
+    if embedded_match:
+        return embedded_match.group(1).strip()
     return text
 
 
@@ -330,50 +338,186 @@ def _evaluate_series(context: EvaluationContext) -> tuple[int, dict[str, Any]]:
             f"series count mismatch: expected {len(expected_series)}, got {len(actual_series)}"
         )
 
+    series_mapping = _align_series(expected_series, actual_series, abs_tol=abs_tol, rel_tol=rel_tol)
+    mapping_by_expected = {expected_index: actual_index for expected_index, actual_index in series_mapping}
+
     for series_index, expected_item in enumerate(expected_series):
-        if series_index >= len(actual_series):
-            break
-        actual_item = actual_series[series_index]
-        expected_points = expected_item["points"]
-        actual_points = actual_item["points"]
-
-        if len(expected_points) != len(actual_points):
-            mismatches.append(
-                f"series[{series_index}] point count mismatch: expected {len(expected_points)}, got {len(actual_points)}"
+        actual_index = mapping_by_expected.get(series_index)
+        if actual_index is None:
+            mismatches.append(f"series[{series_index}] missing from actual payload")
+            continue
+        actual_item = actual_series[actual_index]
+        mismatches.extend(
+            _compare_series_points(
+                expected_item,
+                actual_item,
+                series_index=series_index,
+                abs_tol=abs_tol,
+                rel_tol=rel_tol,
             )
-
-        compare_count = min(len(expected_points), len(actual_points))
-        for point_index in range(compare_count):
-            expected_point = expected_points[point_index]
-            actual_point = actual_points[point_index]
-            if expected_point["x"] != actual_point["x"]:
-                mismatches.append(
-                    f"series[{series_index}] ordering/x mismatch at point[{point_index}]: "
-                    f"expected '{expected_point['x']}', got '{actual_point['x']}'"
-                )
-
-            expected_value = expected_point["value"]
-            actual_value = actual_point["value"]
-            if expected_value is None or actual_value is None:
-                mismatches.append(
-                    f"series[{series_index}] value missing at point[{point_index}]"
-                )
-                continue
-
-            if not math.isclose(actual_value, expected_value, abs_tol=abs_tol, rel_tol=rel_tol):
-                mismatches.append(
-                    f"series[{series_index}] value mismatch at point[{point_index}]: "
-                    f"expected {expected_value}, got {actual_value}"
-                )
+        )
 
     score = int(len(mismatches) == 0)
     return score, {
         "expected_mode": expected["mode"],
         "actual_mode": actual["mode"],
         "tolerance": {"abs": abs_tol, "rel": rel_tol},
+        "series_mapping": [
+            {"expected_index": expected_index, "actual_index": actual_index}
+            for expected_index, actual_index in series_mapping
+        ],
+        "unmatched_actual_series": [
+            actual_index
+            for actual_index in range(len(actual_series))
+            if actual_index not in {mapped_actual for _, mapped_actual in series_mapping}
+        ],
         "mismatch_count": len(mismatches),
         "mismatches": mismatches[:50],
     }
+
+
+def _align_series(
+    expected_series: list[dict[str, Any]],
+    actual_series: list[dict[str, Any]],
+    *,
+    abs_tol: float,
+    rel_tol: float,
+) -> list[tuple[int, int]]:
+    pair_summaries: dict[tuple[int, int], dict[str, Any]] = {}
+    for expected_index, expected_item in enumerate(expected_series):
+        for actual_index, actual_item in enumerate(actual_series):
+            pair_summaries[(expected_index, actual_index)] = _summarize_series_pair(
+                expected_item,
+                actual_item,
+                abs_tol=abs_tol,
+                rel_tol=rel_tol,
+            )
+
+    @lru_cache(maxsize=None)
+    def _search(expected_index: int, used_mask: int) -> tuple[tuple[Any, ...], tuple[tuple[int, int], ...]]:
+        if expected_index >= len(expected_series):
+            unmatched_actual = len(actual_series) - used_mask.bit_count()
+            return (unmatched_actual, 0, 0, 0, 0, 0.0), ()
+
+        best_cost: tuple[Any, ...] | None = None
+        best_mapping: tuple[tuple[int, int], ...] = ()
+
+        skip_cost, skip_mapping = _search(expected_index + 1, used_mask)
+        skip_total = (skip_cost[0] + 1, *skip_cost[1:])
+        best_cost = skip_total
+        best_mapping = skip_mapping
+
+        for actual_index in range(len(actual_series)):
+            bit = 1 << actual_index
+            if used_mask & bit:
+                continue
+            pair_summary = pair_summaries[(expected_index, actual_index)]
+            remaining_cost, remaining_mapping = _search(expected_index + 1, used_mask | bit)
+            total_cost = (
+                remaining_cost[0],
+                remaining_cost[1] + pair_summary["point_count_delta"],
+                remaining_cost[2] + pair_summary["x_mismatch_count"],
+                remaining_cost[3] + pair_summary["value_issue_count"],
+                remaining_cost[4] + pair_summary["label_mismatch"],
+                remaining_cost[5] + pair_summary["abs_error_sum"],
+            )
+            candidate_mapping = ((expected_index, actual_index),) + remaining_mapping
+            if best_cost is None or total_cost < best_cost:
+                best_cost = total_cost
+                best_mapping = candidate_mapping
+
+        return best_cost or (0, 0, 0, 0, 0, 0.0), best_mapping
+
+    _, mapping = _search(0, 0)
+    return list(mapping)
+
+
+def _summarize_series_pair(
+    expected_item: Mapping[str, Any],
+    actual_item: Mapping[str, Any],
+    *,
+    abs_tol: float,
+    rel_tol: float,
+) -> dict[str, Any]:
+    expected_points = expected_item["points"]
+    actual_points = actual_item["points"]
+    compare_count = min(len(expected_points), len(actual_points))
+
+    x_mismatch_count = 0
+    value_issue_count = 0
+    abs_error_sum = 0.0
+
+    for point_index in range(compare_count):
+        expected_point = expected_points[point_index]
+        actual_point = actual_points[point_index]
+        if expected_point["x"] != actual_point["x"]:
+            x_mismatch_count += 1
+
+        expected_value = expected_point["value"]
+        actual_value = actual_point["value"]
+        if expected_value is None or actual_value is None:
+            value_issue_count += 1
+            continue
+
+        abs_error_sum += abs(actual_value - expected_value)
+        if not math.isclose(actual_value, expected_value, abs_tol=abs_tol, rel_tol=rel_tol):
+            value_issue_count += 1
+
+    expected_label = _normalized_token(_as_clean_str(expected_item.get("label")))
+    actual_label = _normalized_token(_as_clean_str(actual_item.get("label")))
+    label_mismatch = int(
+        expected_label is not None and actual_label is not None and expected_label != actual_label
+    )
+
+    return {
+        "point_count_delta": abs(len(expected_points) - len(actual_points)),
+        "x_mismatch_count": x_mismatch_count,
+        "value_issue_count": value_issue_count,
+        "label_mismatch": label_mismatch,
+        "abs_error_sum": abs_error_sum,
+    }
+
+
+def _compare_series_points(
+    expected_item: Mapping[str, Any],
+    actual_item: Mapping[str, Any],
+    *,
+    series_index: int,
+    abs_tol: float,
+    rel_tol: float,
+) -> list[str]:
+    mismatches: list[str] = []
+    expected_points = expected_item["points"]
+    actual_points = actual_item["points"]
+
+    if len(expected_points) != len(actual_points):
+        mismatches.append(
+            f"series[{series_index}] point count mismatch: expected {len(expected_points)}, got {len(actual_points)}"
+        )
+
+    compare_count = min(len(expected_points), len(actual_points))
+    for point_index in range(compare_count):
+        expected_point = expected_points[point_index]
+        actual_point = actual_points[point_index]
+        if expected_point["x"] != actual_point["x"]:
+            mismatches.append(
+                f"series[{series_index}] ordering/x mismatch at point[{point_index}]: "
+                f"expected '{expected_point['x']}', got '{actual_point['x']}'"
+            )
+
+        expected_value = expected_point["value"]
+        actual_value = actual_point["value"]
+        if expected_value is None or actual_value is None:
+            mismatches.append(f"series[{series_index}] value missing at point[{point_index}]")
+            continue
+
+        if not math.isclose(actual_value, expected_value, abs_tol=abs_tol, rel_tol=rel_tol):
+            mismatches.append(
+                f"series[{series_index}] value mismatch at point[{point_index}]: "
+                f"expected {expected_value}, got {actual_value}"
+            )
+
+    return mismatches
 
 
 def _normalize_series(payload: Any) -> dict[str, Any]:
@@ -456,15 +600,15 @@ def _normalize_points(points_payload: Any) -> list[dict[str, Any]]:
 
 async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any]]:
     # Text scoring is semantic and delegated to a judge model; still collapsed to 0/1.
-    expected_text = _normalize_text_payload(context.ground_truth.answer_payload)
-    actual_text = _normalize_text_payload(context.final_answer.answer_payload)
+    ground_truth = _normalize_text_payload(context.ground_truth.answer_payload)
+    agent_answer = _normalize_text_payload(context.final_answer.answer_payload)
 
     judge_model = context.model_config.judge_model
     if not judge_model:
         return 0, {
             "reason": "judge model is not configured",
-            "expected_text": expected_text,
-            "actual_text": actual_text,
+            "expected_text": ground_truth,
+            "actual_text": agent_answer,
         }
 
     client = OpenAI(
@@ -472,17 +616,11 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
         api_key=context.model_config.openrouter_api_key,
     )
 
-    system_prompt = (
-        "You are a strict semantic evaluator. Compare candidate answer with reference facts. "
-        "Return ONLY valid JSON object: "
-        '{"score":0|1,"verdict":"string","matched_facts":["string"],"missing_or_incorrect":["string"]}. '
-        "Score 1 only if candidate answer is materially correct and not contradictory."
-    )
+    system_prompt = Evaluator_PROMPT
     user_payload = {
-        "task_id": context.task_id,
-        "task_prompt": context.prompt,
-        "reference": expected_text,
-        "candidate": actual_text,
+        "task": context.prompt,
+        "ground_truth": ground_truth,
+        "agent_answer": agent_answer,
     }
     messages = [
         {"role": "system", "content": system_prompt},
@@ -506,16 +644,15 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
                 "judge_parse_error": parse_error,
             }
 
-        raw_score = parsed.get("score")
-        score = 1 if str(raw_score).strip() == "1" else 0
+        raw_rating = parsed.get("score")
+        # collapse to binary score: only perfect (2) is passing, everything else is failing but we keep the granularity in diagnostics.
+        score = 1 if str(raw_rating).strip() == "2" else 0
         return score, {
-            "judge_model": judge_model,
-            "judge_parser_used": parser_used,
-            "judge_verdict": _as_clean_str(parsed.get("verdict")),
-            "judge_matched_facts": parsed.get("matched_facts"),
-            "judge_missing_or_incorrect": parsed.get("missing_or_incorrect"),
-            "expected_text": expected_text,
-            "actual_text": actual_text,
+            "raw_rating": raw_rating,
+            "reason": parsed.get("reason") or "no reason provided",
+            "judge_raw_response": content,
+            "expected_text": ground_truth,
+            "actual_text": agent_answer,
         }
     except Exception as exc:
         return 0, {
@@ -523,51 +660,50 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
             "judge_model": judge_model,
             "error_type": type(exc).__name__,
             "error_message": str(exc),
-            "expected_text": expected_text,
-            "actual_text": actual_text,
+            "expected_text": ground_truth,
+            "actual_text": agent_answer,
         }
 
 
 def _normalize_text_payload(payload: Any) -> dict[str, Any]:
     if isinstance(payload, Mapping):
-        reference_answer = None
-        for key in ("reference answer", "reference_answer", "ref_answer", "summary"):
-            reference_answer = _as_clean_str(payload.get(key))
-            if reference_answer:
-                break
 
-        facts = payload.get("facts")
-        if not isinstance(facts, list):
-            facts = []
 
-        summary = _as_clean_str(payload.get("summary"))
-        key_points = payload.get("key_points")
-        if not isinstance(key_points, list):
-            key_points = []
+        raw_summary = summary = _as_clean_str(payload.get("summary"))
+        raw_key_points = payload.get("key_points")
+        if not isinstance(raw_key_points, list):
+            raw_key_points = []
+
+        # Normalize fact and key_point elements to non-empty strings.
+        def _normalize_list_items(items: Any) -> list[str]:
+            if not isinstance(items, list):
+                return []
+            out: list[str] = []
+            for it in items:
+                if it is None:
+                    continue
+                s = str(it).strip()
+                if s:
+                    out.append(s)
+            return out
+
+        key_points = _normalize_list_items(raw_key_points)
+        
 
         return {
-            "reference_answer": reference_answer,
-            "facts": facts,
             "summary": summary,
             "key_points": key_points,
-            "raw_payload": payload,
         }
 
     if payload is None:
         return {
-            "reference_answer": None,
-            "facts": [],
             "summary": None,
             "key_points": [],
-            "raw_payload": None,
         }
 
     return {
-        "reference_answer": None,
-        "facts": [],
         "summary": str(payload),
         "key_points": [],
-        "raw_payload": payload,
     }
 
 
@@ -578,9 +714,6 @@ def _build_openrouter_completion_kwargs(
     openrouter_params: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     params = dict(openrouter_params or {})
-    params.setdefault("temperature", 0.0)
-    params.pop("tool_choice", None)
-    params.pop("parallel_tool_calls", None)
 
     kwargs: dict[str, Any] = {
         "model": model,

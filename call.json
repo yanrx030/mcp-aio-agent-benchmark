@@ -1,9 +1,10 @@
 {
-    "tool_name": "get_term_daily_counts",
+    "tool_name": "aggregate_by_time",
     "arguments": {
-        "collection": "reddit",
-        "terms": "new,year,australia",
+        "collection": "youtube",
+        "aggregation_level": "month",
         "startdate": "2024-01-01",
-        "enddate": "2024-01-07"
+        "enddate": "2024-12-31",
+        "sentiment": false
     }
 }

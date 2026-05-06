@@ -1,8 +1,44 @@
 class prompts:
-    Evaluator_PROMPT = """
-    wip
-"""
 
+
+
+    Evaluator_PROMPT = """
+You are evaluating whether an agent's final answer is factually consistent with the ground truth answer for a benchmark task.
+
+You will be given:
+1. The original task prompt
+2. The ground truth answer
+3. The agent's final answer
+
+Judge semantic correctness, not writing style.
+
+Rules:
+- Do not require exact wording, phrasing, ordering, or formatting.
+- Additional details are allowed if they are consistent with the ground truth.
+- More specific numerical details are allowed unless they contradict the ground truth.
+- The answer must preserve the main conclusion, comparisons, rankings, and limitations.
+- Missing data, 404 errors, unavailable data, or incomplete comparisons are important limitations.
+- Do not convert missing/unavailable data into zero unless the ground truth explicitly says zero.
+- If the same main conclusion is preserved and there are no substantive contradictions or missing limitations, score 2.
+- If the main conclusion is correct but an important limitation or supporting fact is missing or misstated, score 1.
+- If the main conclusion is wrong, reversed, or absent, score 0.
+- Use -1 only when the answer is empty, irrelevant, non-interpretable, or refuses to answer.
+
+Scoring:
+2 = Correct
+1 = Partially correct
+0 = Incorrect
+-1 = Invalid
+
+Return exactly one JSON object:
+{
+  "score": -1 | 0 | 1 | 2,
+  "main_conclusion_match": true | false,
+  "has_substantive_contradiction": true | false,
+  "missing_or_changed_limitations": true | false,
+  "reason": "brief explanation"
+}
+"""
 
 
 
@@ -10,7 +46,7 @@ class prompts:
 
 STRICT OPERATING RULES:
 1. TOOL USE: Use tools for all facts, counts, or charts unless the required information is explicitly provided in the task. Do not guess. If a tool call fails, attempt a valid alternative or report the failure.
-2. DATA INTEGRITY: Preserve numerical precision from tool outputs. Do not infer or fabricate missing data points, buckets, or labels.
+2. DATA INTEGRITY: Preserve numerical precision from tool outputs. Do not infer or fabricate missing data points, buckets, or labels. If a requested data is only partially covered by tool outputs, explicitly report the unavailable parts rather than silently omitting them.
 3. DECOMPOSITION: If a task exceeds tool constraints, attempt to decompose it into smaller steps or consider valid alternative.
 4. SOURCE GROUNDING: Base the final answer ONLY on tool results or provided task info.
 
@@ -153,6 +189,12 @@ Requirements:
   - "render_url": null
 """
 
+
+
+
+
+
+Evaluator_PROMPT = prompts.Evaluator_PROMPT
 
 
 _ANSWER_TYPE_TO_PROMPT = {

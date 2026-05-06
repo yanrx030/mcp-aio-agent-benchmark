@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-05-06T09:45:40Z",
+  "source_csv": "task\\tasksmall.csv",
+  "summary": {
+    "model": "qwen/qwen3.6-plus",
+    "total_tasks": 4,
+    "finished_with_result_tasks": 4,
+    "Task Completion Rate (TCR)": 0.75,
+    "average_tool_appropriateness": 0.765625,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": 0.611111111111111,
+    "average_total_tokens": 28657.5,
+    "average_total_steps(temp)": 5.5,
+    "average_total_tool_calls": 8.5,
+    "average_latency": 63.971654474997194
+  },
+  "results": [
+    {
+      "task_id": "B3",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 16749,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 28.32331729994621,
+      "tools_used": [
+        "get_collections",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
+      "answer_type": "scalar",
+      "final_answer": "{\n \"status\": \"success\",\n  \"answer\": {\n    \"value\": 91002,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Twitter posts using the hashtag #auspol during Q1 2023 (January 1 - March 31, 2023)\"\n  }\n}"
+    },
+    {
+      "task_id": "C6",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.5,
+      "total_tokens": 19656,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 46.220170399989,
+      "tools_used": [
+        "get_collections",
+        "aggregate_by_time",
+        "generate_chart"
+      ],
+      "passed": true,
+      "answer_type": "chart",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"chart_type\": \"line\",\n    \"title\": \"BlueSky Monthly Post Count in 2024\",\n    \"labels\": [\n      \"2024-01\",\n      \"2024-02\",\n      \"2024-03\",\n      \"2024-04\",\n      \"2024-05\",\n      \"2024-06\",\n      \"2024-07\",\n      \"2024-08\",\n      \"2024-09\",\n      \"2024-10\",\n      \"2024-11\",\n      \"2024-12\"\n    ],\n    \"datasets\": [\n      {\n        \"label\": \"Post Count\",\n        \"data\": [\n          785519,\n          870280,\n          825456,\n          808994,\n          807033,\n          828125,\n          938607,\n          1190477,\n          2209035,\n          2720206,\n          11437933,\n          11675977\n        ]\n      }\n    ],\n    \"summary\": \"The BlueSky collection post count remained relatively stable between 785,519 and 938,607 from January to July 2024. It then began to rise significantly in August (1,190,477) and September (2,209,035), followed by a massive surge in October (2,720,206), November (11,437,933), and December (11,675,977), indicating exponential growth in the latter part of the year.\",\n    \"render_url\": \"https://quickchart.io/chart/render/zf-16212920-99ed-4229-bba6-03fab127095f\"\n  }\n}"
+    },
+    {
+      "task_id": "D1",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 56069,
+      "total_steps": 10,
+      "total_tool_calls": 24,
+      "latency": 86.29655880003702,
+      "tools_used": [
+        "get_collections",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "analyze_terms_in_collection",
+        "text_search",
+        "text_search",
+        "get_all_terms",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "get_collection_summary",
+        "get_collection_summary",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
+      "answer_type": "timeseries",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"x_axis_type\": \"time\",\n    \"granularity\": \"day\",\n    \"value_unit\": \"post count\",\n    \"series\": [\n      {\n        \"label\": \"reddit\",\n        \"points\": [\n          {\n            \"x\": \"2025-01-01\",\n            \"value\": 50\n          },\n          {\n            \"x\": \"2025-01-02\",\n            \"value\": 12\n          },\n          {\n            \"x\": \"2025-01-03\",\n            \"value\": 6\n          },\n          {\n            \"x\": \"2025-01-04\",\n            \"value\": 2\n          },\n          {\n            \"x\": \"2025-01-05\",\n            \"value\": 5\n          }\n        ]\n      },\n      {\n        \"label\": \"bluesky\",\n        \"points\": [\n          {\n            \"x\": \"2025-01-01\",\n            \"value\": 18374\n          },\n          {\n            \"x\": \"2025-01-02\",\n            \"value\": 3542\n          },\n          {\n            \"x\": \"2025-01-03\",\n            \"value\": 1496\n          },\n          {\n            \"x\": \"2025-01-04\",\n            \"value\": 724\n          },\n          {\n            \"x\": \"2025-01-05\",\n            \"value\": 577\n          }\n        ]\n      }\n    ],\n    \"comment\": \"Daily volume of posts mentioning 'new year' from 2025-01-01 to 2025-01-05. Bluesky shows significantly higher volume than reddit, with both collections peaking on January 1st and declining over the following days.\"\n  }\n}"
+    },
+    {
+      "task_id": "D2",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.3333333333333333,
+      "total_tokens": 22156,
+      "total_steps": 4,
+      "total_tool_calls": 4,
+      "latency": 95.04657140001655,
+      "tools_used": [
+        "get_collections",
+        "aggregate_by_time",
+        "aggregate_by_time",
+        "generate_chart"
+      ],
+      "passed": false,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). Their monthly trends did not follow a similar overall pattern: Reddit showed a general decline from January through September (peaking at 171,016 in January, bottoming at 109,334 in September) before recovering in Q4, while Mastodon grew through mid-year (rising from 1.38M in January to a mid-year peak of 1.62M in July), experienced a sharp September dip (1.22M), then surged to its annual high in October (1.79M). The main similarity was that both platforms hit their lowest monthly volume in September 2024 and recovered in the final quarter.\",\n    \"key_points\": [\n      \"Mastodon total 2024 volume: 18,384,226 posts\",\n      \"Reddit total 2024 volume: 1,743,996 posts\",\n      \"Mastodon had approximately 10.5x more posts than Reddit in 2024\",\n      \"Reddit's highest month was January (171,016 posts); lowest was September (109,334 posts)\",\n      \"Mastodon's highest month was October (1,785,926 posts); lowest was September (1,221,939 posts)\",\n      \"Reddit trend: declined from Q1 through September, then recovered in Q4\",\n      \"Mastodon trend: grew through mid-year (peaking in July at 1,618,219), dipped in September, then surged in Q4\",\n      \"Both platforms shared a September low point and Q4 recovery, but their mid-year trajectories were opposite\"\n    ]\n  }\n}"
+    }
+  ]
+}

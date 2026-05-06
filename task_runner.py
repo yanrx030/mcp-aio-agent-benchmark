@@ -190,6 +190,7 @@ async def run_benchmark_tasks(
                         system_prompt=system_prompt,
                         system_prompt_label=resolved_answer_type or "default",
                     )
+                    latency = time.perf_counter() - attempt_started_perf
                 except Exception as exc:
                     attempt_exc = exc
                 finally:
@@ -207,7 +208,6 @@ async def run_benchmark_tasks(
                     )
                     tool_appropriateness = calculate_tool_appropriateness(task, query_trace)
                     finished_at = utc_now_iso()
-                    latency = time.perf_counter() - attempt_started_perf
                     end_to_end_latency = time.perf_counter() - started_perf
                     cleanup_warning = " | ".join(cleanup_warnings) if cleanup_warnings else None
                     results_by_index[index] = TaskRunResult(
@@ -346,7 +346,6 @@ def calculate_tool_appropriateness(
 ) -> dict[str, Any]:
     core_tools = {_normalize_tool_name(name) for name in task.core_toolset}
     helper_tools = _HELPER_CAPABLE_TOOLS_NORMALIZED
-    helper_tools_in_core = core_tools & helper_tools
 
     tool_calls_path_raw = query_trace.get("tool_calls_path")
     tool_calls_path = Path(tool_calls_path_raw) if tool_calls_path_raw else None
@@ -358,19 +357,10 @@ def calculate_tool_appropriateness(
     core_call_count = 0
     helper_call_count = 0
     other_call_count = 0
-    consumed_helper_core_first_occurrence: set[str] = set()
 
     for index, tool_name in enumerate(tool_names, start=1):
         normalized_name = _normalize_tool_name(tool_name)
-        if normalized_name in helper_tools_in_core:
-            if normalized_name in consumed_helper_core_first_occurrence:
-                label = "helper"
-                score = 0.5
-            else:
-                consumed_helper_core_first_occurrence.add(normalized_name)
-                label = "core"
-                score = 1.0
-        elif normalized_name in core_tools:
+        if normalized_name in core_tools:
             label = "core"
             score = 1.0
         elif normalized_name in helper_tools:
@@ -545,6 +535,95 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     }
 
 
+def _build_simple_summary(
+    results: list[TaskRunResult],
+    *,
+    model: str | None,
+) -> dict[str, Any]:
+    full_summary = summarize_results(results)
+    return {
+        "model": model,
+        "total_tasks": full_summary.get("total_tasks"),
+        "finished_with_result_tasks": full_summary.get("finished_with_result_tasks"),
+        "Task Completion Rate (TCR)": full_summary.get("Task Completion Rate (TCR)"),
+        "average_tool_appropriateness": full_summary.get("average_tool_appropriateness"),
+        "macro_average_parameter_schema_valid_rate(PSV)": full_summary.get(
+            "macro_average_parameter_schema_valid_rate(PSV)"
+        ),
+        "macro_average_constraint_compliance_rates(CCR)": full_summary.get(
+            "macro_average_constraint_compliance_rates(CCR)"
+        ),
+        "average_total_tokens": full_summary.get("average_total_tokens"),
+        "average_total_steps(temp)": full_summary.get("average_total_steps(temp)"),
+        "average_total_tool_calls": full_summary.get("average_total_tool_calls"),
+        "average_latency": full_summary.get("average_latency"),
+    }
+
+
+def _build_simple_task_result(result: TaskRunResult) -> dict[str, Any]:
+    query_trace = result.query_trace or {}
+    validation = result.ground_truth_validation or {}
+
+    return {
+        "task_id": result.task_id,
+        "parameter_schema_valid_rate": result.parameter_schema_valid_rate,
+        "constraint_compliance_rate": result.constraint_compliance_rate,
+        "total_tokens": result.total_tokens,
+        "total_steps": result.total_steps,
+        "total_tool_calls": result.total_tool_calls,
+        "latency": result.latency,
+        "tools_used": query_trace.get("tools_used") or [],
+        "passed": validation.get("passed"),
+        "answer_type": result.answer_type,
+        "final_answer": query_trace.get("final_answer"),
+    }
+
+
+def _resolve_report_model(
+    results: list[TaskRunResult],
+    extra_summary: Mapping[str, Any] | None,
+) -> str | None:
+    if extra_summary:
+        explicit_model = _clean_field(extra_summary.get("model"))
+        if explicit_model:
+            return explicit_model
+
+    for result in results:
+        if not result.query_trace:
+            continue
+        model = _clean_field(result.query_trace.get("model"))
+        if model:
+            return model
+    return None
+
+
+def write_simple_task_run_report(
+    results: Iterable[TaskRunResult],
+    *,
+    source_csv: str | Path,
+    output_dir: str | Path = "logs",
+    filename: str = "task_run_report_simple.json",
+    extra_summary: Mapping[str, Any] | None = None,
+) -> Path:
+    result_list = list(results)
+    output_root = Path(output_dir)
+    output_root.mkdir(parents=True, exist_ok=True)
+
+    output_path = output_root / filename
+    payload = {
+        "generated_at": utc_now_iso(),
+        "source_csv": str(Path(source_csv)),
+        "summary": _build_simple_summary(
+            result_list,
+            model=_resolve_report_model(result_list, extra_summary),
+        ),
+        "results": [_build_simple_task_result(result) for result in result_list],
+    }
+
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return output_path
+
+
 def write_task_run_report(
     results: Iterable[TaskRunResult],
     *,
@@ -569,6 +648,12 @@ def write_task_run_report(
     }
 
     output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_simple_task_run_report(
+        result_list,
+        source_csv=source_csv,
+        output_dir=output_dir,
+        extra_summary=extra_summary,
+    )
     return output_path
 
 

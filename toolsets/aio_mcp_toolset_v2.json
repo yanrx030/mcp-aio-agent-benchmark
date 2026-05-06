@@ -1,6 +1,6 @@
 {
   "toolset_id": "aio_mcp_toolset_v2",
-  "generated_at_utc": "2026-03-06T22:10:14.854931",
+  "generated_at_utc": "2026-05-06T16:35:46.214344",
   "notes": "mcp_raw preserves MCP tool definitions including outputSchema/_meta. openai_tools is derived for OpenRouter/OpenAI tool calling.",
   "mcp_server": "https://mcp.aio.eresearch.unimelb.edu.au/mcp",
   "openai_tools": {

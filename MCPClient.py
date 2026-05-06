@@ -20,6 +20,8 @@ from requests.auth import HTTPBasicAuth
 from openai import OpenAI
 from prompts import prompts
 
+MAX_STEPS = 30  # safety to prevent infinite loops; adjust as needed
+
 
 class MCPAuthenticationError(RuntimeError):
     """Raised when MCP authentication fails or token is invalid/expired."""
@@ -379,7 +381,7 @@ class MCPClient:
         return_trace: bool = False,
     ) -> str | dict[str, Any]:
         """Process a user query and log query-level and tool-level behavior."""
-        max_steps = 30  # safety to prevent infinite loops; adjust as needed
+        max_steps = MAX_STEPS
         if not self.session:
             raise RuntimeError("Not connected to MCP server. Call connect_to_server() first.")
 
@@ -452,8 +454,7 @@ class MCPClient:
                 for tc in msg.tool_calls:
                     tool_call_count += 1
                     tool_name = tc.function.name
-                    if tool_name not in tools_used:
-                        tools_used.append(tool_name)
+                    tools_used.append(tool_name)
                     raw_args = tc.function.arguments or "{}"
                     tool_record = self.logger.build_tool_call(
                         query_id=query_id,

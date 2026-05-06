@@ -96,6 +96,27 @@ Override judge model:
 uv run --env-file .env main.py --judge-model "openai/gpt-5.4-mini"
 ```
 
+Re-run only the ground-truth evaluator against an existing report:
+
+```bash
+uv run --env-file .env run_ground_truth_eval.py --report-file logs/task_sets/<task_set_id>/task_run_report.json
+```
+
+Compare multiple LLM judges on just the text tasks:
+
+```bash
+uv run --env-file .env run_ground_truth_eval.py \
+  --report-file logs/task_sets/<task_set_id>/task_run_report.json \
+  --only-text \
+  --judge-model "openai/gpt-5.4-mini" \
+  --judge-model "openai/gpt-4.1-mini"
+```
+
+Notes:
+- `run_ground_truth_eval.py` reuses the original `task_run_report.json` final answers, so it does not re-run the tool-using agent.
+- If `--task-file` is omitted, it uses the `source_csv` recorded in the report.
+- When a `--judge-model` exists in `manifest.yaml`, the script also reuses that model's OpenRouter/provider settings.
+
 Use a non-default manifest path:
 
 ```bash
@@ -134,6 +155,13 @@ Recommended fields for evaluation:
 - `ground_truth`
 - other metadata columns as needed
 
+Useful metadata columns for deterministic evaluators:
+- `scalar_abs_tolerance`, `scalar_rel_tolerance`
+- `series_abs_tolerance`, `series_rel_tolerance`
+- or shared `abs_tolerance`, `rel_tolerance`
+
+The evaluator uses `math.isclose`, so a value passes when the difference is within either the absolute tolerance or the relative tolerance window.
+
 Notes:
 - `ref_tool_call` is preferred.
 - `ground_truth_tool_call` is still accepted for backward compatibility.
@@ -159,6 +187,7 @@ For manual tool argument testing:
 uv run --env-file .env manual_ground_truth_collector.py
 
 uv run python tool_call.py --call-file call.json --pretty
+uv run python tool_call.py --call-file call.json --pretty --raw-result-file logs/raw_result.json
 
 ```
 

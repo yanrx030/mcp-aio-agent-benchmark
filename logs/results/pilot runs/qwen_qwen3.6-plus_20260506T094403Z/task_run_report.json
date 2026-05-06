@@ -1,0 +1,720 @@
+{
+  "generated_at": "2026-05-06T09:45:40Z",
+  "source_csv": "task\\tasksmall.csv",
+  "summary": {
+    "total_tasks": 4,
+    "finished_with_result_tasks": 4,
+    "failed_tasks": 0,
+    "tasks_retried": 0,
+    "tasks_with_auth_refresh": 0,
+    "tasks_with_cleanup_warning": 0,
+    "Evaluated tasks": 4,
+    "Task Completion Rate (TCR)": 0.75,
+    "average_tool_appropriateness": 0.765625,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": 0.611111111111111,
+    "average_total_tokens": 28657.5,
+    "average_total_steps(temp)": 5.5,
+    "average_total_tool_calls": 8.5,
+    "average_latency": 63.971654474997194,
+    "average_end_to_end_latency": 63.97178957500728,
+    "average_attempt_count": 1.0,
+    "model": "qwen/qwen3.6-plus",
+    "jwt_login_count": 1,
+    "jwt_refresh_count": 0
+  },
+  "results": [
+    {
+      "task_id": "B3",
+      "prompt": "How many Twitter posts used the hashtag #auspol during first quarter 2023?",
+      "status": "completed",
+      "started_at": "2026-05-06T09:44:04Z",
+      "finished_at": "2026-05-06T09:44:32Z",
+      "answer_type": "scalar",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 16749,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 28.32331729994621,
+      "end_to_end_latency": 28.323477199999616,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_e430cd441a39",
+        "task_set_id": "taskset_20260506T094403Z_7a9796",
+        "task_id": "B3",
+        "session_id": "session_0505071fb9fd",
+        "user_query": "How many Twitter posts used the hashtag #auspol during first quarter 2023?",
+        "final_answer": "{\n \"status\": \"success\",\n  \"answer\": {\n    \"value\": 91002,\n    \"unit\": \"posts\",\n    \"comment\": \"Number of Twitter posts using the hashtag #auspol during Q1 2023 (January 1 - March 31, 2023)\"\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 3,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search",
+          "text_search"
+        ],
+        "input_tokens": 15967,
+        "output_tokens": 782,
+        "total_tokens": 16749,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\B3.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 1,
+        "passed": true,
+        "strategy": "scalar_deterministic",
+        "answer_type": "scalar",
+        "normalized_answer_type": "scalar",
+        "dispatch_type": "scalar",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "expected": {
+            "value": 91002.0,
+            "unit": "posts"
+          },
+          "actual": {
+            "value": 91002.0,
+            "unit": "posts"
+          },
+          "tolerance": {
+            "abs": 1.0,
+            "rel": 1e-06
+          },
+          "value_match": true,
+          "unit_match": true,
+          "abs_error": 0.0,
+          "rel_error": 0.0
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\B3.jsonl",
+        "query_id": "query_e430cd441a39",
+        "tool_call_count": 3,
+        "core_call_count": 2,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 2.5,
+        "average_score": 0.8333333333333334,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "C6",
+      "prompt": "How did the post count of the BlueSky collection fluctuate on a monthly basis during 2024? draw a line graph",
+      "status": "completed",
+      "started_at": "2026-05-06T09:44:04Z",
+      "finished_at": "2026-05-06T09:44:50Z",
+      "answer_type": "chart",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.5,
+      "total_tokens": 19656,
+      "total_steps": 4,
+      "total_tool_calls": 3,
+      "latency": 46.220170399989,
+      "end_to_end_latency": 46.220304600079544,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_20d7717f6aaa",
+        "task_set_id": "taskset_20260506T094403Z_7a9796",
+        "task_id": "C6",
+        "session_id": "session_29a81520c9f6",
+        "user_query": "How did the post count of the BlueSky collection fluctuate on a monthly basis during 2024? draw a line graph",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"chart_type\": \"line\",\n    \"title\": \"BlueSky Monthly Post Count in 2024\",\n    \"labels\": [\n      \"2024-01\",\n      \"2024-02\",\n      \"2024-03\",\n      \"2024-04\",\n      \"2024-05\",\n      \"2024-06\",\n      \"2024-07\",\n      \"2024-08\",\n      \"2024-09\",\n      \"2024-10\",\n      \"2024-11\",\n      \"2024-12\"\n    ],\n    \"datasets\": [\n      {\n        \"label\": \"Post Count\",\n        \"data\": [\n          785519,\n          870280,\n          825456,\n          808994,\n          807033,\n          828125,\n          938607,\n          1190477,\n          2209035,\n          2720206,\n          11437933,\n          11675977\n        ]\n      }\n    ],\n    \"summary\": \"The BlueSky collection post count remained relatively stable between 785,519 and 938,607 from January to July 2024. It then began to rise significantly in August (1,190,477) and September (2,209,035), followed by a massive surge in October (2,720,206), November (11,437,933), and December (11,675,977), indicating exponential growth in the latter part of the year.\",\n    \"render_url\": \"https://quickchart.io/chart/render/zf-16212920-99ed-4229-bba6-03fab127095f\"\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 3,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 2,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 0.5,
+        "tools_used": [
+          "get_collections",
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "input_tokens": 18060,
+        "output_tokens": 1596,
+        "total_tokens": 19656,
+        "system_prompt_label": "chart",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\C6.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 1,
+        "passed": true,
+        "strategy": "series_deterministic",
+        "answer_type": "chart",
+        "normalized_answer_type": "chart",
+        "dispatch_type": "series",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "expected_mode": "chart",
+          "actual_mode": "chart",
+          "tolerance": {
+            "abs": 1.0,
+            "rel": 1e-06
+          },
+          "series_mapping": [
+            {
+              "expected_index": 0,
+              "actual_index": 0
+            }
+          ],
+          "unmatched_actual_series": [],
+          "mismatch_count": 0,
+          "mismatches": []
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\C6.jsonl",
+        "query_id": "query_20d7717f6aaa",
+        "tool_call_count": 3,
+        "core_call_count": 2,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 2.5,
+        "average_score": 0.8333333333333334,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "generate_chart",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "D1",
+      "prompt": "for the first five days of 2025, show and compare the daily volume of posts mentioning 'new year' across reddit and bluesky collection.",
+      "status": "completed",
+      "started_at": "2026-05-06T09:44:04Z",
+      "finished_at": "2026-05-06T09:45:31Z",
+      "answer_type": "timeseries",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 56069,
+      "total_steps": 10,
+      "total_tool_calls": 24,
+      "latency": 86.29655880003702,
+      "end_to_end_latency": 86.29665669996757,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_e5feafa8915c",
+        "task_set_id": "taskset_20260506T094403Z_7a9796",
+        "task_id": "D1",
+        "session_id": "session_9c524340c7bf",
+        "user_query": "for the first five days of 2025, show and compare the daily volume of posts mentioning 'new year' across reddit and bluesky collection.",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"x_axis_type\": \"time\",\n    \"granularity\": \"day\",\n    \"value_unit\": \"post count\",\n    \"series\": [\n      {\n        \"label\": \"reddit\",\n        \"points\": [\n          {\n            \"x\": \"2025-01-01\",\n            \"value\": 50\n          },\n          {\n            \"x\": \"2025-01-02\",\n            \"value\": 12\n          },\n          {\n            \"x\": \"2025-01-03\",\n            \"value\": 6\n          },\n          {\n            \"x\": \"2025-01-04\",\n            \"value\": 2\n          },\n          {\n            \"x\": \"2025-01-05\",\n            \"value\": 5\n          }\n        ]\n      },\n      {\n        \"label\": \"bluesky\",\n        \"points\": [\n          {\n            \"x\": \"2025-01-01\",\n            \"value\": 18374\n          },\n          {\n            \"x\": \"2025-01-02\",\n            \"value\": 3542\n          },\n          {\n            \"x\": \"2025-01-03\",\n            \"value\": 1496\n          },\n          {\n            \"x\": \"2025-01-04\",\n            \"value\": 724\n          },\n          {\n            \"x\": \"2025-01-05\",\n            \"value\": 577\n          }\n        ]\n      }\n    ],\n    \"comment\": \"Daily volume of posts mentioning 'new year' from 2025-01-01 to 2025-01-05. Bluesky shows significantly higher volume than reddit, with both collections peaking on January 1st and declining over the following days.\"\n  }\n}",
+        "total_steps": 10,
+        "total_tool_calls": 24,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 4,
+        "ccr_true_calls": 4,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "get_term_daily_counts",
+          "get_term_daily_counts",
+          "analyze_terms_in_collection",
+          "text_search",
+          "text_search",
+          "get_all_terms",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "get_collection_summary",
+          "get_collection_summary",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search"
+        ],
+        "input_tokens": 52984,
+        "output_tokens": 3085,
+        "total_tokens": 56069,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\D1.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 1,
+        "passed": true,
+        "strategy": "series_deterministic",
+        "answer_type": "timeseries",
+        "normalized_answer_type": "timeseries",
+        "dispatch_type": "series",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "expected_mode": "timeseries",
+          "actual_mode": "timeseries",
+          "tolerance": {
+            "abs": 1.0,
+            "rel": 1e-06
+          },
+          "series_mapping": [
+            {
+              "expected_index": 0,
+              "actual_index": 1
+            },
+            {
+              "expected_index": 1,
+              "actual_index": 0
+            }
+          ],
+          "unmatched_actual_series": [],
+          "mismatch_count": 0,
+          "mismatches": []
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\D1.jsonl",
+        "query_id": "query_e5feafa8915c",
+        "tool_call_count": 24,
+        "core_call_count": 17,
+        "helper_call_count": 3,
+        "other_call_count": 4,
+        "weighted_score": 18.5,
+        "average_score": 0.7708333333333334,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_term_daily_counts",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "get_term_daily_counts",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "analyze_terms_in_collection",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 6,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 7,
+            "tool_name": "get_all_terms",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          },
+          {
+            "call_index": 8,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 9,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 10,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 11,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 12,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 13,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 14,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 15,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 16,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 17,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 18,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 19,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 20,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 21,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 22,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 23,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 24,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    },
+    {
+      "task_id": "D2",
+      "prompt": "Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?",
+      "status": "completed",
+      "started_at": "2026-05-06T09:44:05Z",
+      "finished_at": "2026-05-06T09:45:40Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.3333333333333333,
+      "total_tokens": 22156,
+      "total_steps": 4,
+      "total_tool_calls": 4,
+      "latency": 95.04657140001655,
+      "end_to_end_latency": 95.04671979998238,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_f7c60c8020cd",
+        "task_set_id": "taskset_20260506T094403Z_7a9796",
+        "task_id": "D2",
+        "session_id": "session_dd3e99f8df9f",
+        "user_query": "Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?",
+        "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). Their monthly trends did not follow a similar overall pattern: Reddit showed a general decline from January through September (peaking at 171,016 in January, bottoming at 109,334 in September) before recovering in Q4, while Mastodon grew through mid-year (rising from 1.38M in January to a mid-year peak of 1.62M in July), experienced a sharp September dip (1.22M), then surged to its annual high in October (1.79M). The main similarity was that both platforms hit their lowest monthly volume in September 2024 and recovered in the final quarter.\",\n    \"key_points\": [\n      \"Mastodon total 2024 volume: 18,384,226 posts\",\n      \"Reddit total 2024 volume: 1,743,996 posts\",\n      \"Mastodon had approximately 10.5x more posts than Reddit in 2024\",\n      \"Reddit's highest month was January (171,016 posts); lowest was September (109,334 posts)\",\n      \"Mastodon's highest month was October (1,785,926 posts); lowest was September (1,221,939 posts)\",\n      \"Reddit trend: declined from Q1 through September, then recovered in Q4\",\n      \"Mastodon trend: grew through mid-year (peaking in July at 1,618,219), dipped in September, then surged in Q4\",\n      \"Both platforms shared a September low point and Q4 recovery, but their mid-year trajectories were opposite\"\n    ]\n  }\n}",
+        "total_steps": 4,
+        "total_tool_calls": 4,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 3,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 0.3333333333333333,
+        "tools_used": [
+          "get_collections",
+          "aggregate_by_time",
+          "aggregate_by_time",
+          "generate_chart"
+        ],
+        "input_tokens": 17940,
+        "output_tokens": 4216,
+        "total_tokens": 22156,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\D2.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 0,
+        "passed": false,
+        "strategy": "text_judge",
+        "answer_type": "text",
+        "normalized_answer_type": "text",
+        "dispatch_type": "text",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "raw_rating": 0,
+          "reason": "The answer correctly identifies Mastodon as having the higher total post volume, but it contradicts the ground truth on the trend comparison. The ground truth says both platforms followed a similar pattern, especially both hitting their annual low in September and rebounding in October. The agent says their trends did not follow a similar overall pattern, which changes the main conclusion.",
+          "judge_raw_response": "{\"score\": 0,\"reason\":\"The answer correctly identifies Mastodon as having the higher total post volume, but it contradicts the ground truth on the trend comparison. The ground truth says both platforms followed a similar pattern, especially both hitting their annual low in September and rebounding in October. The agent says their trends did not follow a similar overall pattern, which changes the main conclusion.\"}",
+          "expected_text": {
+            "reference_answer": "Mastodon had a significantly higher total post volume than Reddit in 2024, and while their overall trends varied in the first half of the year, both platforms followed a similar pattern of reaching their annual low in September followed by a sharp recovery in October.",
+            "facts": [],
+            "summary": "Mastodon had a significantly higher total post volume than Reddit in 2024, and while their overall trends varied in the first half of the year, both platforms followed a similar pattern of reaching their annual low in September followed by a sharp recovery in October.",
+            "key_points": [
+              "Mastodon recorded a total of 18,000,000+ posts in 2024, which is over ten times the posts volume recorded for Reddit in the same period.",
+              "Both platforms experienced their lowest activity of the year in September.",
+              "Both platforms saw a significant increase in activity in October, with Mastodon reaching its yearly peak. ",
+              "Reddit's highest activity occurred at the start of the year in January, followed by a general decline through June.",
+              "Mastodon's volume was more volatile throughout the first half of the year, with notable peaks in February and May."
+            ],
+            "raw_payload": {
+              "summary": "Mastodon had a significantly higher total post volume than Reddit in 2024, and while their overall trends varied in the first half of the year, both platforms followed a similar pattern of reaching their annual low in September followed by a sharp recovery in October.",
+              "key_points": [
+                "Mastodon recorded a total of 18,000,000+ posts in 2024, which is over ten times the posts volume recorded for Reddit in the same period.",
+                "Both platforms experienced their lowest activity of the year in September.",
+                "Both platforms saw a significant increase in activity in October, with Mastodon reaching its yearly peak. ",
+                "Reddit's highest activity occurred at the start of the year in January, followed by a general decline through June.",
+                "Mastodon's volume was more volatile throughout the first half of the year, with notable peaks in February and May."
+              ]
+            }
+          },
+          "actual_text": {
+            "reference_answer": "Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). Their monthly trends did not follow a similar overall pattern: Reddit showed a general decline from January through September (peaking at 171,016 in January, bottoming at 109,334 in September) before recovering in Q4, while Mastodon grew through mid-year (rising from 1.38M in January to a mid-year peak of 1.62M in July), experienced a sharp September dip (1.22M), then surged to its annual high in October (1.79M). The main similarity was that both platforms hit their lowest monthly volume in September 2024 and recovered in the final quarter.",
+            "facts": [],
+            "summary": "Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). Their monthly trends did not follow a similar overall pattern: Reddit showed a general decline from January through September (peaking at 171,016 in January, bottoming at 109,334 in September) before recovering in Q4, while Mastodon grew through mid-year (rising from 1.38M in January to a mid-year peak of 1.62M in July), experienced a sharp September dip (1.22M), then surged to its annual high in October (1.79M). The main similarity was that both platforms hit their lowest monthly volume in September 2024 and recovered in the final quarter.",
+            "key_points": [
+              "Mastodon total 2024 volume: 18,384,226 posts",
+              "Reddit total 2024 volume: 1,743,996 posts",
+              "Mastodon had approximately 10.5x more posts than Reddit in 2024",
+              "Reddit's highest month was January (171,016 posts); lowest was September (109,334 posts)",
+              "Mastodon's highest month was October (1,785,926 posts); lowest was September (1,221,939 posts)",
+              "Reddit trend: declined from Q1 through September, then recovered in Q4",
+              "Mastodon trend: grew through mid-year (peaking in July at 1,618,219), dipped in September, then surged in Q4",
+              "Both platforms shared a September low point and Q4 recovery, but their mid-year trajectories were opposite"
+            ],
+            "raw_payload": {
+              "summary": "Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). Their monthly trends did not follow a similar overall pattern: Reddit showed a general decline from January through September (peaking at 171,016 in January, bottoming at 109,334 in September) before recovering in Q4, while Mastodon grew through mid-year (rising from 1.38M in January to a mid-year peak of 1.62M in July), experienced a sharp September dip (1.22M), then surged to its annual high in October (1.79M). The main similarity was that both platforms hit their lowest monthly volume in September 2024 and recovered in the final quarter.",
+              "key_points": [
+                "Mastodon total 2024 volume: 18,384,226 posts",
+                "Reddit total 2024 volume: 1,743,996 posts",
+                "Mastodon had approximately 10.5x more posts than Reddit in 2024",
+                "Reddit's highest month was January (171,016 posts); lowest was September (109,334 posts)",
+                "Mastodon's highest month was October (1,785,926 posts); lowest was September (1,221,939 posts)",
+                "Reddit trend: declined from Q1 through September, then recovered in Q4",
+                "Mastodon trend: grew through mid-year (peaking in July at 1,618,219), dipped in September, then surged in Q4",
+                "Both platforms shared a September low point and Q4 recovery, but their mid-year trajectories were opposite"
+              ]
+            }
+          }
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "aggregate_by_time"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z\\tool_calls\\D2.jsonl",
+        "query_id": "query_f7c60c8020cd",
+        "tool_call_count": 4,
+        "core_call_count": 2,
+        "helper_call_count": 1,
+        "other_call_count": 1,
+        "weighted_score": 2.5,
+        "average_score": 0.625,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "generate_chart",
+            "category": "other",
+            "appropriateness": "other",
+            "score": 0.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    }
+  ]
+}

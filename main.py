@@ -51,7 +51,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-concurrency",
         type=int,
-        default=3,
+        default=4,
         help="Maximum number of benchmark tasks to run concurrently.",
     )
     parser.add_argument(
@@ -125,7 +125,7 @@ async def main() -> None:
 
     aio_key = os.environ["AIO_AUTH_KEY"]
     openrouter_key = os.environ["OPENROUTER_API_KEY"]
-    shared_logger = JSONLLogger()
+    shared_logger = JSONLLogger(task_set_prefix=selected_model)
     shared_logger.write_run_metadata(
         tool_agent_model=selected_model,
         judge_model=selected_judge_model,
@@ -201,6 +201,7 @@ async def main() -> None:
         source_csv=args.task_file,
         output_dir=shared_logger.task_set_dir,
         extra_summary={
+            "model": selected_model,
             "jwt_login_count": jwt_manager.login_count,
             "jwt_refresh_count": jwt_manager.refresh_count,
         },

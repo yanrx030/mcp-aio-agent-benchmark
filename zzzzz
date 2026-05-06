@@ -1,0 +1,1 @@
+uv run --env-file .env python run_ground_truth_eval.py --report-file logs/task_sets/taskset_20260424T030649Z_1df153/task_run_report.json --only-text --judge-model "openai/gpt-5.4-mini"  

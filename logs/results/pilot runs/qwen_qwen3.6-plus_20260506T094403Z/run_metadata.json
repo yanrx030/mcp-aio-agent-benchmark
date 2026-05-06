@@ -1,0 +1,8 @@
+{
+  "task_set_id": "taskset_20260506T094403Z_7a9796",
+  "task_set_dir": "logs\\results\\qwen_qwen3.6-plus_20260506T094403Z",
+  "created_at": "2026-05-06T09:44:03Z",
+  "tool_agent_model": "qwen/qwen3.6-plus",
+  "judge_model": "openai/gpt-5.4-mini",
+  "updated_at": "2026-05-06T09:44:03Z"
+}

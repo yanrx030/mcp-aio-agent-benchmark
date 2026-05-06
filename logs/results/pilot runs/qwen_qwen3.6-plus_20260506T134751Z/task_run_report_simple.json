@@ -1,0 +1,121 @@
+{
+  "generated_at": "2026-05-06T13:50:56Z",
+  "source_csv": "task\\tasktext.csv",
+  "summary": {
+    "model": "qwen/qwen3.6-plus",
+    "total_tasks": 5,
+    "finished_with_result_tasks": 5,
+    "Task Completion Rate (TCR)": 0.8,
+    "average_tool_appropriateness": 0.6448879551820728,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": 0.8666666666666666,
+    "average_total_tokens": 51002.2,
+    "average_total_steps(temp)": 6.0,
+    "average_total_tool_calls": 6.4,
+    "average_latency": 107.21082288001199
+  },
+  "results": [
+    {
+      "task_id": "D2",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 0.3333333333333333,
+      "total_tokens": 21974,
+      "total_steps": 4,
+      "total_tool_calls": 4,
+      "latency": 86.92037970002275,
+      "tools_used": [
+        "get_collections",
+        "aggregate_by_time",
+        "aggregate_by_time",
+        "generate_chart"
+      ],
+      "passed": true,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts—roughly 10.5 times more. Both platforms exhibited a similar pattern of a notable dip in September followed by a strong recovery in October, though their overall yearly trends differed: Reddit showed a general decline from January through September before recovering, while Mastodon trended upward through mid-year before the September dip.\",\n    \"key_points\": [\n      \"Mastodon's total 2024 volume was 18,384,226 posts, while Reddit's was 1,744,996 posts.\",\n      \"Mastodon's monthly volume ranged from 1,221,939 (September) to 1,785,926 (October).\",\n      \"Reddit's monthly volume ranged from 109,334 (September) to 171,016 (January).\",\n      \"Both platforms experienced their lowest monthly volume in September 2024 (Reddit: 109,334; Mastodon: 1,221,939).\",\n      \"Both platforms peaked or near-peaked in October 2024 (Reddit: 152,815; Mastodon: 1,785,926).\",\n      \"Reddit showed a general declining trend from January (171,016) through September (109,334), a 36% drop.\",\n      \"Mastodon showed an overall increasing trend from January (1,378,541) through July-August (~1.59-1.62M) before the September dip.\",\n      \"Chart URL: https://quickchart.io/chart/render/zf-5436f8d7-191f-42fe-8449-ea07bb1b996d\"\n    ]\n  }\n}"
+    },
+    {
+      "task_id": "D4",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 76298,
+      "total_steps": 13,
+      "total_tool_calls": 17,
+      "latency": 182.3573663000716,
+      "tools_used": [
+        "get_collections",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_collection_summary",
+        "get_term_daily_counts",
+        "get_all_terms",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "aggregate_by_time",
+        "text_search",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"2024 had the highest activity level for the terms \\\"new,\\\" \\\"year,\\\" and \\\"australia\\\" on Reddit during the first week of January, with a combined total of 3,356 occurrences. This was followed by 2022 with 2,516 occurrences, while 2023 had virtually no data available for this period.\",\n    \"key_points\": [\n      \"For 2022 (Jan 1-7), the term \\\"year\\\" had 2,516 total occurrences (449+378+363+325+410+324+267), while \\\"new\\\" and \\\"australia\\\" had 0 occurrences.\",\n      \"For 2023 (Jan 1-7), the Reddit collection had only 1 post total during this week, resulting in 0 occurrences for all three terms.\",\n      \"For 2024 (Jan 1-7), the term \\\"year\\\" had 3,253 total occurrences (571+478+457+481+384+416+466), and \\\"australia\\\" had 103 occurrences (all on Jan 6), while \\\"new\\\" had 0 occurrences.\",\n      \"The combined totals are: 2024 = 3,356, 2022 = 2,516, 2023 = 0.\",\n      \"2024 had the highest activity level among the three years.\"\n    ]\n  }\n}"
+    },
+    {
+      "task_id": "D6",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 24871,
+      "total_steps": 3,
+      "total_tool_calls": 3,
+      "latency": 107.48425400000997,
+      "tools_used": [
+        "aggregate_by_time",
+        "aggregate_by_time",
+        "generate_chart"
+      ],
+      "passed": true,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"Mastodon and GDELT showed some similarities in their daily sentiment patterns during January 2025, particularly a weekly rhythm where weekends tended to have less negative sentiment than weekdays, and both platforms trended toward more negative sentiment in late January. However, the patterns were not identical, and the sentiment scales differed dramatically (Mastodon: -538 to +96; GDELT: -8,470 to +1,008). Mastodon started positive on Jan 1 (+96.17) before turning negative, while GDELT was negative on Jan 1 (-4,443.52). GDELT had two positive days (Jan 23: +1,007.83; Jan 25: +682.32), whereas Mastodon was only positive on Jan 1.\",\n    \"key_points\": [\n      \"Mastodon sentiment ranged from -538.33 (Jan 30) to +96.17 (Jan 1), while GDELT sentiment ranged from -8,469.97 (Jan 28) to +1,007.83 (Jan 23).\",\n      \"Both platforms exhibited a weekly pattern: weekends (e.g., Jan 4-5, 11-12, 18-19, 25-26) generally showed less negative sentiment compared to weekdays.\",\n      \"Both platforms trended toward more negative sentiment in late January, with the most negative values occurring around Jan 28-31.\",\n      \"Mastodon was positive only on Jan 1 (+96.17) and negative for the remaining 30 days.\",\n      \"GDELT was positive on two days: Jan 23 (+1,007.83) and Jan 25 (+682.32), and negative on all other days.\",\n      \"On Jan 9, GDELT had its least negative weekday sentiment (-592.17), while Mastodon was at -414.72, showing different day-to-day fluctuations.\",\n      \"The overall correlation in daily patterns is moderate: both show weekend relief and late-month negativity, but specific daily movements do not closely align.\"\n    ]\n  }\n}"
+    },
+    {
+      "task_id": "E1",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 122053,
+      "total_steps": 8,
+      "total_tool_calls": 7,
+      "latency": 130.5181596999755,
+      "tools_used": [
+        "get_collections",
+        "get_collection_summary",
+        "get_all_terms",
+        "get_nlp_terms_for_day",
+        "get_term_daily_counts",
+        "get_term_daily_counts",
+        "get_nlp_topics"
+      ],
+      "passed": false,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"During the first week of January 2025 in the Bluesky collection, the most prominent terms were dominated by political discourse and major news events. The top terms by frequency included 'trump' (47,883), 'peopl' (64,583), 'time' (42,216), 'year' (47,874), 'thing' (30,709), 'musk' (14,419), 'presid' (14,062), 'countri' (17,466), 'work' (13,813), and 'money' (13,194). Several terms were especially characteristic of this specific period, reflecting major events: New Year's celebrations ('firework', 'happi', 'new', 'year'), the death of Jimmy Carter ('carter' - 3,014), the New Orleans truck attack on Jan 1 ('nola' - 282, 'orlean' - 1,097, 'cybertruck' - 1,482), anticipation of the presidential inauguration ('inaugur' - 2,173, building from 129 on Jan 1 to 602 on Jan 4), the January 6th Capitol attack anniversary ('capitol' - 1,640, 'insurrect' - 2,242, spiking on Jan 6), Trump's Greenland comments ('greenland' - 2,836, almost entirely on Jan 6-7), Canadian Prime Minister Trudeau's resignation ('trudeau' - 995, 'canada' - 5,205, prominent Jan 6-7), and Attorney General Garland-related news ('garland' - 3,476, with a massive spike of 2,246 on Jan 7).\",\n    \"key_points\": [\n      \"The most frequent term was 'peopl' (64,583), followed by 'trump' (47,883), 'year' (47,874), and 'time' (42,216) over Jan 1-7, 2025.\",\n      \"New Year's terms were prominent on Jan 1-2: 'firework' (1,148 total, 686 on Jan 1), 'happi' (3,955), and 'thank' (25,153).\",\n      \"Jimmy Carter's death (Dec 29, 2024) drove discussion: 'carter' appeared 3,014 times, with 441 mentions on Jan 1 and 778 on Jan 4.\",\n      \"The New Orleans truck attack (Jan 1, 2025) generated terms 'nola' (282, concentrated Jan 1-2), 'orlean' (1,097, concentrated Jan 1-3), and 'cybertruck' (1,482, Jan 1-4).\",\n      \"Inauguration anticipation built through the week: 'inaugur' rose from 129 on Jan 1 to 602 on Jan 4, totaling 2,173.\",\n      \"January 6th anniversary drove spikes: 'capitol' jumped to 751 on Jan 6, 'insurrect' to 900 on Jan 6, and 'jan' to 766 on Jan 6.\",\n      \"Trump discourse was dominant and growing: 'trump' rose from 4,427 on Jan 1 to 11,538 on Jan 7; 'felon' totaled 4,033.\",\n      \"Musk/Twitter/X discussion was prominent: 'musk' (14,419), 'elon' (8,013), 'twitter' (4,601), 'blueski' (3,815).\",\n      \"Trump's Greenland comments created a late-week surge: 'greenland' had 2,836 mentions, with only 163 on Jan 6 and 2,673 on Jan 7.\",\n      \"Canadian politics surged late-week: 'trudeau' (995) and 'canada' (5,205) were prominent on Jan 6-7 following Trudeau's resignation announcement.\",\n      \"Attorney General Garland news peaked on Jan 7: 'garland' totaled 3,476, with 2,246 mentions on Jan 7 alone.\",\n      \"The Luigi Mangione case appeared early: 'luigi' had 369 mentions concentrated on Jan 1-3.\",\n      \"Topic clusters confirmed these themes: Jan 1 featured New Year's and Carter topics; Jan 6 featured democracy/Capitol and Trudeau topics; Jan 7 featured Musk/Greenland topics.\"\n    ]\n  }\n}"
+    },
+    {
+      "task_id": "E3",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 9815,
+      "total_steps": 2,
+      "total_tool_calls": 1,
+      "latency": 28.773954699980095,
+      "tools_used": [
+        "get_topic_groupings"
+      ],
+      "passed": true,
+      "answer_type": "text",
+      "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"summary\": \"From December 24-25, 2023, the Reddit collection shows 3 topic clusters connected by 2 groupings. The strongest topic grouping (weight: 15) connects the largest Dec 24 cluster (size: 403) with the Dec 25 cluster (size: 51), sharing 15 common terms centered around Christmas, family, and daily life themes. A second grouping (weight: 11) connects a smaller Dec 24 Israel-Hamas conflict cluster (size: 8) to the Dec 25 cluster.\",\n    \"key_points\": [\n      \"Three topic clusters were identified: '20231224-0' (size 403), '20231225-0' (size 51), and '20231224-1' (size 8)\",\n      \"The strongest topic grouping has a weight of 15, connecting cluster '20231224-0' to '20231225-0'\",\n      \"The strongest grouping shares 15 common terms: thing, year, famili, car, someon, polic, work, week, time, peopl, someth, christma, way, home, day\",\n      \"Cluster '20231224-0' (Dec 24) top terms include: peopl, year, time, day, christma, hous, thing, car, home, way, someon, dog, week, place, thank, famili, train, work\",\n      \"Cluster '20231225-0' (Dec 25) top terms include: peopl, day, time, christma, year, famili, thing, way, kid, someon, everyon, home, protest, covid, children, work, car, hama, war\",\n      \"A second grouping (weight: 11) connects cluster '20231224-1' to '20231225-0', sharing terms: hama, year, children, war, protest, kid, fuck, time, peopl, christma, way\",\n      \"Cluster '20231224-1' (Dec 24) focuses on Israel-Hamas conflict with terms: israel, peopl, hama, children, protest, war, palestin, palestinian, kid, gaza, conflict, govern\"\n    ]\n  }\n}"
+    }
+  ]
+}

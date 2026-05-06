@@ -4,6 +4,7 @@ import contextlib
 import io
 import json
 import os
+from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +14,68 @@ from mcp_result_analyzer import analyze_tool_result
 
 DEFAULT_TOOLSET = "toolsets/aio_mcp_toolset_v2.json"
 DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+
+
+class _NullLogger:
+    task_set_id = None
+    query_runs_path = None
+
+    def new_session_id(self) -> str:
+        return "tool_call_session"
+
+    def task_tool_calls_path(self, **_: Any) -> Path:
+        return Path("NUL")
+
+
+def _to_jsonable(value: Any, *, depth: int = 0, max_depth: int = 8) -> Any:
+    if depth >= max_depth:
+        return f"<max_depth_reached type={type(value).__name__}>"
+
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+
+    if isinstance(value, dict):
+        return {str(key): _to_jsonable(item, depth=depth + 1, max_depth=max_depth) for key, item in value.items()}
+
+    if isinstance(value, (list, tuple, set)):
+        return [_to_jsonable(item, depth=depth + 1, max_depth=max_depth) for item in value]
+
+    if is_dataclass(value):
+        return {
+            "__type__": type(value).__name__,
+            "__dataclass__": _to_jsonable(asdict(value), depth=depth + 1, max_depth=max_depth),
+        }
+
+    if hasattr(value, "model_dump"):
+        try:
+            dumped = value.model_dump()
+            return {
+                "__type__": type(value).__name__,
+                "__model_dump__": _to_jsonable(dumped, depth=depth + 1, max_depth=max_depth),
+            }
+        except Exception as exc:
+            return {
+                "__type__": type(value).__name__,
+                "__model_dump_error__": str(exc),
+                "__repr__": repr(value),
+            }
+
+    if hasattr(value, "__dict__"):
+        return {
+            "__type__": type(value).__name__,
+            "__attrs__": {
+                key: _to_jsonable(item, depth=depth + 1, max_depth=max_depth)
+                for key, item in vars(value).items()
+                if not key.startswith("_")
+            },
+            "__repr__": repr(value),
+        }
+
+    return {
+        "__type__": type(value).__name__,
+        "__repr__": repr(value),
+        "__str__": str(value),
+    }
 
 
 def _load_env_file(path: Path) -> None:
@@ -80,6 +143,7 @@ async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) ->
         auth_key=auth_key,
         openrouter_api_key=openrouter_key,
         openrouter_model=DEFAULT_MODEL,
+        logger=_NullLogger(),
     )
 
     try:
@@ -92,18 +156,27 @@ async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) ->
             call_spec["tool_name"],
             {k: v for k, v in call_spec["arguments"].items() if v is not None},
         )
+        if args.raw_result_file:
+            raw_result_path = Path(args.raw_result_file)
+            raw_result_path.parent.mkdir(parents=True, exist_ok=True)
+            raw_result_path.write_text(
+                json.dumps(_to_jsonable(result), ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
         analyzed = analyze_tool_result(result)
-        return {
+        payload = {
             "tool_name": call_spec["tool_name"],
             "arguments": call_spec["arguments"],
             "execution_success": analyzed["execution_success"],
             "mcp_is_error": analyzed["mcp_is_error"],
             "payload_has_error": analyzed["payload_has_error"],
-            "response_summary": analyzed["response_summary"],
             "content_blocks": analyzed["content_blocks"],
             "structured_content": analyzed["structured_content"],
             "server_error_message": analyzed["server_error_message"],
         }
+        if args.raw_result_file:
+            payload["raw_result_file"] = str(Path(args.raw_result_file))
+        return payload
     finally:
         await client.cleanup()
 
@@ -135,6 +208,10 @@ def main() -> int:
         "--pretty",
         action="store_true",
         help="Pretty-print the output JSON.",
+    )
+    parser.add_argument(
+        "--raw-result-file",
+        help="Optional path to save the raw MCP call result as JSON.",
     )
     args = parser.parse_args()
 
