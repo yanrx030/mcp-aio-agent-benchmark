@@ -754,7 +754,7 @@ B7,"In 2020, which available collection had the highest number of posts or recor
  ""collection"": ""youtube"",
  ""query"": ""date:[2020-01-01T00:00:00Z TO 2020-12-31T23:59:59Z] AND (text:\""inflation\"")""
  }
-},",scalar,"{
+}",scalar,"{
  ""value"": 28845,
  ""unit"": ""posts"",
  ""comment"": ""gdelt has the highest number of posts""
@@ -1506,7 +1506,7 @@ D1,"for the first five days of 2025, show and compare the daily volume of posts 
       ]
     }
   ],
-  ""comment"": ""Mentions of 'new year' peaked on January 1st for both platforms, with Bluesky exhibiting a significantly higher volume (18,369) compared to Reddit (50). Both series show a rapid decline in interest over the subsequent four days.""
+  ""comment"": ""Mentions of 'new year' peaked on January 1st for both platforms, with Bluesky exhibiting a significantly higher volume (18,374) compared to Reddit (50). Both series show a rapid decline in interest over the subsequent four days.""
 }",text_search,D,multi,fixed,multi
 D2,"Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?","{""tool_name"": ""aggregate_by_time"", ""arguments"": {""collection"": ""reddit"", ""aggregation_level"": ""month"", ""startdate"": ""2024-01-01"", ""enddate"": ""2024-12-31"", ""sentiment"": false}, ""execution_success"": true, ""mcp_is_error"": false, ""payload_has_error"": false, ""response_summary"": ""[\""type='text' text='[{\\\""time\\\"":\\\""2024-01\\\"",\\\""count\\\"":171016},{\\\""time\\\"":\\\""2024-02\\\"",\\\""count\\\"":165042},{\\\""time\\\"":\\\""2024-03\\\"",\\\""count\\\"":166728},{\\\""time\\\"":\\\""2024-04\\\"",\\\""count\\\"":143071},{\\\""time\\\"":\\\""2024-05\\\"",\\\""count\\\"":151224},{\\\""time\\\"":\\\""2024-06\\\"",\\\""count\\\"":128882},{\\\""time\\\"":\\\""2024-07\\\"",\\\""count\\\"":132277},{\\\""time\\\"":\\\""2024-08\\\"",\\\""count\\\"":134044},{\\\""time\\\"":\\\""2024-09\\\"",\\\""count\\\"":109334},{\\\""time\\\"":\\\""2024-10\\\"",\\\""count\\\"":152815},{\\\""time\\\"":\\\""2024-11\\\"",\\\""count\\\"":145260},{\\\""time\\\"":\\\""2024-12\\\"",\\\""count\\\"":144303}]' annotations=None meta=None\""]""
 
@@ -2172,6 +2172,16 @@ D6,Compare the daily sentiment trend of Mastodon and gdelt during January 2025. 
     ""tool_name"": ""aggregate_by_time"",
     ""arguments"": {
         ""collection"": ""mastodon"",
+        ""aggregation_level"": ""day"",
+        ""startdate"": ""2025-01-01"",
+        ""enddate"": ""2025-01-31"",
+        ""sentiment"": true
+    }
+},
+{
+    ""tool_name"": ""aggregate_by_time"",
+    ""arguments"": {
+        ""collection"": ""gdelt"",
         ""aggregation_level"": ""day"",
         ""startdate"": ""2025-01-01"",
         ""enddate"": ""2025-01-31"",
