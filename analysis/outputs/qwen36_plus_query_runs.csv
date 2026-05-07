@@ -1,0 +1,1510 @@
+run_index,run_id,query_id,user_query,task_set_id,task_id,session_id,model,toolset_id,status,error_type,error_message,start_time,end_time,final_answer,total_steps,total_tool_calls,parameter_schema_valid_rate,ccr_applicable_calls,ccr_true_calls,constraint_compliance_rate,tools_used,input_tokens,output_tokens,total_tokens,metadata,timestamp
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_ddbc5c07a269,how many posts does twitter collection have?,taskset_20260506T151456Z_596c26,A1,session_dc65875edb2e,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:14:58Z,2026-05-06T15:15:07Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 185873222,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of posts in the twitter collection from 2021-06-21 to 2023-04-21""
+  }
+}",2,1,1.0,0,0,,['get_collection_summary'],7851,243,8094,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:07Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_15ccafbc178d,"Compare Reddit, Mastodon, and Twitter by total post count and harvesting date range. Summarise which collection is largest and which has the most recent data.",taskset_20260506T151456Z_596c26,A3,session_53997ad3adc7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:14:57Z,2026-05-06T15:15:16Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Twitter is the largest collection with 185,873,222 posts, followed by Mastodon (59,857,709) and Reddit (8,021,797). Reddit and Mastodon share the most recent data, both ending on 2026-05-06, while Twitter's data ends on 2023-04-21."",
+    ""key_points"": [
+      ""Twitter has the highest post count at 185,873,222 posts."",
+      ""Mastodon has 59,857,709 posts, making it the second largest collection."",
+      ""Reddit has 8,021,797 posts, the smallest of the three collections."",
+      ""Reddit and Mastodon both have the most recent data with an end date of 2026-05-06."",
+      ""Twitter's data is the least recent, ending on 2023-04-21."",
+      ""Reddit has the earliest start date (2019-10-03), followed by Mastodon (2020-01-01), then Twitter (2021-06-21).""
+    ]
+  }
+}",2,3,1.0,0,0,,"['get_collection_summary', 'get_collection_summary', 'get_collection_summary']",7991,747,8738,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:15:16Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_811c91929cb1,List all available collections and their startdates.,taskset_20260506T151456Z_596c26,A4,session_281b2e10f13a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:14:58Z,2026-05-06T15:15:17Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""There are 7 available collections with the following start dates: bluesky (2024-01-01), gdelt (2015-02-18), flickr (2021-04-27), mastodon (2020-01-01), reddit (2019-10-03), twitter (2021-06-21), and youtube (2021-06-13)."",
+    ""key_points"": [
+      ""bluesky: startDate 2024-01-01"",
+      ""gdelt: startDate 2015-02-18"",
+      ""flickr: startDate 2021-04-27"",
+      ""mastodon: startDate 2020-01-01"",
+      ""reddit: startDate 2019-10-03"",
+      ""twitter: startDate 2021-06-21"",
+      ""youtube: startDate 2021-06-13""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12262,724,12986,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:15:17Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_c33323f9c203,Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.,taskset_20260506T151456Z_596c26,B1,session_ecc042658a39,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:07Z,2026-05-06T15:15:24Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 102,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Bluesky posts from February 2024 mentioning either bulk billing or Medicare""
+  }
+}",3,2,1.0,0,0,,"['get_collections', 'text_search']",11920,740,12660,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:24Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_22eabd1b194f,How many Twitter posts used the hashtag #auspol during first quarter 2023?,taskset_20260506T151456Z_596c26,B3,session_8594ee1ef7a7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:21Z,2026-05-06T15:15:34Z,"{""status"":""success"",""answer"":{""value"":91002,""unit"":""posts"",""comment"":""Number of Twitter posts with hashtag #auspol during Q1 2023 (January 1 - March 31, 2023)""}}",3,2,1.0,0,0,,"['get_collections', 'text_search']",11904,540,12444,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:34Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_ae5c8766793f,"Compare the harvesting date span of all available collections. Which collection has the longest harvesting period, and which has the largest post count?",taskset_20260506T151456Z_596c26,A2,session_343c2982a8aa,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:14:58Z,2026-05-06T15:15:38Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""GDELT has the longest harvesting period (from 2015-02-18 to 2026-05-06, approximately 11 years), while Bluesky has the largest post count (209,705,701 posts)."",
+    ""key_points"": [
+      ""GDELT has the longest harvesting span: 2015-02-18 to 2026-05-06 (~11 years, 2.5 months)"",
+      ""Reddit: 2019-10-03 to 2026-05-06 (~6 years, 7 months)"",
+      ""Mastodon: 2020-01-01 to 2026-05-06 (~6 years, 4 months)"",
+      ""Flickr: 2021-04-27 to 2026-05-06 (~5 years)"",
+      ""YouTube: 2021-06-13 to 2026-05-05 (~4 years, 11 months)"",
+      ""Bluesky: 2024-01-01 to 2026-05-06 (~2 years, 4 months)"",
+      ""Twitter: 2021-06-21 to 2023-04-21 (~1 year, 10 months)"",
+      ""Bluesky has the largest post count: 209,705,701 posts"",
+      ""Twitter has the second largest post count: 185,873,222 posts"",
+      ""Mastodon: 59,857,709 posts"",
+      ""GDELT: 55,261,236 posts"",
+      ""Reddit: 8,021,797 posts"",
+      ""Flickr: 596,126 posts"",
+      ""YouTube: 569,745 posts""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12313,1905,14218,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:15:38Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_2a3131c124c4,How many English-language Mastodon posts mention unimelb in 2025?,taskset_20260506T151456Z_596c26,B4,session_84ec86f57cb3,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:25Z,2026-05-06T15:15:45Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 34,
+    ""unit"": ""posts"",
+    ""comment"": ""English-language Mastodon posts mentioning 'unimelb' in 2025""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'get_collection_summary']",16065,827,16892,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:45Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_974ae320fd31,"How many Bluesky posts in 2024 mentioned ""cost of living"" and did not mention mortgage?",taskset_20260506T151456Z_596c26,B2,session_7c8f05b6a380,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:19Z,2026-05-06T15:15:46Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 5467,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Bluesky posts in 2024 that mentioned \""cost of living\"" and did not mention mortgage""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'text_search']",16044,929,16973,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:46Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_bcbf9ecd85ac,"During January 2024, how many Reddit posts were recorded in total?",taskset_20260506T151456Z_596c26,B5,session_261744d7d94a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:35Z,2026-05-06T15:15:52Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 171016,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of Reddit posts recorded in January 2024""
+  }
+}",4,3,1.0,1,1,1.0,"['get_collections', 'get_collection_summary', 'aggregate_by_time']",16086,709,16795,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:52Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_ae11de762196,"For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",taskset_20260506T151456Z_596c26,B6,session_1d1890ef32d1,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:41Z,2026-05-06T15:15:55Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 13528,
+    ""unit"": ""posts"",
+    ""comment"": ""Size of the largest topic cluster in the BlueSky collection from 2025-02-01 to 2025-02-03""
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",14499,602,15101,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:15:55Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_5debc43b06a7,"In 2020, which available collection had the highest number of posts or records mentioning the keyword inflation, give me the count?",taskset_20260506T151456Z_596c26,B7,session_947c852535ab,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:45Z,2026-05-06T15:16:27Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 28850,
+    ""unit"": ""posts"",
+    ""comment"": ""The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020, with 28850 posts. All other collections (bluesky, flickr, mastodon, reddit, twitter, youtube) returned 0 results for the same search.""
+  }
+}",4,15,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",17597,1856,19453,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:16:27Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_37e4731a85bc,"For the Reddit dataset, was posting activity generally higher on weekends or weekdays during 2023?",taskset_20260506T151456Z_596c26,C3,session_d1922648ebd0,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:56Z,2026-05-06T15:16:29Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During 2023, Reddit posting activity was generally higher on weekdays than on weekends. The average weekday saw approximately 239,984 posts, while the average weekend day saw approximately 230,032 posts. Thursday had the highest activity (243,426 posts), followed closely by Wednesday (242,988), while Saturday had the lowest activity (226,939 posts)."",
+    ""key_points"": [
+      ""Weekday posting counts: Monday (237,584), Tuesday (237,255), Wednesday (242,988), Thursday (243,426), Friday (238,666)"",
+      ""Weekend posting counts: Saturday (226,939), Sunday (233,125)"",
+      ""Average weekday posts: ~239,984 per day"",
+      ""Average weekend posts: ~230,032 per day"",
+      ""Thursday was the most active day with 243,426 posts"",
+      ""Saturday was the least active day with 226,939 posts"",
+      ""Weekdays had approximately 4.3% higher average posting activity than weekends""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'aggregate_seasonality', 'generate_chart']",16674,1563,18237,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:16:29Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_620b9d5679ce,Can you show me the weekly number of posts containing the hashtag #melbourne in the Mastodon collection in Jan 2024?,taskset_20260506T151456Z_596c26,C2,session_95795d353bda,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:52Z,2026-05-06T15:17:08Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""week"",
+    ""value_unit"": ""posts"",
+    ""series"": [
+      {
+        ""label"": ""#melbourne"",
+        ""points"": [
+          {
+            ""x"": ""2024-01-01"",
+            ""value"": 69
+          },
+          {
+            ""x"": ""2024-01-08"",
+            ""value"": 52
+          },
+          {
+            ""x"": ""2024-01-15"",
+            ""value"": 64
+          },
+          {
+            ""x"": ""2024-01-22"",
+            ""value"": 57
+          },
+          {
+            ""x"": ""2024-01-29"",
+            ""value"": 20
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Weekly post counts for hashtag #melbourne in the Mastodon collection during January 2024. The last week (Jan 29-31) covers only 3 days.""
+  }
+}",4,7,1.0,0,0,,"['get_collections', 'get_collection_summary', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",17285,4002,21287,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-06T15:17:08Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_2f67d58e8748,Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?,taskset_20260506T151456Z_596c26,C5,session_9e9ab5972ac1,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:16:31Z,2026-05-06T15:17:11Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""bar"",
+    ""title"": ""Reddit Monthly Post Counts - 2025"",
+    ""labels"": [""2025-01"", ""2025-02"", ""2025-03"", ""2025-04"", ""2025-05"", ""2025-06"", ""2025-07"", ""2025-08"", ""2025-09"", ""2025-10"", ""2025-11"", ""2025-12""],
+    ""datasets"": [
+      {
+        ""label"": ""Monthly Post Counts"",
+        ""data"": [152074, 141916, 159511, 132151, 133610, 117729, 118185, 113837, 118194, 122222, 132369, 135096]
+      }
+    ],
+    ""summary"": ""Bar chart showing monthly Reddit post counts for all 12 months of 2025. Post counts range from a low of 113,837 in August to a high of 159,511 in March."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-72675f58-565d-44b8-b19f-8a62e4e30668""
+  }
+}",5,4,1.0,2,2,1.0,"['get_collections', 'get_collection_summary', 'aggregate_by_time', 'generate_chart']",22454,1698,24152,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-06T15:17:11Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_9f2ade25952e,I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2024?,taskset_20260506T151456Z_596c26,C4,session_5f800b3f2246,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:16:28Z,2026-05-06T15:17:13Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Yes, Mastodon post volume shows a clear daily pattern in February 2024, with activity peaking in the afternoon hours (UTC). The highest volume occurs at 16:00 UTC (4 PM) with 84,652 posts, while the lowest activity is in the early morning around 05:00 UTC (5 AM) with 41,332 posts. Post volume gradually rises from the early morning trough, accelerates through midday, peaks between 15:00-17:00 UTC, and then steadily declines through the evening."",
+    ""key_points"": [
+      ""Peak hour: 16:00 UTC with 84,652 posts"",
+      ""Second highest: 15:00 UTC with 83,647 posts"",
+      ""Third highest: 17:00 UTC with 83,828 posts"",
+      ""Lowest hour: 05:00 UTC with 41,332 posts"",
+      ""Early morning trough spans 03:00-06:00 UTC (41,332-44,939 posts)"",
+      ""Afternoon peak window spans 14:00-18:00 UTC (77,596-84,652 posts)"",
+      ""Post volume more than doubles from the daily low (41,332) to the daily peak (84,652)"",
+      ""The pattern shows a gradual morning ramp-up, sharp afternoon peak, and steady evening decline""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'aggregate_seasonality', 'generate_chart']",17479,2177,19656,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:17:13Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_1fd7a1253372,How did the post count of the Youtube collection fluctuate on a monthly basis during 2024? draw a line graph,taskset_20260506T151456Z_596c26,C6,session_d381d2968e4b,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:17:09Z,2026-05-06T15:17:37Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""line"",
+    ""title"": ""Youtube Post Count Monthly Fluctuation in 2024"",
+    ""labels"": [
+      ""2024-01"",
+      ""2024-02"",
+      ""2024-03"",
+      ""2024-04"",
+      ""2024-05"",
+      ""2024-06"",
+      ""2024-07"",
+      ""2024-08"",
+      ""2024-09"",
+      ""2024-10"",
+      ""2024-11"",
+      ""2024-12""
+    ],
+    ""datasets"": [
+      {
+        ""label"": ""Post Count"",
+        ""data"": [
+          18142,
+          17267,
+          16380,
+          15775,
+          14333,
+          14801,
+          15070,
+          15241,
+          12676,
+          19974,
+          16743,
+          15698
+        ]
+      }
+    ],
+    ""summary"": ""The Youtube collection post count fluctuated throughout 2024, starting at 18,142 in January and generally declining to a low of 12,676 in September, before spiking to a peak of 19,974 in October and ending the year at 15,698 in December."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-561eba4f-078e-4263-a91f-8d602d8dda4f""
+  }
+}",3,2,1.0,2,1,0.5,"['aggregate_by_time', 'generate_chart']",13673,1120,14793,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-06T15:17:37Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_b68e68e5aedd,"Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",taskset_20260506T151456Z_596c26,C1,session_ec8dccc9f38b,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:15:47Z,2026-05-06T15:18:02Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The Twitter collection started on 2021-06-21. Here is the daily activity for its first 10 calendar days (June 21-30, 2021): June 21: 227,781 posts; June 22: 266,920; June 23: 270,177; June 24: 255,432; June 25-27: no data; June 28: 2; June 29: 299,017; June 30: 302,848."",
+    ""key_points"": [
+      ""The Twitter collection start date is 2021-06-21"",
+      ""2021-06-21: 227,781 posts"",
+      ""2021-06-22: 266,920 posts"",
+      ""2021-06-23: 270,177 posts"",
+      ""2021-06-24: 255,432 posts"",
+      ""2021-06-25: No data available"",
+      ""2021-06-26: No data available"",
+      ""2021-06-27: No data available"",
+      ""2021-06-28: 2 posts"",
+      ""2021-06-29: 299,017 posts"",
+      ""2021-06-30: 302,848 posts""
+    ]
+  }
+}",9,8,1.0,7,7,1.0,"['get_collection_summary', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time']",41489,6608,48097,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:18:02Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_e2a970fe23db,"Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?",taskset_20260506T151456Z_596c26,D2,session_3724201648b9,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:17:16Z,2026-05-06T15:18:32Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts—roughly 10.5 times more. Both platforms exhibited a similar pattern of a notable dip in September 2024 followed by a recovery in October, but their overall trends differed: Reddit showed a general decline from January (171K) to September (109K) before recovering, while Mastodon remained relatively stable with fluctuations between 1.2M and 1.8M posts per month throughout the year."",
+    ""key_points"": [
+      ""Mastodon total 2024 volume: 18,384,226 posts; Reddit total 2024 volume: 1,743,996 posts"",
+      ""Mastodon's monthly volume was consistently higher, ranging from 1,221,939 (September) to 1,785,926 (October)"",
+      ""Reddit's monthly volume ranged from 109,334 (September) to 171,016 (January)"",
+      ""Both platforms experienced their lowest monthly volume in September 2024 (Reddit: 109,334; Mastodon: 1,221,939)"",
+      ""Both platforms recovered in October 2024 (Reddit: 152,815; Mastodon: 1,785,926)"",
+      ""Reddit showed a declining trend from January through September, then a partial recovery in Q4"",
+      ""Mastodon maintained relatively high and stable volumes throughout 2024 with a peak in October"",
+      ""Chart URL: https://quickchart.io/chart/render/zf-9f5503ab-ba81-4e7d-bfdd-bf2cecdc6fd0""
+    ]
+  }
+}",4,4,1.0,3,1,0.3333333333333333,"['get_collections', 'aggregate_by_time', 'aggregate_by_time', 'generate_chart']",18123,3526,21649,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:18:32Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_91d9d080d128,"for the first five days of 2025, show and compare the daily volume of posts mentioning 'new year' across reddit and bluesky collection.",taskset_20260506T151456Z_596c26,D1,session_f370944c62fc,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:17:11Z,2026-05-06T15:18:50Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""day"",
+    ""value_unit"": ""post count"",
+    ""series"": [
+      {
+        ""label"": ""Reddit"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 50
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 12
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 6
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 2
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 5
+          }
+        ]
+      },
+      {
+        ""label"": ""Bluesky"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 18374
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 3542
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 1496
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 724
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 577
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Daily volume of posts mentioning 'new year' from Jan 1-5, 2025. Bluesky shows significantly higher volume than Reddit, with both platforms peaking on New Year's Day (Jan 1) and declining rapidly thereafter. Chart: https://quickchart.io/chart/render/zf-9714a290-706f-4888-ac54-d4a76b8ab5e1""
+  }
+}",11,25,1.0,6,6,1.0,"['get_term_daily_counts', 'get_term_daily_counts', 'get_collections', 'get_all_terms', 'text_search', 'text_search', 'get_nlp_terms_for_day', 'get_nlp_terms_for_day', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'generate_chart']",73006,3717,76723,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-06T15:18:50Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_d91265237f8c,which collection had the highest number of posts mentioning bushfire in 2024? What insights do you have about this result?,taskset_20260506T151456Z_596c26,D3,session_dc566710b8c6,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:17:37Z,2026-05-06T15:19:08Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The GDELT collection had the highest number of posts mentioning 'bushfire' in 2024, with 23,371 mentions. This is significantly higher than the next highest collection, Bluesky, which had 1,986 mentions."",
+    ""key_points"": [
+      ""GDELT had 23,371 posts mentioning 'bushfire' in 2024, the highest among all collections."",
+      ""Bluesky ranked second with 1,986 bushfire mentions in 2024."",
+      ""Mastodon had 791 mentions, Reddit had 572, and Flickr had 113 mentions."",
+      ""Twitter and YouTube both returned 0 results for bushfire in 2024."",
+      ""Twitter's 0 result is explained by its data coverage ending on 2023-04-21, meaning no 2024 data exists for this collection."",
+      ""YouTube has data through 2026 but returned 0 bushfire mentions, suggesting either low coverage of this topic or different content characteristics."",
+      ""GDELT is a global news monitoring database with over 55 million total posts, making it well-suited for capturing news-related terms like 'bushfire' across global media sources."",
+      ""GDELT had approximately 3.9 million total posts in 2024 (averaging ~325,000 per month), so bushfire mentions represent about 0.6% of its 2024 content.""
+    ]
+  }
+}",10,26,1.0,11,10,0.9090909090909091,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'analyze_terms_in_collection', 'analyze_terms_in_collection', 'analyze_terms_in_collection', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'aggregate_by_time', 'get_nlp_topics', 'get_nlp_topics', 'get_nlp_metadata']",52873,4123,56996,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:19:08Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_ef987a3f342c,"For the Mastodon dataset, was posting activity generally higher on Sundays than on Mondays from the start of the Mastodon collection through 2024?",taskset_20260506T151456Z_596c26,D5,session_b74344bcdbc5,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:18:34Z,2026-05-06T15:19:09Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""No, posting activity was not generally higher on Sundays than on Mondays. Across all years from the start of the Mastodon collection (2020) through 2024, Monday consistently had higher posting activity than Sunday."",
+    ""key_points"": [
+      ""The Mastodon collection spans from 2020-01-01 to 2026-05-06 with 59,857,709 total posts."",
+      ""In 2020: Monday had 62 posts vs Sunday's 60 (Monday higher)."",
+      ""In 2021: Monday had 127 posts vs Sunday's 108 (Monday higher)."",
+      ""In 2022: Monday had 130,063 posts vs Sunday's 68,059 (Monday higher)."",
+      ""In 2023: Monday had 2,556,125 posts vs Sunday's 2,388,867 (Monday higher)."",
+      ""In 2024: Monday had 2,720,800 posts vs Sunday's 2,254,117 (Monday higher)."",
+      ""Monday posting activity exceeded Sunday activity in every single year from 2020 through 2024.""
+    ]
+  }
+}",3,6,1.0,5,3,0.6,"['get_collection_summary', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality']",12881,1659,14540,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:19:09Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_4ebdc08831f4,"For BlueSky, during the first week of Feb 2025, what topic clusters are detected, and which cluster appears to be the largest or most prominent?",taskset_20260506T151456Z_596c26,E2,session_505312122419,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:19:11Z,2026-05-06T15:19:39Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of February 2025 (Feb 1-7), BlueSky topic clusters were detected daily, with a dominant cluster consistently focused on US politics, government, and figures like Trump and Musk. This political cluster was by far the largest each day, ranging from 11,429 to 13,528 posts. The single largest cluster appeared on February 3rd with 13,528 posts, centered on terms like 'people, musk, government, state, time, elon, law, trump.' Other recurring clusters throughout the week included topics on the Israel-Gaza conflict, Ukraine-Russia war, books/reading, music, Canadian politics, and protests."",
+    ""key_points"": [
+      ""The largest and most prominent cluster across the entire week focused on US politics, government, Trump, and Musk, appearing as the #1 cluster every single day."",
+      ""The political cluster sizes by day were: Feb 1 (11,429), Feb 2 (12,384), Feb 3 (13,528 - the largest single cluster of the week), Feb 4 (12,863), Feb 5 (13,329), Feb 6 (11,479), Feb 7 (11,931)."",
+      ""Key terms in the dominant political cluster included: people, trump, musk, elon, government, state, law, country, power, work, money, republican, democrat, senat, congress, and america."",
+      ""The Israel-Gaza conflict was a consistent secondary cluster, with sizes ranging from 229 (Feb 1) to 762 (Feb 6), with terms like gaza, palestinian, israel, netanyahu, genocid, hama, biden, bibi."",
+      ""The Ukraine-Russia war appeared as a recurring cluster with sizes from 211 (Feb 4) to 295 (Feb 2), featuring terms like ukrain, russia, putin, russian, zelenski, nato, moscow, kremlin."",
+      ""Other notable recurring clusters included: books/reading (160-253 posts), music (166-373 posts), Canadian politics (200-285 posts), protests (199-276 posts), and health/medical topics (237 posts on Feb 4)."",
+      ""On Feb 6, the Gaza cluster spiked to 762 posts, and Australian politics (auspol) emerged as a significant cluster with 562 posts focused on dutton, albanes, labor, lnp.""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",17714,1311,19025,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:19:39Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_1e3ce65f4b48,"For reddit collection, can you show me how discussion themes are grouped together from 24 Dec 2023 to 25 Dec 2023, and point out the strongest topic groupings?",taskset_20260506T151456Z_596c26,E3,session_5a4f763355ba,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:19:42Z,2026-05-06T15:20:10Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""From December 24-25, 2023, the Reddit collection shows 3 topic clusters connected by 2 groupings. The strongest topic grouping (weight: 15) connects the main Christmas/holiday discussion cluster from Dec 24 to the Dec 25 cluster, sharing 15 common terms including 'people', 'year', 'family', 'Christmas', 'time', 'day', 'home', and 'work'. A second grouping (weight: 11) connects the Israel-Hamas conflict cluster from Dec 24 to the Dec 25 cluster, sharing terms like 'Hamas', 'war', 'protest', 'children', and 'people'."",
+    ""key_points"": [
+      ""Three topic clusters were identified: Cluster 20231224-0 (size: 403 posts) focused on Christmas/holiday themes with terms like 'people', 'year', 'time', 'day', 'christmas', 'house', 'family', 'work', 'police', 'shop', 'insurance', and 'train'."",
+      ""Cluster 20231224-1 (size: 8 posts) focused on the Israel-Hamas conflict with terms like 'israel', 'hamas', 'children', 'protest', 'war', 'palestine', 'gaza', 'conflict', 'civilian', 'genocide', and 'idf'."",
+      ""Cluster 20231225-0 (size: 51 posts) on Dec 25 contained mixed themes including Christmas ('christmas', 'family', 'kid', 'everyone') and conflict/protest terms ('protest', 'covid', 'hamas', 'war', 'police')."",
+      ""The strongest topic grouping has weight 15, connecting the main Dec 24 cluster (20231224-0) to the Dec 25 cluster (20231225-0), with 15 common terms: 'thing', 'year', 'family', 'car', 'someone', 'police', 'work', 'week', 'time', 'people', 'something', 'christmas', 'way', 'home', 'day'."",
+      ""The second strongest grouping has weight 11, connecting the Israel-Hamas conflict cluster (20231224-1) to the Dec 25 cluster (20231225-0), with 11 common terms: 'hamas', 'year', 'children', 'war', 'protest', 'kid', 'fuck', 'time', 'people', 'christmas', 'way'.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_topic_groupings'],8370,1483,9853,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:20:10Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_266ae8badbbd,"For the reddit collection between 2022-04-20 and 2022-04-25, identify the top stemmed terms and summarise the main themes suggested by those terms.",taskset_20260506T151456Z_596c26,E4,session_1e44172ae061,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:20:13Z,2026-05-06T15:20:46Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The top stemmed terms in the Reddit collection between 2022-04-20 and 2022-04-25 reveal discussions centered around daily life, urban living, transportation, and Australian city-specific topics. The most frequent terms include 'peopl' (4003), 'time' (3136), 'day' (2441), 'year' (2174), 'thing' (1963), 'car' (1846), 'way' (1667), 'place' (1444), 'someon' (1281), and 'work' (1200)."",
+    ""key_points"": [
+      ""The top 10 stemmed terms by frequency are: peopl (4003), time (3136), day (2441), year (2174), thing (1963), car (1846), way (1667), place (1444), someon (1281), and work (1200)."",
+      ""Australian cities feature prominently: melbourn (613), sydney (640), perth (262), and australia (233), indicating location-specific discussions."",
+      ""Transportation is a major theme with terms like car (1846), road (1136), driver (654), train (291), lane (340), station (111), pedestrian (110), cross (129), and uber (155)."",
+      ""Housing and cost of living discussions are evident through terms like hous (1124), money (422), price (737), cost (100), and job (759)."",
+      ""Urban infrastructure and places appear frequently: citi (918), area (938), park (523), street (423), suburb (140), and school (114)."",
+      ""Social and governance topics are represented by terms like issu (378), problem (216), govern (117), vote (241), and parti (264)."",
+      ""Pandemic-related discussions are present with covid (202) appearing in the term list."",
+      ""Service and delivery economy terms include deliveri (101), restaur (105), order (138), and servic (541)."",
+      ""The main themes suggested are: (1) everyday life and people's experiences, (2) urban transportation and road issues, (3) housing and cost of living concerns, (4) Australian city-specific matters (particularly Melbourne and Sydney), and (5) community and governance issues.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_all_terms'],8412,1719,10131,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:20:46Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_ddd5da7491cc,Compare the daily sentiment trend of Mastodon and gdelt during January 2025. Did the two platforms follow a similar daily pattern?,taskset_20260506T151456Z_596c26,D6,session_5800391a8b41,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:18:51Z,2026-05-06T15:21:09Z,"Based on the daily sentiment data for January 2025, here is the comparison:
+
+**Chart:** https://quickchart.io/chart/render/zf-6e37079e-f91d-42ae-ab6a-97e10be55b2d
+
+**Summary:** Mastodon and GDELT showed **some similarities but also notable differences** in their daily sentiment patterns during January 2025. They shared a general weekend effect and an end-of-month decline, but diverged in several key ways.
+
+**Key Points:**
+- **Overall sentiment levels:** Mastodon sentiment ranged from +96.17 (Jan 1) to -538.33 (Jan 30), while GDELT sentiment was much more volatile, ranging from -8,469.97 (Jan 28) to +1,007.83 (Jan 23).
+- **Weekend effect (shared pattern):** Both platforms generally showed less negative sentiment on weekends. For example, Mastodon's weekend averages (Jan 4-5: -133.6, Jan 11-12: -167.6, Jan 18-19: -194.7, Jan 25-26: -206.0) were consistently less negative than weekday values. GDELT showed a similar pattern in weeks 1, 3, and 4.
+- **End-of-month decline (shared pattern):** Both platforms trended increasingly negative in the final week of January. Mastodon dropped from -371.76 (Jan 27) to -538.33 (Jan 30), while GDELT plunged from -5,095.67 (Jan 27) to -8,469.97 (Jan 28).
+- **Positive days diverged:** Mastodon was positive only on Jan 1 (+96.17), while GDELT had two positive days (Jan 23: +1,007.83 and Jan 25: +682.32).
+- **Mid-month patterns differed:** During Jan 14-16, Mastodon sentiment was relatively stable (-398.73 to -343.41), while GDELT hit some of its lowest points (-6,435.25 to -7,828.66).
+- **GDELT showed higher volatility:** GDELT's sentiment swings were much larger in magnitude, with sharp spikes (e.g., Jan 9: -592.17, a relative high) and deep troughs, whereas Mastodon's changes were more gradual.",4,4,1.0,3,3,1.0,"['get_collections', 'aggregate_by_time', 'aggregate_by_time', 'generate_chart']",23611,7350,30961,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:21:09Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_c45c21f4cdab,"In the Twitter collection, how did daily usage of the stemmed terms tax,inflat, and economi change between 2022-02-01 and 2022-02-14?",taskset_20260506T151456Z_596c26,E5,session_cd613d19577a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:20:48Z,2026-05-06T15:21:19Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Between 2022-02-01 and 2022-02-14, the daily usage of the three stemmed terms showed distinct patterns. The term 'tax' had the highest overall usage, fluctuating between 357 and 701 daily mentions, with a notable peak on Feb 14 (701) and a low on Feb 12 (357). The term 'economi' showed relatively stable usage between 196 and 373, starting at 363 on Feb 1 and ending at 247 on Feb 14. The term 'inflat' had the lowest usage (106-296), with data gaps on Feb 5-9 and Feb 12, peaking on Feb 10 (296) and dropping to its lowest on Feb 13 (106)."",
+    ""key_points"": [
+      ""Tax: Daily counts ranged from 357 (Feb 12) to 701 (Feb 14), with notable peaks on Feb 3 (677) and Feb 10 (656)."",
+      ""Tax: Usage declined from 644 on Feb 1 to a low of 357 on Feb 12, then surged to 701 on Feb 14."",
+      ""Inflat: Daily counts ranged from 106 (Feb 13) to 296 (Feb 10), with data missing for Feb 5-9 and Feb 12."",
+      ""Inflat: Usage dropped from 194 on Feb 1 to 131-133 on Feb 3-4, then spiked to 296 on Feb 10 before declining again."",
+      ""Economi: Daily counts ranged from 196 (Feb 13) to 373 (Feb 2), with complete data across all 14 days."",
+      ""Economi: Usage started at 363 on Feb 1, peaked at 373 on Feb 2, declined to a low of 196 on Feb 13, and recovered to 247 on Feb 14.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_term_daily_counts'],8611,1558,10169,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:21:19Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_a0cc6a25f231,"Over the first week in Jan 2025, in the Bluesky collection, what are the most prominent terms people are using, and which ones seem especially characteristic of that period?",taskset_20260506T151456Z_596c26,E1,session_b39ba96b47a7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:19:11Z,2026-05-06T15:21:28Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of January 2025 in the Bluesky collection, the most prominent terms were dominated by political discourse around Trump (47,883 mentions), Musk (14,419), and general political terms like 'people' (64,583), 'country' (17,466), 'media' (12,747), and 'money' (13,194). Terms especially characteristic of this period reflected several major news events: the New Year's Day truck attack in New Orleans ('nola': 282, 'firework': 1,148 on Jan 1-2), Jimmy Carter's death ('carter': 3,014, peaking at 778 on Jan 4), the January 6th Capitol attack anniversary ('capitol': 751 and 'insurrect': 900 on Jan 6), Justin Trudeau's resignation announcement ('trudeau': 995, with 617 on Jan 6), Trump's Greenland and Panama Canal comments ('greenland': 2,836 with 2,673 on Jan 7; 'denmark': 706 and 'panama': 571 on Jan 7), and the upcoming inauguration ('inaugur': 2,173, building from 129 on Jan 1 to 602 on Jan 4). Ongoing topics included Gaza/Israel, Russia/Ukraine, and RFK Jr. health policy discussions."",
+    ""key_points"": [
+      ""Trump was the single most prominent named figure with 47,883 mentions, followed by Musk (14,419) and Elon (8,013)"",
+      ""New Year's Day events: 'firework' had 686 mentions on Jan 1 and 462 on Jan 2; 'nola' (New Orleans) had 128 on Jan 1 and 154 on Jan 2, reflecting the New Year's Day truck attack"",
+      ""Jimmy Carter's death drove 3,014 mentions of 'carter', peaking at 778 on Jan 4 (the day of his death)"",
+      ""January 6th anniversary: 'capitol' spiked to 751 mentions and 'insurrect' to 900 on Jan 6, compared to much lower counts on other days"",
+      ""Justin Trudeau's resignation: 'trudeau' had 617 mentions on Jan 6 and 378 on Jan 7; 'canada' appeared 5,205 times overall"",
+      ""Trump's territorial expansion comments: 'greenland' had 2,836 total mentions with 2,673 on Jan 7 alone; 'denmark' had 706 and 'panama' had 571 on Jan 7"",
+      ""Inauguration anticipation: 'inaugur' had 2,173 mentions, building from 129 on Jan 1 to a peak of 602 on Jan 4"",
+      ""Golden Globes appeared as a topic cluster on Jan 6 with terms like 'goldenglob', 'award', 'globe', 'movi', 'actress'"",
+      ""Ongoing major topics included Gaza/Israel (topic clusters every day), Russia/Ukraine war, and RFK Jr./vaccine discussions"",
+      ""Platform-related terms were prominent: 'blueski' (3,815), 'twitter' (4,601), 'bot' (2,588), reflecting Bluesky's growing user base""
+    ]
+  }
+}",5,4,1.0,3,3,1.0,"['get_collections', 'analyze_terms_in_collection', 'get_nlp_topics', 'get_term_daily_counts']",68924,7216,76140,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:21:28Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_424eaacdd97c,"For the Reddit collection, retrieve the NLP metadata for 2025-03-01 to 2025-03-03. What NLP model or topic modelling configuration was used, and what should a researcher know before interpreting the topic outputs?",taskset_20260506T151456Z_596c26,E7,session_8c26d1899ee3,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:21:21Z,2026-05-06T15:21:44Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""For the Reddit collection from 2025-03-01 to 2025-03-03, the NLP topic modelling used a Word2Vec (w2v) embedding model combined with clustering. Despite the parameter name 'bert_model', the actual model used is Word2Vec, not BERT. Key configuration includes a vector size of 100, minimum word count threshold of 30, window size of 5, and a minimum topic size of 5. Researchers should be aware that the 'bert_model' label is misleading—it refers to Word2Vec embeddings—and that terms appearing fewer than 30 times in the corpus are excluded from analysis."",
+    ""key_points"": [
+      ""The topic modelling configuration uses Word2Vec (w2v) embeddings, not BERT, despite the parameter being named 'bert_model': 'w2v'."",
+      ""Word2Vec parameters: vector size = 100, minimum count = 30 (terms appearing fewer than 30 times are filtered out), window size = 5, training algorithm = 0."",
+      ""Clustering parameters: bert_top_n_words = 30 (top 30 words returned per topic), bert_min_topic_size = 5 (topics must contain at least 5 items)."",
+      ""Corpus sizes: 2025-03-01 had 4,461 documents (dictionary size 5,500); 2025-03-02 had 4,997 documents (dictionary size 5,954); 2025-03-03 had 4,213 documents (dictionary size 5,268)."",
+      ""All three days were processed on 2025-03-05, taking 0-2 minutes per day."",
+      ""Researchers should note the minimum count threshold of 30 means rare terms are excluded, which may affect topic coverage for niche discussions."",
+      ""The 'bert_model' naming is a misnomer—this is a Word2Vec-based approach, so interpretations should account for the limitations of static word embeddings rather than contextual transformer models.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_nlp_metadata'],8575,1158,9733,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:21:44Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_2207e0179a97,Compare the topic clusters found in the BlueSky and reddit collections during 2025-05-01 to 2025-05-07. Are the dominant topic areas similar or different across the two platforms?,taskset_20260506T151456Z_596c26,E6,session_c41aec47e51f,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:21:11Z,2026-05-06T15:21:56Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The dominant topic areas in BlueSky and Reddit during May 1-7, 2025 are substantially different. BlueSky is dominated by global political discourse and cultural topics, while Reddit (which appears to be Australian-focused) centers on local daily life and practical community concerns."",
+    ""key_points"": [
+      ""BlueSky's largest daily topic (~9,700-12,600 posts) is a general catch-all category with terms like 'people, day, time, thank, year, thing, work, life, love, kid, friend'"",
+      ""BlueSky's second most prominent topic is the Israel-Gaza conflict (~215-690 posts daily), with terms like 'israel, gaza, palestinian, netanyahu, genocid, hama, zionist, aid, starvat, hostag'"",
+      ""BlueSky features significant coverage of Canadian politics (~150-500 posts) with terms like 'canada, carney, alberta, poilievre, trudeau, cpc, conserv', growing in prominence through the week"",
+      ""BlueSky has consistent topics on US politics (~150-350 posts), music (~150-280 posts), food (~140-285 posts), gaming (~130-220 posts), books (~130-190 posts), and Ukraine-Russia (~130-260 posts)"",
+      ""Reddit's largest daily topic (~98-178 posts) is highly Australia-localized with terms like 'people, time, perth, year, day, way, house, place, driver, cat, thank, work, city'"",
+      ""Reddit topics focus on practical local concerns: cars/traffic (~22-67 posts), food/restaurant recommendations (~13-42 posts), housing/property (~16-22 posts), weather/climate (~29-157 posts), education/schools (~18-125 posts), and health/medical (~18-63 posts)"",
+      ""Australian election coverage appears on both platforms but at different scales: BlueSky (~200-350 posts with terms like 'auspol, dutton, albanes, labor, lnp, elect') vs Reddit (~18-61 posts with terms like 'vote, labor, green, lnp, liber, elect, dutton')"",
+      ""BlueSky topic volumes are orders of magnitude larger than Reddit (thousands vs dozens/hundreds of posts per topic)"",
+      ""BlueSky discourse is global and politically intense (Israel-Gaza, US politics, Canadian politics, Ukraine-Russia, gender debates), while Reddit discourse is localized to Australian cities (Perth, Melbourne, Sydney) and focuses on everyday practical matters""
+    ]
+  }
+}",2,2,1.0,2,2,1.0,"['get_nlp_topics', 'get_nlp_topics']",19341,2348,21689,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:21:56Z
+1,1_qwen_qwen3.6-plus_20260506T151456Z,query_14b90a2f2f7d,"Comparing the daily occurrences of the terms ""new,"" ""year,"" and ""australia"" on Reddit during the first week of January in 2022, 2023, and 2024, which year had the highest activity level for these words?",taskset_20260506T151456Z_596c26,D4,session_e6a6cc4f7a93,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:18:04Z,2026-05-06T15:22:45Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""2024 had the highest activity level for the terms \""new,\"" \""year,\"" and \""australia\"" during the first week of January, with a combined total of 3,356 term occurrences. In comparison, 2022 had 2,516 occurrences, and 2023 had essentially no data available for this period."",
+    ""key_points"": [
+      ""For 2022 (Jan 1-7): The term \""year\"" had 2,516 total occurrences (daily counts: 449, 378, 363, 325, 410, 324, 267). The terms \""new\"" and \""australia\"" returned zero occurrences in the stemmed term analysis."",
+      ""For 2023 (Jan 1-7): The Reddit collection had only 1 post total during this entire week, resulting in zero occurrences for all three terms. The get_all_terms query returned an empty term list for this period."",
+      ""For 2024 (Jan 1-7): The term \""year\"" had 3,253 total occurrences (daily counts: 571, 478, 457, 481, 384, 416, 466). The term \""australia\"" had 103 occurrences (all on January 6). The term \""new\"" returned zero occurrences in the stemmed term analysis."",
+      ""Combined totals: 2022 = 2,516; 2023 = 0; 2024 = 3,356."",
+      ""The term \""new\"" did not appear in the stemmed term analysis for any year, likely because it is treated as a stop word in the NLP pipeline.""
+    ]
+  }
+}",14,25,1.0,14,14,1.0,"['get_collections', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_all_terms', 'get_all_terms', 'get_all_terms', 'get_all_terms', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",84460,14630,99090,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:22:45Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_70d5f5c75281,how many posts does twitter collection have?,taskset_20260506T153847Z_56e8e0,A1,session_c740c2886028,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:38:49Z,2026-05-06T15:38:56Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 185873222,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of posts in the twitter collection from 2021-06-21 to 2023-04-21""
+  }
+}",2,1,1.0,0,0,,['get_collection_summary'],7851,198,8049,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:38:56Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_4aed2fbd109a,"Compare Reddit, Mastodon, and Twitter by total post count and harvesting date range. Summarise which collection is largest and which has the most recent data.",taskset_20260506T153847Z_56e8e0,A3,session_21e2a72a891a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:38:49Z,2026-05-06T15:39:05Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Twitter is the largest collection with 185,873,222 posts, followed by Mastodon (59,857,709) and Reddit (8,021,797). Reddit and Mastodon share the most recent data, both ending on 2026-05-06, while Twitter's data ends on 2023-04-21."",
+    ""key_points"": [
+      ""Twitter has the highest post count at 185,873,222 posts."",
+      ""Mastodon has 59,857,709 posts, making it the second largest collection."",
+      ""Reddit has 8,021,797 posts, the smallest of the three collections."",
+      ""Reddit and Mastodon both have the most recent data with an end date of 2026-05-06."",
+      ""Twitter's data is the oldest, ending on 2023-04-21."",
+      ""Reddit has the earliest start date (2019-10-03), followed by Mastodon (2020-01-01), then Twitter (2021-06-21).""
+    ]
+  }
+}",2,3,1.0,0,0,,"['get_collection_summary', 'get_collection_summary', 'get_collection_summary']",7991,743,8734,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:39:05Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_3a15a9d9c853,List all available collections and their startdates.,taskset_20260506T153847Z_56e8e0,A4,session_b40e614fe87d,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:38:49Z,2026-05-06T15:39:07Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""There are 7 available collections with the following start dates: bluesky (2024-01-01), gdelt (2015-02-18), flickr (2021-04-27), mastodon (2020-01-01), reddit (2019-10-03), twitter (2021-06-21), and youtube (2021-06-13)."",
+    ""key_points"": [
+      ""bluesky: startDate 2024-01-01"",
+      ""gdelt: startDate 2015-02-18"",
+      ""flickr: startDate 2021-04-27"",
+      ""mastodon: startDate 2020-01-01"",
+      ""reddit: startDate 2019-10-03"",
+      ""twitter: startDate 2021-06-21"",
+      ""youtube: startDate 2021-06-13""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12262,738,13000,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:39:07Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_adc56fe6c078,Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.,taskset_20260506T153847Z_56e8e0,B1,session_a4a80a891575,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:38:56Z,2026-05-06T15:39:19Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 102,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Bluesky posts from February 2024 mentioning either 'bulk billing' or 'Medicare'""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'get_collection_summary']",16094,764,16858,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:39:19Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_3b9209e6c6c2,"Compare the harvesting date span of all available collections. Which collection has the longest harvesting period, and which has the largest post count?",taskset_20260506T153847Z_56e8e0,A2,session_9e09801750b4,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:38:49Z,2026-05-06T15:39:24Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Among the 7 available collections, **gdelt** has the longest harvesting period (from 2015-02-18 to 2026-05-06, approximately 11 years), while **bluesky** has the largest post count with 209,705,701 posts."",
+    ""key_points"": [
+      ""gdelt has the longest harvesting span: 2015-02-18 to 2026-05-06 (~11 years)"",
+      ""reddit: 2019-10-03 to 2026-05-06 (~6.6 years)"",
+      ""mastodon: 2020-01-01 to 2026-05-06 (~6.3 years)"",
+      ""flickr: 2021-04-27 to 2026-05-06 (~5 years)"",
+      ""youtube: 2021-06-13 to 2026-05-05 (~4.9 years)"",
+      ""bluesky: 2024-01-01 to 2026-05-06 (~2.3 years)"",
+      ""twitter: 2021-06-21 to 2023-04-21 (~1.8 years)"",
+      ""bluesky has the largest post count: 209,705,701 posts"",
+      ""twitter has the second largest post count: 185,873,222 posts"",
+      ""mastodon: 59,857,709 posts"",
+      ""gdelt: 55,261,236 posts"",
+      ""reddit: 8,021,797 posts"",
+      ""flickr: 596,126 posts"",
+      ""youtube: 569,745 posts""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12313,1724,14037,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:39:24Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_2ba5885b8f01,"How many Bluesky posts in 2024 mentioned ""cost of living"" and did not mention mortgage?",taskset_20260506T153847Z_56e8e0,B2,session_8f078a5161b7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:07Z,2026-05-06T15:39:32Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 4197,
+    ""unit"": ""posts"",
+    ""comment"": ""Bluesky posts in 2024 that mentioned 'cost of living' and did not mention 'mortgage'""
+  }
+}",5,4,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'get_collection_summary']",20393,811,21204,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:39:32Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_94215876b216,How many Twitter posts used the hashtag #auspol during first quarter 2023?,taskset_20260506T153847Z_56e8e0,B3,session_643d058f36b1,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:09Z,2026-05-06T15:39:35Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 91002,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Twitter posts with the hashtag #auspol during Q1 2023 (January 1 - March 31, 2023)""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'text_search']",16015,732,16747,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:39:35Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_888adbb218c0,"For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",taskset_20260506T153847Z_56e8e0,B6,session_af5cc18e043d,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:32Z,2026-05-06T15:39:48Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 13528,
+    ""unit"": ""posts"",
+    ""comment"": ""Size of the largest topic cluster in the BlueSky collection from 2025-02-01 to 2025-02-03, occurring on 2025-02-03""
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",14499,616,15115,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:39:48Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_ce4ec79abce2,How many English-language Mastodon posts mention unimelb in 2025?,taskset_20260506T153847Z_56e8e0,B4,session_cff5cac73035,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:20Z,2026-05-06T15:39:49Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 34,
+    ""unit"": ""posts"",
+    ""comment"": ""English-language Mastodon posts mentioning unimelb in 2025""
+  }
+}",5,4,1.0,0,0,,"['get_collections', 'text_search', 'get_collection_summary', 'text_search']",20252,982,21234,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:39:49Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_58c5505d16f1,"During January 2024, how many Reddit posts were recorded in total?",taskset_20260506T153847Z_56e8e0,B5,session_5452d10b2667,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:26Z,2026-05-06T15:40:04Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 171016,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of Reddit posts recorded during January 2024 (sum of daily counts from 2024-01-01 to 2024-01-31)""
+  }
+}",4,3,1.0,1,1,1.0,"['get_collections', 'get_collection_summary', 'aggregate_by_time']",16716,1795,18511,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:40:04Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_69f9b12e499b,"Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",taskset_20260506T153847Z_56e8e0,C1,session_209d96b1c8c4,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:49Z,2026-05-06T15:40:16Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The Twitter collection started on 2021-06-21. Daily activity for the first 10 days (June 21-30, 2021) shows 7 days with data: June 21 had 227,781 posts, June 22 had 266,920, June 23 had 270,177, June 24 had 255,432, June 28 had 2, June 29 had 299,017, and June 30 had 302,848. Data for June 25-27 is not present in the collection."",
+    ""key_points"": [
+      ""Twitter collection start date: 2021-06-21"",
+      ""Twitter collection end date: 2023-04-21"",
+      ""Total posts in collection: 185,873,222"",
+      ""2021-06-21: 227,781 posts"",
+      ""2021-06-22: 266,920 posts"",
+      ""2021-06-23: 270,177 posts"",
+      ""2021-06-24: 255,432 posts"",
+      ""2021-06-25 to 2021-06-27: No data available"",
+      ""2021-06-28: 2 posts"",
+      ""2021-06-29: 299,017 posts"",
+      ""2021-06-30: 302,848 posts""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collection_summary', 'aggregate_by_time']",12045,1214,13259,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:40:16Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_eef7bc1e72cc,I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2024?,taskset_20260506T153847Z_56e8e0,C4,session_9a4327684850,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:40:19Z,2026-05-06T15:40:44Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Yes, Mastodon post volume shows a clear daily pattern in February 2024, with posts peaking in the late afternoon hours (UTC). The highest volume occurs at hour 16 (4 PM UTC) with 84,652 posts, while the lowest volumes are in the early morning hours around 4-5 AM UTC with approximately 41,300 posts."",
+    ""key_points"": [
+      ""Peak posting hour is 16:00 UTC with 84,652 posts"",
+      ""Hours 15-17 (3-5 PM UTC) represent the peak window, with counts of 83,647, 84,652, and 83,828 respectively"",
+      ""Lowest posting volume occurs at hours 4-5 AM UTC with 41,334 and 41,332 posts"",
+      ""Post volume steadily increases from early morning through midday, rising from ~41K at 5 AM to ~63K at noon"",
+      ""After the afternoon peak, volume gradually declines through the evening, dropping to 59,338 by hour 23 (11 PM UTC)"",
+      ""The ratio between peak (hour 16) and trough (hour 5) is approximately 2:1, indicating significant daily variation in user activity""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'aggregate_seasonality']",12166,1189,13355,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:40:44Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_0f70319d07e1,"For the Reddit dataset, was posting activity generally higher on weekends or weekdays during 2023?",taskset_20260506T153847Z_56e8e0,C3,session_1f57c7907598,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:40:05Z,2026-05-06T15:41:12Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During 2023, Reddit posting activity was generally higher on weekdays than on weekends. The average weekday had approximately 239,984 posts, while the average weekend day had approximately 230,032 posts. Thursday was the most active day (243,426 posts), and Saturday was the least active (226,939 posts)."",
+    ""key_points"": [
+      ""Weekday posting counts: Monday (237,584), Tuesday (237,255), Wednesday (242,988), Thursday (243,426), Friday (238,666)"",
+      ""Weekend posting counts: Saturday (226,939), Sunday (233,125)"",
+      ""Average weekday posts: ~239,984 per day"",
+      ""Average weekend posts: ~230,032 per day"",
+      ""Thursday had the highest posting activity of any day in 2023"",
+      ""Saturday had the lowest posting activity of any day in 2023"",
+      ""Chart URL: https://quickchart.io/chart/render/zf-658c211a-7525-4f6c-a6b8-1ec718f465df""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'aggregate_seasonality', 'generate_chart']",16691,1586,18277,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:41:12Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_faa238d02b78,Can you show me the weekly number of posts containing the hashtag #melbourne in the Mastodon collection in Jan 2024?,taskset_20260506T153847Z_56e8e0,C2,session_c47abe7b3750,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:49Z,2026-05-06T15:41:14Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""week"",
+    ""value_unit"": ""count"",
+    ""series"": [
+      {
+        ""label"": ""#melbourne posts"",
+        ""points"": [
+          {
+            ""x"": ""2024-01-01"",
+            ""value"": 69
+          },
+          {
+            ""x"": ""2024-01-08"",
+            ""value"": 52
+          },
+          {
+            ""x"": ""2024-01-15"",
+            ""value"": 64
+          },
+          {
+            ""x"": ""2024-01-22"",
+            ""value"": 57
+          },
+          {
+            ""x"": ""2024-01-29"",
+            ""value"": 20
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Weekly post counts for hashtag #melbourne in the Mastodon collection during January 2024. The final week (Jan 29-31) covers only 3 days.""
+  }
+}",3,6,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",13016,4235,17251,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-06T15:41:14Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_4e4f578c7a54,Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?,taskset_20260506T153847Z_56e8e0,C5,session_23035fd3efca,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:40:47Z,2026-05-06T15:41:24Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""bar"",
+    ""title"": ""Reddit Monthly Post Counts - 2025"",
+    ""labels"": [""2025-01"", ""2025-02"", ""2025-03"", ""2025-04"", ""2025-05"", ""2025-06"", ""2025-07"", ""2025-08"", ""2025-09"", ""2025-10"", ""2025-11"", ""2025-12""],
+    ""datasets"": [
+      {
+        ""label"": ""Monthly Post Counts"",
+        ""data"": [152074, 141916, 159511, 132151, 133610, 117729, 118185, 113837, 118194, 122222, 132369, 135096]
+      }
+    ],
+    ""summary"": ""Bar chart showing monthly post counts for the Reddit collection throughout 2025. Post counts range from a low of 113,837 in August to a high of 159,511 in March."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-0398db27-c79c-4432-993f-e773ffc05e13""
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'aggregate_by_time', 'generate_chart']",18006,1591,19597,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-06T15:41:24Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_6250401c4290,How did the post count of the Youtube collection fluctuate on a monthly basis during 2024? draw a line graph,taskset_20260506T153847Z_56e8e0,C6,session_463da0358c84,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:41:14Z,2026-05-06T15:41:46Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""line"",
+    ""title"": ""YouTube Post Count Monthly Fluctuation in 2024"",
+    ""labels"": [
+      ""2024-01"",
+      ""2024-02"",
+      ""2024-03"",
+      ""2024-04"",
+      ""2024-05"",
+      ""2024-06"",
+      ""2024-07"",
+      ""2024-08"",
+      ""2024-09"",
+      ""2024-10"",
+      ""2024-11"",
+      ""2024-12""
+    ],
+    ""datasets"": [
+      {
+        ""label"": ""Post Count"",
+        ""data"": [
+          18142,
+          17267,
+          16380,
+          15775,
+          14333,
+          14801,
+          15070,
+          15241,
+          12676,
+          19974,
+          16743,
+          15698
+        ]
+      }
+    ],
+    ""summary"": ""The YouTube collection post count fluctuated throughout 2024, starting at 18,142 in January and generally declining to a low of 12,676 in September, before spiking to a peak of 19,974 in October and ending the year at 15,698 in December."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-8af8ca23-f8da-4be8-81a3-11e04cd38928""
+  }
+}",3,2,1.0,2,1,0.5,"['aggregate_by_time', 'generate_chart']",13796,1459,15255,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-06T15:41:46Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_1154b2aa760e,"for the first five days of 2025, show and compare the daily volume of posts mentioning 'new year' across reddit and bluesky collection.",taskset_20260506T153847Z_56e8e0,D1,session_8254459667b7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:41:16Z,2026-05-06T15:42:28Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""day"",
+    ""value_unit"": ""post count"",
+    ""series"": [
+      {
+        ""label"": ""reddit"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 50
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 12
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 6
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 2
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 5
+          }
+        ]
+      },
+      {
+        ""label"": ""bluesky"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 18374
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 3542
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 1496
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 724
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 577
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Daily volume of posts mentioning 'new year' from 2025-01-01 to 2025-01-05. Bluesky shows significantly higher volume than Reddit, with both platforms peaking on New Year's Day (Jan 1) and declining sharply thereafter.""
+  }
+}",8,19,1.0,7,7,1.0,"['get_term_daily_counts', 'get_term_daily_counts', 'text_search', 'text_search', 'get_all_terms', 'get_term_daily_counts', 'get_term_daily_counts', 'get_nlp_terms_for_day', 'get_nlp_terms_for_day', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",49153,2864,52017,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-06T15:42:28Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_789f25c85085,"In 2020, which available collection had the highest number of posts or records mentioning the keyword inflation, give me the count?",taskset_20260506T153847Z_56e8e0,B7,session_dd6a34b555bf,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:39:35Z,2026-05-06T15:43:00Z,"Based on my search across all available collections for posts mentioning the keyword ""inflation"" in 2020, here are the results:
+
+| Collection | Posts mentioning ""inflation"" in 2020 |
+|---|---|
+| **GDELT** | **4,761,491** |
+| Mastodon | 84,749 |
+| Reddit | 8,149 |
+| Bluesky | 0 (no data in 2020) |
+| Flickr | 0 (no data in 2020) |
+| Twitter | 0 (no data in 2020) |
+| YouTube | 0 (no data in 2020) |
+
+The collection with the highest number of posts mentioning ""inflation"" in 2020 is **GDELT** with **4,761,491** posts.",12,31,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",65194,8592,73786,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-06T15:43:00Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_5b50f7b5a922,"Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?",taskset_20260506T153847Z_56e8e0,D2,session_febc42bae1f2,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:41:24Z,2026-05-06T15:43:22Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Mastodon had a significantly higher total post volume in 2024 with approximately 18.4 million posts compared to Reddit's 1.7 million posts (roughly 10.5x more). The monthly trends showed some similarities but also notable differences: both platforms experienced their lowest activity in September 2024, but Reddit showed a more gradual mid-year decline from January through September before recovering, while Mastodon exhibited more volatility with multiple peaks (February, May-July, and October) and a sharper September dip followed by a strong October rebound."",
+    ""key_points"": [
+      ""Mastodon total 2024 volume: 18,384,226 posts"",
+      ""Reddit total 2024 volume: 1,743,996 posts"",
+      ""Mastodon's volume was approximately 10.5x higher than Reddit's"",
+      ""Both platforms hit their lowest monthly volume in September 2024 (Reddit: 109,334; Mastodon: 1,221,939)"",
+      ""Reddit showed a steady decline from January (171,016) through September (109,334), then recovered to ~144-152K in Q4"",
+      ""Mastodon was more volatile, peaking in October (1,785,926) and February (1,480,241), with notable dips in March (1,334,349) and September (1,221,939)"",
+      ""Reddit's highest month was January (171,016); Mastodon's highest was October (1,785,926)"",
+      ""Chart URL: https://quickchart.io/chart/render/zf-84eaf9af-f4d8-4a6c-910a-483e68fdc51b""
+    ]
+  }
+}",4,4,1.0,3,1,0.3333333333333333,"['get_collections', 'aggregate_by_time', 'aggregate_by_time', 'generate_chart']",18047,5826,23873,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:43:22Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_87698348343d,"For the Mastodon dataset, was posting activity generally higher on Sundays than on Mondays from the start of the Mastodon collection through 2024?",taskset_20260506T153847Z_56e8e0,D5,session_574efc4d8112,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:43:00Z,2026-05-06T15:43:34Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""No, posting activity on Mastodon was not higher on Sundays than on Mondays from the start of the collection (2020) through 2024. In fact, Monday posting activity was consistently higher than Sunday activity in every year during this period."",
+    ""key_points"": [
+      ""In 2020, Monday had 62 posts vs. Sunday's 60 posts."",
+      ""In 2021, Monday had 127 posts vs. Sunday's 108 posts."",
+      ""In 2022, Monday had 130,063 posts vs. Sunday's 68,059 posts."",
+      ""In 2023, Monday had 2,556,125 posts vs. Sunday's 2,388,867 posts."",
+      ""In 2024, Monday had 2,720,800 posts vs. Sunday's 2,254,117 posts."",
+      ""Monday posting activity exceeded Sunday activity in all five years from 2020 through 2024.""
+    ]
+  }
+}",3,6,1.0,5,3,0.6,"['get_collection_summary', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality']",12881,1652,14533,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:43:34Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_80359082b50f,which collection had the highest number of posts mentioning bushfire in 2024? What insights do you have about this result?,taskset_20260506T153847Z_56e8e0,D3,session_3d5f41111695,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:41:47Z,2026-05-06T15:43:58Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The GDELT collection had the highest number of posts mentioning 'bushfire' in 2024, with 23,371 results. This is significantly higher than the next closest collection, Bluesky, which had 1,986 mentions."",
+    ""key_points"": [
+      ""GDELT had 23,371 posts mentioning 'bushfire' in 2024, the highest among all collections."",
+      ""Bluesky ranked second with 1,986 bushfire mentions in 2024."",
+      ""Mastodon had 791 mentions, Reddit had 572, and Flickr had 113."",
+      ""Twitter and YouTube both returned 0 results for bushfire in 2024."",
+      ""Twitter's data only covers 2021-06-21 to 2023-04-21, which explains why it returned 0 results for 2024."",
+      ""YouTube covers 2021-06-13 to 2026-05-05 but still returned 0 bushfire mentions, suggesting either low usage of the term or different content patterns."",
+      ""GDELT is a global news monitoring database with over 55 million total posts, making it the most comprehensive source for news-related content about bushfires."",
+      ""The high number of bushfire mentions in GDELT likely reflects extensive global news coverage of bushfire events, particularly in Australia and other fire-prone regions during 2024.""
+    ]
+  }
+}",15,30,1.0,15,12,0.8,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'analyze_terms_in_collection', 'aggregate_by_time', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'aggregate_by_time', 'analyze_terms_in_collection', 'analyze_terms_in_collection', 'get_nlp_topics', 'get_nlp_topics', 'get_nlp_terms_for_day', 'aggregate_by_time', 'analyze_terms_in_collection', 'get_nlp_metadata']",88553,4969,93522,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:43:58Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_c396b5c02a8e,"For BlueSky, during the first week of Feb 2025, what topic clusters are detected, and which cluster appears to be the largest or most prominent?",taskset_20260506T153847Z_56e8e0,E2,session_57ee616c696f,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:44:00Z,2026-05-06T15:44:40Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of February 2025 (Feb 1-7) on BlueSky, the most prominent topic cluster detected each day was a large cluster centered on US politics and government, featuring terms like 'people', 'Trump', 'Musk', 'government', 'law', 'power', 'election', 'republican', 'democrat', and 'america'. This cluster dominated every single day with sizes ranging from 11,429 to 13,528 posts, far exceeding all other clusters. Other notable recurring clusters included topics on the Israel-Gaza conflict, Ukraine-Russia war, books/reading, music, Canadian politics, and protests."",
+    ""key_points"": [
+      ""The largest cluster on Feb 1 had 11,429 posts with top terms: people, thing, govern, year, time, way, trump, day, thank, media, law, work, musk, countri, power, senat, dem, elect, vote, democraci"",
+      ""The largest cluster on Feb 2 had 12,384 posts with top terms: people, trump, time, way, countri, thing, world, year, state, canada, america, musk, work, govern, elon, vote, power, republican, maga"",
+      ""The largest cluster on Feb 3 had 13,528 posts (the peak of the week) with top terms: people, musk, govern, state, time, elon, law, trump, access, secur, system, money, data, power, congress"",
+      ""The largest cluster on Feb 4 had 12,863 posts with top terms: people, thank, trump, time, thing, way, day, musk, year, countri, govern, power, world, work, elon, media, presid, america, maga"",
+      ""The largest cluster on Feb 5 had 13,329 posts with top terms: thank, musk, time, people, thing, work, state, way, day, govern, power, elon, law, year, republican, elect, constitut, court, system, democraci"",
+      ""The largest cluster on Feb 6 had 11,479 posts with top terms: musk, people, thank, time, elon, senat, govern, trump, dei, work, way, day, money, law, republican, job, power, elect, maga"",
+      ""The largest cluster on Feb 7 had 11,931 posts with top terms: musk, people, govern, trump, money, elon, thing, republican, time, countri, thank, senat, law, day, way, power, elect, media, congress, presid"",
+      ""This US politics/government cluster was consistently 10-50x larger than the second-largest clusters each day"",
+      ""Other recurring prominent clusters included: Israel-Gaza conflict (229-762 posts), Ukraine-Russia war (211-295 posts), books/reading (160-251 posts), music (174-373 posts), Canadian politics (244-285 posts), and protests (199-276 posts)""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",17714,1775,19489,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:44:40Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_588620b80f65,"Comparing the daily occurrences of the terms ""new,"" ""year,"" and ""australia"" on Reddit during the first week of January in 2022, 2023, and 2024, which year had the highest activity level for these words?",taskset_20260506T153847Z_56e8e0,D4,session_8aa8160a7609,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:42:28Z,2026-05-06T15:44:57Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""2024 had the highest activity level for the terms \""new,\"" \""year,\"" and \""australia\"" on Reddit during the first week of January, with a combined total of 3,356 occurrences. This was followed by 2022 with 2,516 occurrences, while 2023 had no recorded data for these terms during that period."",
+    ""key_points"": [
+      ""2024 (Jan 1-7): \""year\"" had 3,253 total occurrences (571+478+457+481+384+416+466), \""australia\"" had 103 occurrences (on Jan 6 only), and \""new\"" had 0 occurrences, for a combined total of 3,356."",
+      ""2022 (Jan 1-7): \""year\"" had 2,516 total occurrences (449+378+363+325+410+324+267), while \""new\"" and \""australia\"" had 0 occurrences each, for a combined total of 2,516."",
+      ""2023 (Jan 1-7): All three terms (\""new,\"" \""year,\"" and \""australia\"") returned empty results with 0 recorded occurrences."",
+      ""The term \""new\"" returned no data for any of the three years during the first week of January."",
+      ""The term \""australia\"" only appeared in 2024 (103 occurrences on Jan 6) and had no data in 2022 or 2023.""
+    ]
+  }
+}",12,22,1.0,20,20,1.0,"['get_collections', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts']",64866,6826,71692,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:44:57Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_97df9bbef976,"Over the first week in Jan 2025, in the Bluesky collection, what are the most prominent terms people are using, and which ones seem especially characteristic of that period?",taskset_20260506T153847Z_56e8e0,E1,session_9c06ee9e40e7,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:43:36Z,2026-05-06T15:44:57Z,"Based on the analysis of the Bluesky collection for January 1-7, 2025, here are the most prominent terms and those especially characteristic of that period:
+
+{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of January 2025 on Bluesky, the most prominent terms reflected a mix of evergreen political discourse and several highly time-specific events. The dominant topics included Trump and the incoming administration, Musk/Twitter/X dynamics, the Israel-Gaza conflict, and ongoing Ukraine-Russia war coverage. Terms especially characteristic of this specific period included references to the New Year, Jimmy Carter's death, the January 6th Capitol attack anniversary, the New Orleans attack, Canadian political turmoil (Trudeau/Poilievre), Greenland territorial discussions, and the Australia vs India cricket test series."",
+    ""key_points"": [
+      ""The most frequent terms overall were 'peopl' (64,583), 'thing' (30,709), 'trump' (47,883), 'year' (47,874), 'day' (26,508), 'way' (25,868), and 'thank' (25,153)."",
+      ""New Year terms were highly prominent: 'januari' (4,266), 'jan' (3,130), 'year' (47,874), 'new' (13,521), and 'firework' (1,148)."",
+      ""Trump and inauguration discourse dominated: 'trump' (47,883), 'presid' (14,062), 'maga' (11,271), 'elect' (11,141), and 'inaugur' (2,173)."",
+      ""Musk/Twitter/X ecosystem was a major theme: 'musk' (14,419), 'elon' (8,013), 'twitter' (4,601), 'blueski' (3,815), 'tesla' (3,469), and 'cybertruck' (1,482)."",
+      ""January 6th anniversary terms appeared prominently: 'insurrect' (2,242), 'insurrectionist' (1,782), 'capitol' (1,640)."",
+      ""Jimmy Carter's death generated significant discussion: 'carter' (3,014)."",
+      ""The New Orleans attack was reflected in terms: 'nola' (282) and 'orlean' (1,097)."",
+      ""Canadian political crisis was a major topic, especially Jan 6-7: 'canada' (5,205), 'trudeau' (995), 'poilievr' (354), with Trudeau's resignation as a key topic."",
+      ""Greenland territorial discussions emerged on Jan 7: 'greenland' (2,836), 'denmark' (706), 'panama' (571), 'canal' (235)."",
+      ""The Israel-Gaza conflict was a consistent daily topic with terms like 'gaza' (1,512), 'israel' (2,261), 'genocid' (1,590), 'palestinian' (105), 'netanyahu' (111)."",
+      ""Ukraine-Russia war coverage was persistent: 'ukrain' (2,533), 'russia' (3,394), 'putin' (3,907)."",
+      ""The Australia vs India cricket test series was a major sports topic: 'ausvind' (388), 'cricket' (401), 'bumrah', 'kohli', and related terms appeared in daily topic clusters."",
+      ""Health/vaccine discourse was consistent: 'vaccin' (2,129), 'covid' (2,796), 'flu' (1,022), 'rfk' (711), 'kennedi' (498)."",
+      ""The Golden Globes appeared as a topic on Jan 6: 'goldenglob' (216), 'award' (629), 'gold' (539)."",
+      ""Garland was a notable term with 3,476 mentions, likely related to political/legal discussions.""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'analyze_terms_in_collection', 'get_nlp_topics']",45801,3891,49692,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:44:57Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_0a92005804a1,"For reddit collection, can you show me how discussion themes are grouped together from 24 Dec 2023 to 25 Dec 2023, and point out the strongest topic groupings?",taskset_20260506T153847Z_56e8e0,E3,session_1464c5a9435e,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:44:42Z,2026-05-06T15:45:17Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""For the Reddit collection from December 24-25, 2023, there are 3 topic clusters connected by 2 groupings. The strongest topic grouping (weight: 15) connects the main Dec 24 cluster (size: 403 posts) with the main Dec 25 cluster (size: 51 posts), sharing 15 common terms centered around Christmas, family, and daily life. The second grouping (weight: 11) connects a Dec 24 Israel-Hamas war cluster (size: 8 posts) to the main Dec 25 cluster, sharing terms related to the conflict and Christmas."",
+    ""key_points"": [
+      ""Three topic clusters identified: '20231224-0' (Dec 24, size 403), '20231224-1' (Dec 24, size 8), and '20231225-0' (Dec 25, size 51)"",
+      ""Strongest grouping (weight 15): Between '20231224-0' and '20231225-0', with 15 common terms including 'thing', 'year', 'famili', 'car', 'someon', 'polic', 'work', 'week', 'time', 'peopl', 'someth', 'christma', 'way', 'home', 'day'"",
+      ""Second grouping (weight 11): Between '20231224-1' and '20231225-0', with 11 common terms including 'hama', 'year', 'children', 'war', 'protest', 'kid', 'fuck', 'time', 'peopl', 'christma', 'way'"",
+      ""Dec 24 main cluster ('20231224-0') top terms: 'peopl', 'year', 'time', 'day', 'christma', 'hous', 'thing', 'car', 'home', 'way', 'someon', 'dog', 'week', 'place', 'thank', 'famili', 'train', 'work', 'agent', 'market'"",
+      ""Dec 25 main cluster ('20231225-0') top terms: 'peopl', 'day', 'time', 'christma', 'year', 'famili', 'thing', 'way', 'kid', 'someon', 'everyon', 'someth', 'home', 'protest', 'covid', 'children', 'work', 'car', 'hama', 'fuck'"",
+      ""Dec 24 war-related cluster ('20231224-1') top terms: 'israel', 'peopl', 'hama', 'children', 'protest', 'war', 'palestin', 'palestinian', 'kid', 'gaza', 'conflict', 'govern', 'time', 'support', 'caus', 'world', 'jesu', 'civilian', 'jew', 'place'""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_topic_groupings'],8370,1685,10055,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:45:17Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_906c8c67d8cb,"In the Twitter collection, how did daily usage of the stemmed terms tax,inflat, and economi change between 2022-02-01 and 2022-02-14?",taskset_20260506T153847Z_56e8e0,E5,session_d3cefb044add,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:45:01Z,2026-05-06T15:45:39Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Between 2022-02-01 and 2022-02-14, the term 'tax' had the highest daily usage (ranging from 357 to 701), followed by 'economi' (196 to 373), and 'inflat' had the lowest (106 to 296). The term 'tax' peaked on Feb 14 (701) and hit its lowest on Feb 12 (357). 'Economi' peaked on Feb 2 (373) and was lowest on Feb 13 (196). 'Inflat' peaked on Feb 10 (296) and was lowest on Feb 13 (106), though data for 'inflat' was missing for Feb 5-9 and Feb 12."",
+    ""key_points"": [
+      ""Tax daily counts: Feb 1 (644), Feb 2 (558), Feb 3 (677), Feb 4 (442), Feb 5 (393), Feb 6 (581), Feb 7 (479), Feb 8 (587), Feb 9 (609), Feb 10 (656), Feb 11 (372), Feb 12 (357), Feb 13 (627), Feb 14 (701)."",
+      ""Tax usage fluctuated significantly, with a low of 357 on Feb 12 and a high of 701 on Feb 14."",
+      ""Economi daily counts: Feb 1 (363), Feb 2 (373), Feb 3 (265), Feb 4 (244), Feb 5 (197), Feb 6 (231), Feb 7 (290), Feb 8 (254), Feb 9 (222), Feb 10 (260), Feb 11 (272), Feb 12 (205), Feb 13 (196), Feb 14 (247)."",
+      ""Economi usage peaked on Feb 2 (373) and reached its lowest on Feb 13 (196)."",
+      ""Inflat daily counts: Feb 1 (194), Feb 2 (183), Feb 3 (131), Feb 4 (133), Feb 10 (296), Feb 11 (241), Feb 13 (106), Feb 14 (152)."",
+      ""Inflat data was not available for Feb 5-9 and Feb 12."",
+      ""Inflat usage peaked on Feb 10 (296) and was lowest on Feb 13 (106)."",
+      ""Overall, 'tax' consistently had the highest daily usage, followed by 'economi', then 'inflat'.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_term_daily_counts'],8611,1741,10352,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:45:39Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_f4605053f8b7,"For the reddit collection between 2022-04-20 and 2022-04-25, identify the top stemmed terms and summarise the main themes suggested by those terms.",taskset_20260506T153847Z_56e8e0,E4,session_be89d59ea396,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:44:59Z,2026-05-06T15:45:42Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The top stemmed terms in the Reddit collection from 2022-04-20 to 2022-04-25 reveal discussions centered around people, daily life, transportation, housing, and urban living in Australian cities. The most frequent terms include 'peopl' (4003), 'time' (3136), 'day' (2441), 'year' (2174), 'thing' (1963), 'car' (1846), 'way' (1667), 'place' (1444), 'someon' (1281), and 'work' (1200)."",
+    ""key_points"": [
+      ""The top 10 stemmed terms by frequency are: peopl (4003), time (3136), day (2441), year (2174), thing (1963), car (1846), way (1667), place (1444), someon (1281), and work (1200)."",
+      ""People and daily life themes dominate, with terms like 'peopl' (4003), 'time' (3136), 'day' (2441), 'year' (2174), 'week' (1075), 'anyon' (781), and 'someon' (1281) indicating discussions about everyday experiences and social interactions."",
+      ""Transportation and infrastructure is a major theme, evidenced by 'car' (1846), 'road' (1136), 'driver' (654), 'train' (291), 'street' (423), 'lane' (340), and 'park' (523)."",
+      ""Housing and urban living concerns are prominent, with 'hous' (1124), 'citi' (918), 'area' (938), 'place' (1444), and 'home' (688) appearing frequently."",
+      ""Australian geographic focus is clear from city-specific terms: 'melbourn' (613), 'sydney' (640), 'perth' (262), and 'australia' (233)."",
+      ""Economic and work-related discussions are suggested by 'work' (1200), 'job' (759), 'money' (422), 'price' (737), and 'cost' (100)."",
+      ""Other notable terms include 'thank' (1072), 'post' (574), 'food' (438), 'covid' (202), 'vote' (241), and 'anzac' (113), indicating gratitude expressions, social media activity, food discussions, pandemic references, and political/civic engagement.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_all_terms'],8412,1911,10323,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:45:42Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_199855a72f4a,Compare the topic clusters found in the BlueSky and reddit collections during 2025-05-01 to 2025-05-07. Are the dominant topic areas similar or different across the two platforms?,taskset_20260506T153847Z_56e8e0,E6,session_31bac0584172,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:45:19Z,2026-05-06T15:46:04Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The dominant topic areas in BlueSky and Reddit during May 1-7, 2025 are substantially different. BlueSky is dominated by international politics, conflicts, and cultural topics, while Reddit focuses on localized, practical, everyday concerns—primarily Australian life."",
+    ""key_points"": [
+      ""BlueSky's largest topic across the week was general discussion (9,724-12,659 posts per day), followed by Israel/Gaza conflict (337-690 posts daily), Australian election politics (peaking at 12,659 posts on May 3), Canadian politics (165-492 posts), and US politics/Trump (187-377 posts)."",
+      ""BlueSky also featured significant discussion on Ukraine/Russia war (141-260 posts), gender/trans issues (173-377 posts), music (156-256 posts), food (145-285 posts), gaming (132-219 posts), and books/reading (141-193 posts)."",
+      ""Reddit's largest topics were general local life (98-178 posts), weather/climate (29-157 posts), Australian voting/election (16-147 posts), education/schools (18-125 posts), cars/driving/traffic (22-67 posts), and food/restaurants (13-63 posts)."",
+      ""Reddit topics were highly localized and practical, including housing/property (16-30 posts), health/medical services (18-63 posts), travel/local places (13-26 posts), and police/crime (15-22 posts)."",
+      ""The Australian election appeared on both platforms but was far more prominent on BlueSky, where it dominated on May 3 (election day) with 12,659 posts, compared to Reddit's maximum of 147 posts on the same day."",
+      ""BlueSky showed strong international focus with sustained discussion on Israel/Gaza, Ukraine/Russia, US politics, and Canadian politics—topics largely absent from Reddit."",
+      ""Reddit's content was heavily Australia-centric with practical community questions about Perth, Melbourne, Sydney, local services, restaurants, traffic, and housing—topics not prominent on BlueSky.""
+    ]
+  }
+}",2,2,1.0,2,2,1.0,"['get_nlp_topics', 'get_nlp_topics']",19341,2254,21595,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:46:04Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_3f7d477102d5,"For the Reddit collection, retrieve the NLP metadata for 2025-03-01 to 2025-03-03. What NLP model or topic modelling configuration was used, and what should a researcher know before interpreting the topic outputs?",taskset_20260506T153847Z_56e8e0,E7,session_fe40f1962b78,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:45:41Z,2026-05-06T15:46:11Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The Reddit collection for 2025-03-01 to 2025-03-03 used a Word2Vec-based topic modelling configuration. Despite the parameter name 'bert_model', the actual model used is Word2Vec (w2v) with a 100-dimensional vector size, minimum word count of 30, window size of 5, and training algorithm 0. Clustering returns the top 30 words per topic with a minimum topic size of 5. Researchers should note that the corpus sizes are relatively small (350–391 documents per day after filtering), dictionary sizes range from 5,268 to 5,954 terms, and the min_count threshold of 30 means rare words are excluded from the model."",
+    ""key_points"": [
+      ""Model type: Word2Vec (w2v), not BERT, despite the 'bert_model' parameter name being set to 'w2v'"",
+      ""Word vector size: 100 dimensions"",
+      ""Minimum word count (wv_min_count): 30 — words appearing fewer than 30 times are excluded from the vocabulary"",
+      ""Window size (wv_window_size): 5 — the context window used during Word2Vec training"",
+      ""Training algorithm (wv_training_algorithm): 0"",
+      ""Top words per topic (bert_top_n_words): 30"",
+      ""Minimum topic size (bert_min_topic_size): 5 — topics must contain at least 5 items"",
+      ""Corpus sizes after filtering: 350 documents (2025-03-01), 383 documents (2025-03-02), 391 documents (2025-03-03)"",
+      ""Dictionary sizes: 5,500 terms (2025-03-01), 5,954 terms (2025-03-02), 5,268 terms (2025-03-03)"",
+      ""Total raw documents: 4,461 (2025-03-01), 4,997 (2025-03-02), 4,213 (2025-03-03)"",
+      ""Researchers should be aware that the high min_count threshold (30) and relatively small filtered corpus sizes may limit topic granularity and exclude niche or emerging terms""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_nlp_metadata'],8575,1247,9822,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:46:11Z
+2,2_qwen_qwen3.6-plus_20260506T153847Z,query_a2521a98615b,Compare the daily sentiment trend of Mastodon and gdelt during January 2025. Did the two platforms follow a similar daily pattern?,taskset_20260506T153847Z_56e8e0,D6,session_4ec73eacca8f,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-06T15:43:24Z,2026-05-06T15:47:00Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Mastodon and GDELT did not follow a similar daily sentiment pattern in January 2025. Mastodon displayed a relatively stable, predictable weekly rhythm with a gradual downward trend, while GDELT exhibited extreme daily volatility with erratic spikes and drops. The only notable similarity was that both platforms reached their lowest sentiment scores during the final days of the month (January 28–31)."",
+    ""key_points"": [
+      ""Mastodon's aggregate sentiment ranged from a high of 96.17 on January 1 to a low of -538.33 on January 30, maintaining a consistent weekly pattern where weekends (e.g., Jan 11-12, Jan 18-19, Jan 25-26) were consistently less negative than weekdays."",
+      ""GDELT's sentiment was highly volatile, swinging from a peak of 1,007.83 on January 23 to a trough of -8,469.97 on January 28, with no discernible weekly or bi-weekly rhythm."",
+      ""Both platforms shared a late-month downturn, hitting their most negative values between January 28 and 31 (Mastodon: -471 to -538; GDELT: -6,889 to -8,469)."",
+      ""The magnitude of daily fluctuations differed drastically: Mastodon's sentiment typically shifted by 100-300 points day-to-day, whereas GDELT frequently experienced swings of 2,000-4,000 points between consecutive days.""
+    ]
+  }
+}",3,3,1.0,2,2,1.0,"['get_collections', 'aggregate_by_time', 'aggregate_by_time']",14816,8082,22898,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-06T15:47:00Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_6ab484dd31b5,how many posts does twitter collection have?,taskset_20260507T012024Z_52a2c0,A1,session_e85f3c5a213a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:26Z,2026-05-07T01:20:37Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 185873222,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of posts in the twitter collection from 2021-06-21 to 2023-04-21""
+  }
+}",2,1,1.0,0,0,,['get_collection_summary'],7851,198,8049,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:20:37Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_7d5116119b0f,"Compare Reddit, Mastodon, and Twitter by total post count and harvesting date range. Summarise which collection is largest and which has the most recent data.",taskset_20260507T012024Z_52a2c0,A3,session_8b13213c6275,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:26Z,2026-05-07T01:20:46Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Twitter is the largest collection with 185,873,222 posts, while Mastodon has the most recent data with harvesting ending on 2026-05-07."",
+    ""key_points"": [
+      ""Twitter has the highest post count at 185,873,222 posts, followed by Mastodon at 59,880,389 posts, and Reddit at 8,022,817 posts."",
+      ""Mastodon has the most recent data with an end date of 2026-05-07, followed closely by Reddit at 2026-05-06."",
+      ""Twitter's data is the oldest, with harvesting ending on 2023-04-21."",
+      ""Reddit has the earliest start date at 2019-10-03, while Mastodon started on 2020-01-01 and Twitter on 2021-06-21.""
+    ]
+  }
+}",2,3,1.0,0,0,,"['get_collection_summary', 'get_collection_summary', 'get_collection_summary']",7991,685,8676,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:20:46Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_f66a050c8290,List all available collections and their startdates.,taskset_20260507T012024Z_52a2c0,A4,session_7528207dc462,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:25Z,2026-05-07T01:20:49Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""There are 7 available collections with the following start dates: bluesky (2024-01-01), gdelt (2015-02-18), flickr (2021-04-27), mastodon (2020-01-01), reddit (2019-10-03), twitter (2021-06-21), and youtube (2021-06-13)."",
+    ""key_points"": [
+      ""bluesky: startDate 2024-01-01"",
+      ""gdelt: startDate 2015-02-18"",
+      ""flickr: startDate 2021-04-27"",
+      ""mastodon: startDate 2020-01-01"",
+      ""reddit: startDate 2019-10-03"",
+      ""twitter: startDate 2021-06-21"",
+      ""youtube: startDate 2021-06-13""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12262,724,12986,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:20:49Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_61bcae87afec,Count the number of Bluesky posts from February 2024 that mention either bulk billing or Medicare.,taskset_20260507T012024Z_52a2c0,B1,session_37b55d0e08b6,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:38Z,2026-05-07T01:20:57Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 102,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Bluesky posts from February 2024 mentioning either 'bulk billing' or 'Medicare'""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'get_collection_summary']",16094,735,16829,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:20:57Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_064a712a7b03,"Compare the harvesting date span of all available collections. Which collection has the longest harvesting period, and which has the largest post count?",taskset_20260507T012024Z_52a2c0,A2,session_e416cc7aa485,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:26Z,2026-05-07T01:21:02Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The collection with the longest harvesting period is **gdelt** (from 2015-02-18 to 2026-05-07, approximately 11 years and 2.5 months). The collection with the largest post count is **bluesky** with 209,833,333 posts."",
+    ""key_points"": [
+      ""gdelt has the longest harvesting span: 2015-02-18 to 2026-05-07 (~11 years, 2.5 months)"",
+      ""reddit: 2019-10-03 to 2026-05-06 (~6 years, 7 months)"",
+      ""mastodon: 2020-01-01 to 2026-05-07 (~6 years, 4 months)"",
+      ""flickr: 2021-04-27 to 2026-05-06 (~5 years)"",
+      ""youtube: 2021-06-13 to 2026-05-06 (~4 years, 11 months)"",
+      ""bluesky: 2024-01-01 to 2026-05-07 (~2 years, 4 months)"",
+      ""twitter: 2021-06-21 to 2023-04-21 (~1 year, 10 months)"",
+      ""bluesky has the largest post count: 209,833,333 posts"",
+      ""twitter has the second largest post count: 185,873,222 posts"",
+      ""mastodon: 59,880,403 posts"",
+      ""gdelt: 55,264,363 posts"",
+      ""reddit: 8,022,817 posts"",
+      ""flickr: 596,276 posts"",
+      ""youtube: 570,138 posts""
+    ]
+  }
+}",3,8,1.0,0,0,,"['get_collections', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",12313,1469,13782,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:21:02Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_7834d317c5a4,How many Twitter posts used the hashtag #auspol during first quarter 2023?,taskset_20260507T012024Z_52a2c0,B3,session_3d2be7e3bebb,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:50Z,2026-05-07T01:21:04Z,"{""status"":""success"",""answer"":{""value"":91002,""unit"":""posts"",""comment"":""Number of Twitter posts with hashtag #auspol during Q1 2023 (January 1 - March 31, 2023)""}}",3,2,1.0,0,0,,"['get_collections', 'text_search']",11904,577,12481,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:04Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_78acaeb9f412,"How many Bluesky posts in 2024 mentioned ""cost of living"" and did not mention mortgage?",taskset_20260507T012024Z_52a2c0,B2,session_e6de177f2f2a,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:49Z,2026-05-07T01:21:08Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 5467,
+    ""unit"": ""posts"",
+    ""comment"": ""Number of Bluesky posts in 2024 mentioning 'cost of living' but not 'mortgage'""
+  }
+}",4,3,1.0,1,1,1.0,"['get_collections', 'text_search', 'generate_chart']",16332,710,17042,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:08Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_a41f7d2c47e4,How many English-language Mastodon posts mention unimelb in 2025?,taskset_20260507T012024Z_52a2c0,B4,session_061500439245,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:20:57Z,2026-05-07T01:21:17Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 34,
+    ""unit"": ""posts"",
+    ""comment"": ""English-language Mastodon posts mentioning 'unimelb' in 2025""
+  }
+}",4,3,1.0,0,0,,"['get_collections', 'text_search', 'get_collection_summary']",16065,888,16953,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:17Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_731f2e217b11,"For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",taskset_20260507T012024Z_52a2c0,B6,session_aef525e5f5a1,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:05Z,2026-05-07T01:21:19Z,"{
+ ""status"": ""success"",
+ ""answer"": {
+    ""value"": 13528,
+    ""unit"": ""posts"",
+    ""comment"": ""Size of the largest topic cluster for BlueSky from 2025-02-01 to 2025-02-03, occurring on 2025-02-03""
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",14499,569,15068,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:19Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_1c7801254bee,"During January 2024, how many Reddit posts were recorded in total?",taskset_20260507T012024Z_52a2c0,B5,session_109cbbcb25c4,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:03Z,2026-05-07T01:21:41Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 171016,
+    ""unit"": ""posts"",
+    ""comment"": ""Total number of Reddit posts recorded during January 2024 (sum of daily counts from 2024-01-01 to 2024-01-31)""
+  }
+}",4,3,1.0,1,1,1.0,"['get_collections', 'get_collection_summary', 'aggregate_by_time']",16716,1788,18504,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:41Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_8b3da8c9fd49,"In 2020, which available collection had the highest number of posts or records mentioning the keyword inflation, give me the count?",taskset_20260507T012024Z_52a2c0,B7,session_c0c69e2fc7af,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:09Z,2026-05-07T01:21:46Z,"{
+ ""status"": ""success"",
+  ""answer"": {
+    ""value"": 28845,
+    ""unit"": ""posts"",
+    ""comment"": ""The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020, with 28,845 posts. All other collections (bluesky, flickr, mastodon, reddit, twitter, youtube) returned 0 results for the same query in 2020.""
+  }
+}",4,15,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary']",17625,1707,19332,"{'system_prompt_label': 'scalar', 'system_prompt_overridden': True}",2026-05-07T01:21:46Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_9264c06eafc6,"For the Reddit dataset, was posting activity generally higher on weekends or weekdays during 2023?",taskset_20260507T012024Z_52a2c0,C3,session_fed6a24c2f73,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:42Z,2026-05-07T01:22:06Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During 2023, posting activity in the Reddit dataset was generally higher on weekdays than on weekends. The average daily post count for weekdays (Monday–Friday) was approximately 239,984, compared to approximately 230,032 for weekend days (Saturday–Sunday)."",
+    ""key_points"": [
+      ""Thursday had the highest posting activity with 243,426 posts."",
+      ""Wednesday followed with 242,988 posts."",
+      ""Friday had 238,666 posts."",
+      ""Monday had 237,584 posts."",
+      ""Tuesday had 237,255 posts."",
+      ""Sunday had 233,125 posts."",
+      ""Saturday had the lowest posting activity with 226,939 posts."",
+      ""The average weekday count (~239,984) exceeded the average weekend day count (~230,032).""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'aggregate_seasonality']",11936,1144,13080,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:22:06Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_60944793e3fc,Can you show me the weekly number of posts containing the hashtag #melbourne in the Mastodon collection in Jan 2024?,taskset_20260507T012024Z_52a2c0,C2,session_ce38aff37e88,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:19Z,2026-05-07T01:22:14Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""week"",
+    ""value_unit"": ""posts"",
+    ""series"": [
+      {
+        ""label"": ""#melbourne posts"",
+        ""points"": [
+          {
+            ""x"": ""2024-01-01"",
+            ""value"": 69
+          },
+          {
+            ""x"": ""2024-01-08"",
+            ""value"": 52
+          },
+          {
+            ""x"": ""2024-01-15"",
+            ""value"": 64
+          },
+          {
+            ""x"": ""2024-01-22"",
+            ""value"": 57
+          },
+          {
+            ""x"": ""2024-01-29"",
+            ""value"": 20
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Weekly post counts for hashtag #melbourne in the Mastodon collection during January 2024. The final week (Jan 29-31) covers only 3 days.""
+  }
+}",3,6,1.0,0,0,,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",12916,2815,15731,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-07T01:22:14Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_7fcd60fbfef6,"Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",taskset_20260507T012024Z_52a2c0,C1,session_4bb547ddd26d,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:18Z,2026-05-07T01:22:27Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The Twitter collection started on 2021-06-21. The first 10 days with data show varying daily activity, with a notable gap on June 25-27 and July 2-3 where no data was recorded."",
+    ""key_points"": [
+      ""The Twitter collection's harvesting started on 2021-06-21 and ended on 2023-04-21, with a total of 185,873,222 posts."",
+      ""Day 1 (2021-06-21): 227,781 posts"",
+      ""Day 2 (2021-06-22): 266,920 posts"",
+      ""Day 3 (2021-06-23): 270,177 posts"",
+      ""Day 4 (2021-06-24): 255,432 posts"",
+      ""Day 5 (2021-06-28): 2 posts (note: no data recorded for June 25-27)"",
+      ""Day 6 (2021-06-29): 299,017 posts"",
+      ""Day 7 (2021-06-30): 302,848 posts"",
+      ""Day 8 (2021-07-01): 256,741 posts"",
+      ""Day 9 (2021-07-04): 66,064 posts (note: no data recorded for July 2-3)"",
+      ""Day 10 (2021-07-05): 10,655 posts""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collection_summary', 'aggregate_by_time', 'aggregate_by_time']",16593,3612,20205,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:22:27Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_580c591e4da6,I'm interested in Mastodon user behavior; does post volume typically peak at certain hours of the day over Feb 2024?,taskset_20260507T012024Z_52a2c0,C4,session_389985d5f4db,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:21:46Z,2026-05-07T01:22:32Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Yes, Mastodon post volume shows a clear daily pattern in February 2024, with activity peaking in the mid-to-late afternoon UTC hours. The highest volume occurs at 16:00 UTC (84,652 posts), while the lowest activity is in the early morning around 05:00 UTC (41,332 posts). Post volume roughly doubles from the daily low to the daily peak."",
+    ""key_points"": [
+      ""Peak post volume occurs at 16:00 UTC with 84,652 posts in February 2024."",
+      ""The lowest post volume occurs at 05:00 UTC with 41,332 posts."",
+      ""Activity is consistently high between 14:00-18:00 UTC, with counts ranging from 77,596 to 84,652 posts per hour."",
+      ""Early morning hours (03:00-06:00 UTC) show the lowest activity, with counts between 41,332 and 44,939 posts."",
+      ""Post volume gradually increases from 07:00 UTC onward, rising steadily through the morning and early afternoon."",
+      ""After the 16:00 UTC peak, activity gradually declines through the evening, dropping to 59,338 posts by 23:00 UTC."",
+      ""The ratio between peak (16:00) and trough (05:00) activity is approximately 2.05x, indicating a strong daily rhythm in user posting behavior.""
+    ]
+  }
+}",4,3,1.0,2,2,1.0,"['get_collections', 'aggregate_seasonality', 'generate_chart']",17672,2279,19951,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:22:32Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_16b8266b3dee,How did the post count of the Youtube collection fluctuate on a monthly basis during 2024? draw a line graph,taskset_20260507T012024Z_52a2c0,C6,session_9bcea1b99353,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:15Z,2026-05-07T01:22:44Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""line"",
+    ""title"": ""Youtube Post Count Monthly Fluctuation in 2024"",
+    ""labels"": [
+      ""2024-01"",
+      ""2024-02"",
+      ""2024-03"",
+      ""2024-04"",
+      ""2024-05"",
+      ""2024-06"",
+      ""2024-07"",
+      ""2024-08"",
+      ""2024-09"",
+      ""2024-10"",
+      ""2024-11"",
+      ""2024-12""
+    ],
+    ""datasets"": [
+      {
+        ""label"": ""Post Count"",
+        ""data"": [
+          18142,
+          17267,
+          16380,
+          15775,
+          14333,
+          14801,
+          15070,
+          15241,
+          12676,
+          19974,
+          16743,
+          15698
+        ]
+      }
+    ],
+    ""summary"": ""The Youtube collection post count fluctuated throughout 2024, starting at 18,142 in January and generally declining to a low of 12,676 in September, before spiking to a peak of 19,974 in October and ending the year at 15,698 in December."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-3941e92c-7cef-4362-bbe4-604ec98a8b9e""
+  }
+}",3,2,1.0,2,1,0.5,"['aggregate_by_time', 'generate_chart']",13673,1374,15047,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-07T01:22:44Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_a71413c9df3c,Can you draw a bar chart on the monthly post counts for the Reddit collection throughout the entire year of 2025?,taskset_20260507T012024Z_52a2c0,C5,session_183353a8c951,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:08Z,2026-05-07T01:22:48Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""chart_type"": ""bar"",
+    ""title"": ""Reddit Monthly Post Counts - 2025"",
+    ""labels"": [""2025-01"", ""2025-02"", ""2025-03"", ""2025-04"", ""2025-05"", ""2025-06"", ""2025-07"", ""2025-08"", ""2025-09"", ""2025-10"", ""2025-11"", ""2025-12""],
+    ""datasets"": [
+      {
+        ""label"": ""Monthly Post Counts"",
+        ""data"": [152074, 141916, 159511, 132151, 133610, 117729, 118185, 113837, 118194, 122222, 132369, 135096]
+      }
+    ],
+    ""summary"": ""Bar chart showing monthly Reddit post counts for all 12 months of 2025. Post counts range from a low of 113,837 in August to a high of 159,511 in March."",
+    ""render_url"": ""https://quickchart.io/chart/render/zf-a75a45ac-af2e-475a-9093-5ad1d5640628""
+  }
+}",5,4,1.0,2,2,1.0,"['get_collections', 'get_collection_summary', 'aggregate_by_time', 'generate_chart']",22589,1793,24382,"{'system_prompt_label': 'chart', 'system_prompt_overridden': True}",2026-05-07T01:22:48Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_f7e56db3113d,"for the first five days of 2025, show and compare the daily volume of posts mentioning 'new year' across reddit and bluesky collection.",taskset_20260507T012024Z_52a2c0,D1,session_a648db35c080,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:29Z,2026-05-07T01:23:24Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""x_axis_type"": ""time"",
+    ""granularity"": ""day"",
+    ""value_unit"": ""post count"",
+    ""series"": [
+      {
+        ""label"": ""reddit"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 50
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 12
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 6
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 2
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 5
+          }
+        ]
+      },
+      {
+        ""label"": ""bluesky"",
+        ""points"": [
+          {
+            ""x"": ""2025-01-01"",
+            ""value"": 18374
+          },
+          {
+            ""x"": ""2025-01-02"",
+            ""value"": 3542
+          },
+          {
+            ""x"": ""2025-01-03"",
+            ""value"": 1497
+          },
+          {
+            ""x"": ""2025-01-04"",
+            ""value"": 724
+          },
+          {
+            ""x"": ""2025-01-05"",
+            ""value"": 577
+          }
+        ]
+      }
+    ],
+    ""comment"": ""Daily volume of posts mentioning 'new year' from 2025-01-01 to 2025-01-05. Bluesky shows significantly higher volume than Reddit, with both platforms peaking on January 1st and declining over the following days.""
+  }
+}",6,14,1.0,3,3,1.0,"['get_collections', 'get_term_daily_counts', 'get_term_daily_counts', 'get_all_terms', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search']",28908,2333,31241,"{'system_prompt_label': 'timeseries', 'system_prompt_overridden': True}",2026-05-07T01:23:24Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_568924bdd721,"For the Mastodon dataset, was posting activity generally higher on Sundays than on Mondays from the start of the Mastodon collection through 2024?",taskset_20260507T012024Z_52a2c0,D5,session_b94e7b4a7d97,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:23:25Z,2026-05-07T01:23:58Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""No, posting activity on Mastodon was not generally higher on Sundays than on Mondays from the start of the collection through 2024. In fact, Monday posting activity was consistently higher than Sunday activity in every year from 2020 through 2024."",
+    ""key_points"": [
+      ""In 2020, Monday had 62 posts vs Sunday's 60 posts."",
+      ""In 2021, Monday had 127 posts vs Sunday's 108 posts."",
+      ""In 2022, Monday had 130,063 posts vs Sunday's 68,059 posts."",
+      ""In 2023, Monday had 2,556,125 posts vs Sunday's 2,388,867 posts."",
+      ""In 2024, Monday had 2,720,800 posts vs Sunday's 2,254,117 posts."",
+      ""Monday posting activity exceeded Sunday activity in all five years analyzed.""
+    ]
+  }
+}",3,6,1.0,5,3,0.6,"['get_collection_summary', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality', 'aggregate_seasonality']",12881,1465,14346,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:23:58Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_c51037a5e797,which collection had the highest number of posts mentioning bushfire in 2024? What insights do you have about this result?,taskset_20260507T012024Z_52a2c0,D3,session_52579aea3761,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:44Z,2026-05-07T01:25:32Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The GDELT collection had the highest number of posts mentioning 'bushfire' in 2024, with 23,335 results. This significantly outpaced all other collections: Bluesky (1,290), Mastodon (747), Reddit (494), Flickr (13), while Twitter and YouTube returned 0 results (their data does not cover 2024)."",
+    ""key_points"": [
+      ""GDELT had 23,335 posts mentioning 'bushfire' in 2024, the highest among all 7 collections searched."",
+      ""Bluesky was the second highest with 1,290 mentions, followed by Mastodon (747), Reddit (494), and Flickr (13)."",
+      ""Twitter and YouTube returned 0 results because their data coverage does not extend to 2024 (Twitter ends April 2023)."",
+      ""Monthly breakdown of GDELT bushfire mentions shows peaks in December (5,634) and February (3,983), aligning with Australia's summer bushfire season in the Southern Hemisphere."",
+      ""Other notable months for GDELT bushfire mentions: March (2,344), November (2,036), September (1,902), and January (1,698)."",
+      ""The lowest bushfire mention months in GDELT were August (821), May (824), and October (911), corresponding to cooler months in the Southern Hemisphere."",
+      ""GDELT is a global news and media monitoring collection with over 55 million total posts, explaining its high volume of bushfire-related coverage compared to social media platforms."",
+      ""Overall GDELT sentiment across 2024 was consistently negative each month (ranging from -144,470 to -355,308), which is expected for disaster-related news coverage.""
+    ]
+  }
+}",17,45,1.0,14,12,0.8571428571428571,"['get_collections', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'get_collection_summary', 'aggregate_by_time', 'get_term_daily_counts', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'analyze_terms_in_collection', 'get_all_terms', 'text_search', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'aggregate_by_time']",101422,7464,108886,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:25:32Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_e9d9733450c7,Compare the daily sentiment trend of Mastodon and gdelt during January 2025. Did the two platforms follow a similar daily pattern?,taskset_20260507T012024Z_52a2c0,D6,session_34b533955e70,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:23:59Z,2026-05-07T01:25:55Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Mastodon and GDELT showed some similarities but also notable differences in their daily sentiment patterns during January 2025. Both platforms were predominantly negative throughout the month and both trended toward increasingly negative sentiment in the final week (Jan 28-31). However, Mastodon exhibited a more consistent weekly pattern with weekends consistently showing less negative sentiment, while GDELT was more volatile with larger swings and two positive days (Jan 23: +1007.83, Jan 25: +682.32) compared to Mastodon's single positive day (Jan 1: +96.17)."",
+    ""key_points"": [
+      ""Mastodon sentiment ranged from +96.17 (Jan 1) to -538.33 (Jan 30), with 30 of 31 days being negative."",
+      ""GDELT sentiment ranged from -8469.97 (Jan 28) to +1007.83 (Jan 23), with 29 of 31 days being negative."",
+      ""Mastodon showed a clear weekly pattern: weekends (Sat/Sun) consistently had less negative sentiment (e.g., Jan 11-12: -204.88/-130.23; Jan 18-19: -195.52/-193.94; Jan 25-26: -225.82/-186.24) compared to weekdays."",
+      ""GDELT's weekly pattern was less consistent, with weekend sentiment varying widely (e.g., Jan 4-5: -5806.28/-3335.83 vs. Jan 25-26: +682.32/-3060.03)."",
+      ""Both platforms showed increasingly negative sentiment in the last week of January: Mastodon dropped from -371.76 (Jan 27) to -538.33 (Jan 30); GDELT dropped from -5095.67 (Jan 27) to -8469.97 (Jan 28)."",
+      ""GDELT exhibited much higher volatility with larger day-to-day swings compared to Mastodon's more gradual changes."",
+      ""Chart URL: https://quickchart.io/chart/render/zf-316dcd3f-abd9-4161-91a2-214f955f0d15""
+    ]
+  }
+}",4,4,1.0,3,3,1.0,"['get_collections', 'aggregate_by_time', 'aggregate_by_time', 'generate_chart']",23749,6045,29794,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:25:55Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_0be006617fd4,"Comparing the daily occurrences of the terms ""new,"" ""year,"" and ""australia"" on Reddit during the first week of January in 2022, 2023, and 2024, which year had the highest activity level for these words?",taskset_20260507T012024Z_52a2c0,D4,session_c1906e40caba,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:48Z,2026-05-07T01:26:02Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""2024 had the highest activity level for the terms \""new,\"" \""year,\"" and \""australia\"" on Reddit during the first week of January, with a combined total of 2,487 occurrences. This was followed by 2022 with 2,149 occurrences, while 2023 had 0 occurrences for all three terms during that period."",
+    ""key_points"": [
+      ""In 2022 (Jan 1-7), the terms appeared as follows: \""new\"" = 977, \""year\"" = 751, \""australia\"" = 421, totaling 2,149 occurrences."",
+      ""In 2023 (Jan 1-7), all three terms had 0 occurrences, as confirmed by text search and the empty terms list from get_all_terms."",
+      ""In 2024 (Jan 1-7), the terms appeared as follows: \""new\"" = 868, \""year\"" = 1,140, \""australia\"" = 479, totaling 2,487 occurrences."",
+      ""2024 had the highest combined activity level at 2,487 occurrences, exceeding 2022's 2,149 by 338 occurrences."",
+      ""The term \""year\"" had the highest individual count in 2024 (1,140), while \""new\"" led in 2022 (977).""
+    ]
+  }
+}",11,23,1.0,12,12,1.0,"['get_collections', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_collection_summary', 'get_term_daily_counts', 'get_term_daily_counts', 'get_term_daily_counts', 'get_all_terms', 'get_all_terms', 'get_all_terms', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'text_search', 'aggregate_by_time', 'aggregate_by_time', 'aggregate_by_time']",63474,9866,73340,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:26:02Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_26266821f206,"For BlueSky, during the first week of Feb 2025, what topic clusters are detected, and which cluster appears to be the largest or most prominent?",taskset_20260507T012024Z_52a2c0,E2,session_0e2d29eedb55,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:25:57Z,2026-05-07T01:26:24Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of February 2025 (Feb 1-7), BlueSky detected multiple topic clusters each day. The largest and most prominent cluster across the entire week was a politics/government-focused cluster that appeared every day, with sizes ranging from 11,429 to 13,528 posts. The single largest cluster occurred on February 3rd with 13,528 posts, centered around terms like 'people', 'musk', 'government', 'state', 'time', 'elon', 'law', 'trump', and related political themes. Other notable recurring clusters included topics on Gaza/Israel, Ukraine/Russia, books/reading, music, Canada/Canadian politics, and protests."",
+    ""key_points"": [
+      ""The most prominent cluster throughout the week was a politics/government cluster appearing daily with sizes: Feb 1 (11,429), Feb 2 (12,384), Feb 3 (13,528), Feb 4 (12,863), Feb 5 (13,329), Feb 6 (11,479), Feb 7 (11,931)"",
+      ""The largest single cluster was on February 3, 2025 with 13,528 posts, with top terms: people, musk, government, state, time, elon, law, trump, thing, access, way, year, security, system, day, money, data, power, congress, country"",
+      ""On Feb 6, a Gaza/Palestine cluster grew significantly to 762 posts (top terms: gaza, palestinian, israel, genocide, netanyahu), making it the second-largest cluster that day"",
+      ""On Feb 6, an Australian politics cluster (auspol, dutton, albanese) appeared with 565 posts"",
+      ""Recurring secondary clusters throughout the week included: Ukraine/Russia war (200-295 posts/day), books/reading (160-250 posts/day), music (160-370 posts/day), and Canada/Canadian politics (200-285 posts/day)"",
+      ""A DOGE/Musk government access cluster emerged on Feb 4 (373 posts) and Feb 5 (395 posts) with terms like musk, congress, senate, coup, elon, tax, doge, treasury""
+    ]
+  }
+}",3,2,1.0,1,1,1.0,"['get_collections', 'get_nlp_topics']",17714,1204,18918,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:26:24Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_d99fb8e08f89,"For reddit collection, can you show me how discussion themes are grouped together from 24 Dec 2023 to 25 Dec 2023, and point out the strongest topic groupings?",taskset_20260507T012024Z_52a2c0,E3,session_3f7ac3fba7a3,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:26:04Z,2026-05-07T01:26:33Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""From December 24-25, 2023, the Reddit collection shows 3 topic clusters connected by 2 groupings. The strongest topic grouping (weight: 15) connects the dominant Dec 24 topic (size: 403 posts) with the Dec 25 topic (size: 51 posts), sharing 15 common terms centered around Christmas, family, and daily life themes. A secondary grouping (weight: 11) connects a smaller Dec 24 Israel-Hamas conflict topic (size: 8 posts) to the Dec 25 topic."",
+    ""key_points"": [
+      ""Three topic clusters were identified: a large Dec 24 cluster (20231224-0, size: 403), a Dec 25 cluster (20231225-0, size: 51), and a smaller Dec 24 cluster (20231224-1, size: 8)."",
+      ""The strongest topic grouping has a weight of 15, linking the main Dec 24 topic to the Dec 25 topic."",
+      ""This strongest grouping shares 15 common terms: thing, year, famili, car, someon, polic, work, week, time, peopl, someth, christma, way, home, day."",
+      ""The main Dec 24 topic (20231224-0) top terms include: peopl, year, time, day, christma, hous, thing, car, home, way, someon, dog, week, place, thank, famili, train, work."",
+      ""The Dec 25 topic (20231225-0) top terms include: peopl, day, time, christma, year, famili, thing, way, kid, someon, everyon, home, protest, covid, children, work, car, hama, war."",
+      ""A secondary grouping (weight: 11) connects the Dec 24 Israel-Hamas topic (20231224-1) to the Dec 25 topic, sharing terms: hama, year, children, war, protest, kid, time, peopl, christma, way."",
+      ""The Dec 24 Israel-Hamas topic (20231224-1) top terms include: israel, peopl, hama, children, protest, war, palestin, palestinian, kid, gaza, conflict, govern, civilian, jew, genocid, idf.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_topic_groupings'],8370,1468,9838,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:26:33Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_3c9e677b1ce5,"For the reddit collection between 2022-04-20 and 2022-04-25, identify the top stemmed terms and summarise the main themes suggested by those terms.",taskset_20260507T012024Z_52a2c0,E4,session_ea2ced767af6,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:26:25Z,2026-05-07T01:27:06Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The top stemmed terms in the Reddit collection from 2022-04-20 to 2022-04-25 reveal discussions centered around everyday life, transportation, Australian cities, work/economy, and community matters. The date range includes Anzac Day (April 25), which aligns with the strong Australian geographic focus."",
+    ""key_points"": [
+      ""The most frequent stemmed terms were: 'peopl' (4003), 'time' (3136), 'day' (2441), 'year' (2174), 'thing' (1963), 'car' (1846), 'way' (1667), 'place' (1444), 'someon' (1281), and 'work' (1200)."",
+      ""Australian locations feature prominently: 'melbourn' (613), 'sydney' (640), 'perth' (262), 'australia' (233), along with urban terms like 'citi' (918), 'area' (938), 'suburb' (140), 'street' (423), and 'road' (1136)."",
+      ""Transportation and infrastructure is a major theme: 'car' (1846), 'driver' (654), 'train' (291), 'station' (111), 'pedestrian' (110), 'cross' (129), 'lane' (340), and 'uber' (155)."",
+      ""Work and economic concerns appear frequently: 'work' (1200), 'job' (759), 'money' (422), 'price' (737), 'cost' (100), 'hous' (1124), 'busi' (113), 'market' (101), 'servic' (541)."",
+      ""The term 'anzac' (113) appears, consistent with Anzac Day falling on April 25 within the date range."",
+      ""Other notable themes include food and services ('food' 438, 'restaur' 105, 'deliveri' 101, 'order' 138), civic engagement ('vote' 241, 'parti' 264, 'govern' 117), and ongoing pandemic references ('covid' 202).""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_all_terms'],8412,2127,10539,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:27:06Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_702072c08cb7,"In the Twitter collection, how did daily usage of the stemmed terms tax,inflat, and economi change between 2022-02-01 and 2022-02-14?",taskset_20260507T012024Z_52a2c0,E5,session_31b83ffddf5c,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:26:35Z,2026-05-07T01:27:13Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Between February 1-14, 2022, the three stemmed terms showed distinct usage patterns in the Twitter collection. The term 'tax' had the highest overall usage, ranging from 357 to 701 daily mentions, with a peak on Feb 14 (701) and a low on Feb 12 (357). The term 'economi' showed moderate usage between 196 and 373, peaking on Feb 2 (373) and hitting its lowest on Feb 13 (196). The term 'inflat' had the lowest usage (106-296), with data available for only 8 of the 14 days; it peaked on Feb 10 (296) and was lowest on Feb 13 (106)."",
+    ""key_points"": [
+      ""Tax: Daily counts ranged from 357 (Feb 12) to 701 (Feb 14), with notable peaks on Feb 3 (677) and Feb 10 (656)."",
+      ""Tax: Usage declined from Feb 3 (677) to Feb 5 (393), then fluctuated before dropping to its lowest on Feb 11-12 (372, 357), followed by a sharp rise to 701 on Feb 14."",
+      ""Economi: Daily counts ranged from 196 (Feb 13) to 373 (Feb 2), with data available for all 14 days."",
+      ""Economi: Usage generally declined from early February (363-373) to mid-February lows (196-205 on Feb 12-13), then recovered to 247 on Feb 14."",
+      ""Inflat: Daily counts ranged from 106 (Feb 13) to 296 (Feb 10), but data was only available for 8 days (Feb 1-4, 10-11, 13-14)."",
+      ""Inflat: Missing data for Feb 5-9 and Feb 12; showed a spike on Feb 10 (296) after earlier lower counts (131-194)."",
+      ""Overall, 'tax' was the most frequently used term, followed by 'economi', then 'inflat'.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_term_daily_counts'],8611,1889,10500,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:27:13Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_4a15b4c075b1,"Over the first week in Jan 2025, in the Bluesky collection, what are the most prominent terms people are using, and which ones seem especially characteristic of that period?",taskset_20260507T012024Z_52a2c0,E1,session_3d32e8690615,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:25:35Z,2026-05-07T01:27:29Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""During the first week of January 2025 in the Bluesky collection, the most prominent terms reflected a mix of evergreen political discourse and several highly time-specific events. The top terms by frequency included 'peopl' (64,583), 'trump' (47,883), 'time' (42,216), 'year' (47,874), 'musk' (14,419), 'presid' (14,062), 'elect' (11,141), 'maga' (11,271), 'biden' (8,458), and 'elon' (8,013). Terms especially characteristic of this period included: 'inaugur' (2,173) and 'januari' (4,266) reflecting the upcoming January 20 presidential inauguration; 'insurrect' (2,242), 'insurrectionist' (1,782), and 'capitol' (1,640) marking the January 6, 2021 anniversary; 'carter' (3,014) following Jimmy Carter's death on December 29, 2024; 'greenland' (2,836) tied to Trump's comments about acquiring Greenland; 'trudeau' (995) and 'canada' (5,205) amid Canadian political turmoil; 'nola' (282) and 'orlean' (1,097) related to the New Year's Day truck attack in New Orleans; 'goldenglob' appearing on January 6 for the Golden Globes ceremony; and 'rfk' (711) and 'kennedi' (498) in health/vaccine discussions. Persistent ongoing topics included Israel/Gaza, Ukraine/Russia, and book/reading communities."",
+    ""key_points"": [
+      ""The most frequent terms overall were 'peopl' (64,583), 'trump' (47,883), 'year' (47,874), 'time' (42,216), and 'thing' (30,709)."",
+      ""Inauguration-related terms were highly prominent: 'inaugur' (2,173), 'januari' (4,266), 'elect' (11,141), 'presid' (14,062), reflecting the upcoming January 20, 2025 presidential inauguration."",
+      ""January 6 anniversary terms appeared strongly: 'insurrect' (2,242), 'insurrectionist' (1,782), 'capitol' (1,640), marking the 4th anniversary of the Capitol attack."",
+      ""Jimmy Carter's recent death drove significant discussion: 'carter' appeared 3,014 times."",
+      ""Trump's Greenland comments generated notable attention: 'greenland' appeared 2,836 times, with related terms 'denmark' (706), 'panama' (571), and 'canal' (235)."",
+      ""Canadian political crisis was a major topic: 'canada' (5,205), 'trudeau' (995), 'canadian' (1,324), 'poilievr' (354), with a dedicated topic cluster on January 6-7."",
+      ""The New Year's Day New Orleans truck attack generated discussion: 'nola' (282), 'orlean' (1,097)."",
+      ""Musk/Twitter discourse was prominent: 'musk' (14,419), 'elon' (8,013), 'twitter' (4,601), 'blueski' (3,815)."",
+      ""The Golden Globes ceremony on January 6 appeared as a topic cluster with terms like 'goldenglob', 'award', 'globe', 'movi', 'actress'."",
+      ""RFK Jr. health discussions were notable: 'rfk' (711), 'kennedi' (498), appearing in vaccine/health topic clusters."",
+      ""Ongoing conflict discussions persisted: Israel/Gaza terms ('gaza' 1,512, 'israel' 2,261, 'genocid' 1,590) and Ukraine/Russia ('russia' 3,394, 'putin' 3,907, 'ukrain' 2,533) appeared consistently across all seven days."",
+      ""Book/reading communities formed consistent daily topic clusters with terms like 'book', 'novel', 'author', 'read', 'fiction'."",
+      ""Australia vs India cricket series ('ausvind' 388, 'cricket' 401) was a recurring topic, especially January 3-5."",
+      ""New Year's celebrations appeared on January 1 with terms like 'happi', 'new', 'year', 'thank' in a dedicated topic cluster.""
+    ]
+  }
+}",5,4,1.0,3,3,1.0,"['get_collections', 'analyze_terms_in_collection', 'get_all_terms', 'get_nlp_topics']",85963,5616,91579,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:27:29Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_2e4e3f14c740,"For the Reddit collection, retrieve the NLP metadata for 2025-03-01 to 2025-03-03. What NLP model or topic modelling configuration was used, and what should a researcher know before interpreting the topic outputs?",taskset_20260507T012024Z_52a2c0,E7,session_71d1c74c3b8c,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:27:15Z,2026-05-07T01:27:42Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The Reddit collection for 2025-03-01 to 2025-03-03 used a Word2Vec-based topic modelling configuration. Word embeddings were generated with a vector size of 100, minimum term frequency of 30, and a context window of 5. Topic clustering relied on these Word2Vec embeddings (not BERT, despite the parameter name), extracting up to 30 top words per topic with a minimum topic size of 5 documents."",
+    ""key_points"": [
+      ""The NLP model used Word2Vec (w2v) for word embeddings with vector_size=100, min_count=30, window_size=5, and training_algorithm=0."",
+      ""Topic clustering used Word2Vec embeddings (bert_model='w2v'), not actual BERT transformers, despite the parameter naming."",
+      ""Each topic cluster returns up to 30 top words (bert_top_n_words=30)."",
+      ""A minimum topic size of 5 documents (bert_min_topic_size=5) is required for a topic to be valid."",
+      ""Only terms appearing at least 30 times in the corpus are included in the dictionary (min_count=30), meaning rare terms are excluded."",
+      ""Daily corpus sizes ranged from 350 to 391 documents, with dictionary sizes between 5,268 and 5,954 terms."",
+      ""Document counts per day: 4,461 (March 1), 4,997 (March 2), and 4,213 (March 3)."",
+      ""Processing occurred on 2025-03-05, several days after the data collection dates."",
+      ""Researchers should note that the relatively high min_count threshold (30) may filter out emerging or niche topics, and the small minimum topic size (5) means even minor themes can surface as topics.""
+    ]
+  }
+}",2,1,1.0,1,1,1.0,['get_nlp_metadata'],8575,1326,9901,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:27:42Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_da55993dc3af,Compare the topic clusters found in the BlueSky and reddit collections during 2025-05-01 to 2025-05-07. Are the dominant topic areas similar or different across the two platforms?,taskset_20260507T012024Z_52a2c0,E6,session_6fb055acc23e,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:27:08Z,2026-05-07T01:28:27Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""The dominant topic areas in BlueSky and Reddit during May 1-7, 2025 are substantially different. BlueSky is heavily focused on international politics (Israel/Gaza, Ukraine/Russia, US politics, Canadian politics), social issues (gender/trans rights), and cultural topics (music, books, gaming). Reddit is predominantly focused on local Australian life, with topics centered on practical daily concerns like housing, traffic, weather, schools, health, food recommendations, and Australian elections. The geographic scope, political focus, and nature of discussions differ markedly between the two platforms."",
+    ""key_points"": [
+      ""BlueSky's largest topic cluster (9,700-12,600 posts/day) is a general catch-all with strong political undertones including Trump, government, and republican terms, while Reddit's largest clusters are much smaller (98-178 posts/day) and focus on local Australian life in Perth, Melbourne, and Sydney."",
+      ""Israel/Gaza is a consistently dominant topic on BlueSky (270-690 posts/day) with terms like 'israel, gaza, palestinian, genocid, netanyahu, hama, zionist,' but this topic is absent from Reddit's top clusters."",
+      ""Ukraine/Russia war discussion appears regularly on BlueSky (141-260 posts/day) with terms like 'russia, putin, drone, ukrain, zelenskyy,' but is not a prominent Reddit topic."",
+      ""Canadian politics is a major BlueSky topic (165-492 posts/day) featuring 'carney, poilievre, alberta, trudeau, cpc,' while Reddit shows no Canadian political discussion."",
+      ""Gender/trans rights issues are prominent on BlueSky (173-377 posts/day) with terms like 'women, tran, gender, transphobia, transgend,' but this topic area is absent from Reddit."",
+      ""Reddit's topics are heavily Australia-focused, with frequent mentions of Perth, Melbourne, Sydney, and local suburbs, while BlueSky topics are internationally oriented."",
+      ""Reddit features practical local topics not prominent on BlueSky: housing/property (16-22 posts/day), cars/traffic (22-67 posts/day), weather/climate (29-157 posts/day), education/schools (18-30 posts/day), and health/medical (20-63 posts/day)."",
+      ""Australian election discussion appears on both platforms but at different scales: BlueSky shows 185-348 posts/day with terms like 'dutton, auspol, lnp, labor,' while Reddit shows 18-32 posts/day with similar terms."",
+      ""BlueSky has notable cultural topic clusters for music (185-285 posts/day), books/reading (145-193 posts/day), and gaming (132-220 posts/day), while Reddit's entertainment/events discussion is smaller (9-24 posts/day)."",
+      ""Tesla/Musk is a distinct BlueSky topic (152 posts/day) with terms like 'tesla, musk, elon, cybertruck, spacex,' which does not appear in Reddit's top clusters."",
+      ""Religion (Catholic/Pope) appears as a BlueSky topic on May 3 (238 posts) with terms like 'cathol, pope, church, vatican, franci,' but is absent from Reddit.""
+    ]
+  }
+}",3,3,1.0,2,2,1.0,"['get_collections', 'get_nlp_topics', 'get_nlp_topics']",23361,4197,27558,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:28:27Z
+3,3_qwen_qwen3.6-plus_20260507T012024Z,query_b86c0d6f4629,"Compare the monthly post volume of Reddit and Mastodon during 2024. Which platform had the higher total volume, and did their monthly trends follow a similar pattern?",taskset_20260507T012024Z_52a2c0,D2,session_52465dddb5e0,qwen/qwen3.6-plus,aio_mcp_toolset_v2,completed,,,2026-05-07T01:22:34Z,2026-05-07T01:41:19Z,"{
+  ""status"": ""success"",
+  ""answer"": {
+    ""summary"": ""Mastodon had a significantly higher total post volume in 2024 (~18.4 million) compared to Reddit (~1.7 million). While both platforms experienced a notable dip in September followed by a rebound in October, their overall monthly trends differed: Reddit showed a general decline for most of the year before recovering, whereas Mastodon fluctuated with a mid-year peak before its September drop."",
+    ""key_points"": [
+      ""Mastodon's total 2024 volume was 18,384,226 posts, vastly exceeding Reddit's 1,743,996 posts."",
+      ""Both platforms saw their lowest monthly volumes in September 2024 (Reddit: 109,334; Mastodon: 1,221,939)."",
+      ""Both platforms rebounded in October 2024 (Reddit: 152,815; Mastodon: 1,785,926)."",
+      ""Reddit's trend was generally downward from January (171,016) to September, followed by a modest recovery through December."",
+      ""Mastodon's trend was more volatile, peaking in the summer months (May-August) before the September dip, and reaching its annual high in October."",
+      ""The platforms did not follow a strictly similar overall pattern, though they shared the late-summer dip and autumn rebound.""
+    ]
+  }
+}",3,3,1.0,2,0,0.0,"['get_collections', 'aggregate_by_time', 'aggregate_by_time']",12454,61654,74108,"{'system_prompt_label': 'text', 'system_prompt_overridden': True}",2026-05-07T01:41:19Z

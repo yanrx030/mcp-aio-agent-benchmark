@@ -1,0 +1,12 @@
+Metric,Value
+TCR,0.7777777777777778
+Pass@3,0.9
+Inter-run consistency,0.9111111111111112
+Strict all-run consistency,0.7333333333333333
+Average PSV,1.0
+Average CCR,0.910375416932794
+Average Tool Appropriateness,0.8060656493392645
+Average latency (s),66.61216488777168
+Average tokens per task,25222.81111111111
+Tokens per successful task,32429.32857142857
+Cost per successful task (USD),0.017090626428571426
