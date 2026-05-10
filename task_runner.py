@@ -25,8 +25,6 @@ class BenchmarkTask:
     prompt: str
     answer_type: str | None = None
     note: str | None = None
-    ground_truth_tool_call_raw: str | None = None
-    ground_truth_tool_calls: list[dict[str, Any]] = field(default_factory=list)
     ground_truth: str | None = None
     core_toolset: list[str] = field(default_factory=list)
     category: str | None = None
@@ -84,16 +82,11 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
             if not task_id or not prompt:
                 continue
 
-            raw_tool_calls = _clean_field(row.get("ref_tool_call")) or _clean_field(
-                row.get("ground_truth_tool_call")
-            )
             task = BenchmarkTask(
                 task_id=task_id,
                 prompt=prompt,
                 answer_type=_clean_field(row.get("answer_type")),
                 note=_clean_field(row.get("note")),
-                ground_truth_tool_call_raw=raw_tool_calls,
-                ground_truth_tool_calls=_parse_ground_truth_tool_calls(raw_tool_calls),
                 ground_truth=_clean_field(row.get("ground_truth")),
                 core_toolset=_parse_toolset_names(row.get("core_toolset")),
                 category=_clean_field(row.get("category")),
@@ -111,7 +104,6 @@ def load_benchmark_tasks(csv_path: str | Path) -> list[BenchmarkTask]:
                         "answer_type",
                         "note",
                         "ref_tool_call",
-                        "ground_truth_tool_call",
                         "ground_truth",
                         "core_toolset",
                         "category",
@@ -667,19 +659,6 @@ def select_tasks(
     if limit is not None:
         return selected[:limit]
     return selected
-
-
-def _parse_ground_truth_tool_calls(raw_value: str | None) -> list[dict[str, Any]]:
-    if not raw_value:
-        return []
-
-    wrapped = f"[{raw_value}]"
-    try:
-        parsed = json.loads(wrapped)
-    except json.JSONDecodeError:
-        return []
-
-    return [item for item in parsed if isinstance(item, dict)]
 
 
 def _parse_toolset_names(raw_value: str | None) -> list[str]:

@@ -16,7 +16,7 @@ DEFAULT_TOOLSET = "toolsets/aio_mcp_toolset_v2.json"
 DEFAULT_MODEL = "placeholder"
 DEFAULT_ENV_FILE = ".env"
 
-__all__ = ["execute_tool_call", "main"]
+__all__ = ["execute_tool_call", "execute_tool_calls", "main"]
 
 
 class _NullLogger:
@@ -96,28 +96,37 @@ def _load_env_file(path: Path) -> None:
         os.environ.setdefault(key, value)
 
 
-def _parse_call_spec(raw: str) -> dict[str, Any]:
-    try:
-        payload = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise ValueError(f"Invalid JSON input: {exc}") from exc
-
+def _validate_call_spec(payload: Any) -> dict[str, Any]:
     if not isinstance(payload, dict):
-        raise ValueError("Input must be a JSON object.")
+        raise ValueError("Each tool call spec must be a JSON object.")
 
     tool_name = payload.get("tool_name")
     arguments = payload.get("arguments")
     if not isinstance(tool_name, str) or not tool_name.strip():
-        raise ValueError("Input must include a non-empty string field 'tool_name'.")
+        raise ValueError("Each tool call spec must include a non-empty string field 'tool_name'.")
     if arguments is None:
         arguments = {}
     if not isinstance(arguments, dict):
-        raise ValueError("Input field 'arguments' must be a JSON object.")
+        raise ValueError("Each tool call spec field 'arguments' must be a JSON object.")
 
     return {
         "tool_name": tool_name.strip(),
         "arguments": arguments,
     }
+
+
+def _parse_call_specs(raw: str) -> list[dict[str, Any]]:
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON input: {exc}") from exc
+
+    if isinstance(payload, list):
+        if not payload:
+            raise ValueError("Input list must contain at least one tool call spec.")
+        return [_validate_call_spec(item) for item in payload]
+
+    return [_validate_call_spec(payload)]
 
 
 def _normalize_call_spec(tool_name: str, arguments: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -134,20 +143,42 @@ def _normalize_call_spec(tool_name: str, arguments: dict[str, Any] | None = None
     }
 
 
-def _read_call_spec(args: argparse.Namespace) -> dict[str, Any]:
+def _read_call_specs(args: argparse.Namespace) -> list[dict[str, Any]]:
     sources = [bool(args.call), bool(args.call_file), not os.isatty(0)]
     if sum(sources) > 1:
         raise ValueError("Provide exactly one input source: positional JSON, --call-file, or stdin.")
 
     if args.call:
-        return _parse_call_spec(args.call)
+        return _parse_call_specs(args.call)
     if args.call_file:
-        return _parse_call_spec(Path(args.call_file).read_text(encoding="utf-8"))
+        return _parse_call_specs(Path(args.call_file).read_text(encoding="utf-8"))
 
     raw = input().strip() if os.isatty(0) else os.sys.stdin.read().strip()
     if not raw:
         raise ValueError("No tool call JSON provided.")
-    return _parse_call_spec(raw)
+    return _parse_call_specs(raw)
+
+
+def _payload_from_result(
+    *,
+    call_spec: dict[str, Any],
+    result: Any,
+    raw_result_file: str | Path | None = None,
+) -> dict[str, Any]:
+    analyzed = analyze_tool_result(result)
+    payload = {
+        "tool_name": call_spec["tool_name"],
+        "arguments": call_spec["arguments"],
+        "execution_success": analyzed["execution_success"],
+        "mcp_is_error": analyzed["mcp_is_error"],
+        "payload_has_error": analyzed["payload_has_error"],
+        "content_blocks": analyzed["content_blocks"],
+        "structured_content": analyzed["structured_content"],
+        "server_error_message": analyzed["server_error_message"],
+    }
+    if raw_result_file:
+        payload["raw_result_file"] = str(Path(raw_result_file))
+    return payload
 
 
 async def _run_tool_call(
@@ -156,6 +187,20 @@ async def _run_tool_call(
     toolset: str = DEFAULT_TOOLSET,
     raw_result_file: str | Path | None = None,
 ) -> dict[str, Any]:
+    payloads = await _run_tool_calls(
+        call_specs=[call_spec],
+        toolset=toolset,
+        raw_result_file=raw_result_file,
+    )
+    return payloads[0]
+
+
+async def _run_tool_calls(
+    *,
+    call_specs: list[dict[str, Any]],
+    toolset: str = DEFAULT_TOOLSET,
+    raw_result_file: str | Path | None = None,
+) -> list[dict[str, Any]]:
     auth_key = os.environ.get("AIO_AUTH_KEY")
     if not auth_key:
         raise RuntimeError("AIO_AUTH_KEY is not set. Use --env-file or export it before running.")
@@ -174,31 +219,37 @@ async def _run_tool_call(
             client.load_tools(toolset)
             await client.connect_to_server()
 
-        result = await client.session.call_tool(
-            call_spec["tool_name"],
-            {k: v for k, v in call_spec["arguments"].items() if v is not None},
-        )
+        payloads = []
+        raw_results = []
+        for call_spec in call_specs:
+            result = await client.session.call_tool(
+                call_spec["tool_name"],
+                {k: v for k, v in call_spec["arguments"].items() if v is not None},
+            )
+            raw_results.append(
+                {
+                    "tool_name": call_spec["tool_name"],
+                    "arguments": call_spec["arguments"],
+                    "result": _to_jsonable(result),
+                }
+            )
+            payloads.append(
+                _payload_from_result(
+                    call_spec=call_spec,
+                    result=result,
+                    raw_result_file=raw_result_file,
+                )
+            )
+
         if raw_result_file:
             raw_result_path = Path(raw_result_file)
             raw_result_path.parent.mkdir(parents=True, exist_ok=True)
+            raw_payload = raw_results[0]["result"] if len(raw_results) == 1 else raw_results
             raw_result_path.write_text(
-                json.dumps(_to_jsonable(result), ensure_ascii=False, indent=2),
+                json.dumps(raw_payload, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
-        analyzed = analyze_tool_result(result)
-        payload = {
-            "tool_name": call_spec["tool_name"],
-            "arguments": call_spec["arguments"],
-            "execution_success": analyzed["execution_success"],
-            "mcp_is_error": analyzed["mcp_is_error"],
-            "payload_has_error": analyzed["payload_has_error"],
-            "content_blocks": analyzed["content_blocks"],
-            "structured_content": analyzed["structured_content"],
-            "server_error_message": analyzed["server_error_message"],
-        }
-        if raw_result_file:
-            payload["raw_result_file"] = str(Path(raw_result_file))
-        return payload
+        return payloads
     finally:
         await client.cleanup()
 
@@ -225,18 +276,42 @@ def execute_tool_call(
     )
 
 
+def execute_tool_calls(
+    calls: list[dict[str, Any]] | tuple[dict[str, Any], ...],
+    *,
+    toolset: str = DEFAULT_TOOLSET,
+    env_file: str | Path | None = DEFAULT_ENV_FILE,
+    raw_result_file: str | Path | None = None,
+) -> list[dict[str, Any]]:
+    """Execute multiple MCP tool calls in one MCP session and return normalized payloads."""
+    if env_file:
+        _load_env_file(Path(env_file))
+
+    if not isinstance(calls, (list, tuple)) or not calls:
+        raise ValueError("calls must be a non-empty list of tool call specs.")
+
+    call_specs = [_validate_call_spec(call) for call in calls]
+    return asyncio.run(
+        _run_tool_calls(
+            call_specs=call_specs,
+            toolset=toolset,
+            raw_result_file=raw_result_file,
+        )
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Execute one MCP tool call from an explicit JSON tool spec.",
+        description="Execute one or more MCP tool calls from explicit JSON tool specs.",
     )
     parser.add_argument(
         "call",
         nargs="?",
-        help='JSON string like {"tool_name":"text_search","arguments":{...}}',
+        help='JSON string like {"tool_name":"text_search","arguments":{...}} or a list of those objects.',
     )
     parser.add_argument(
         "--call-file",
-        help="Path to a file containing the JSON tool spec.",
+        help="Path to a file containing one JSON tool spec or a list of specs.",
     )
     parser.add_argument(
         "--toolset",
@@ -260,14 +335,22 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        call_spec = _read_call_spec(args)
-        payload = execute_tool_call(
-            call_spec["tool_name"],
-            call_spec["arguments"],
-            toolset=args.toolset,
-            env_file=args.env_file,
-            raw_result_file=args.raw_result_file,
-        )
+        call_specs = _read_call_specs(args)
+        if len(call_specs) == 1:
+            payload = execute_tool_call(
+                call_specs[0]["tool_name"],
+                call_specs[0]["arguments"],
+                toolset=args.toolset,
+                env_file=args.env_file,
+                raw_result_file=args.raw_result_file,
+            )
+        else:
+            payload = execute_tool_calls(
+                call_specs,
+                toolset=args.toolset,
+                env_file=args.env_file,
+                raw_result_file=args.raw_result_file,
+            )
     except Exception as exc:
         error_payload = {
             "execution_success": False,

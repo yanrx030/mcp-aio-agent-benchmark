@@ -171,7 +171,7 @@ The evaluator uses `math.isclose`, so a value passes when the difference is with
 
 Notes:
 
-- `ground_truth_tool_call` is still accepted for backward compatibility.
+- `ref_tool_call` is the supported field for reference tool calls.
 
 ## Output and Logs
 
@@ -206,6 +206,40 @@ uv run python tool_call.py --call-file call.json --pretty --raw-result-file logs
 ```
 
 You can also pass the tool-call JSON directly as the positional argument instead of using `--call-file`.
+
+To run multiple tool calls in one MCP session, use a JSON list:
+
+```json
+[
+  {
+    "tool_name": "get_collections",
+    "arguments": {}
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "reddit"
+    }
+  }
+]
+```
+
+```bash
+uv run python tool_call.py --call-file calls.json --pretty
+```
+
+From Python:
+
+```python
+from tool_call import execute_tool_calls
+
+results = execute_tool_calls(
+    [
+        {"tool_name": "get_collections", "arguments": {}},
+        {"tool_name": "get_collection_summary", "arguments": {"collection": "reddit"}},
+    ]
+)
+```
 
 ## Troubleshooting
 

@@ -3,7 +3,7 @@ name: ground-truth-recomputation
 description: Recomputes and validates benchmark ground truth for AIO MCP evaluation tasks. Use when checking whether stored raw outputs or normalized ground truth have changed after re-executing fixed reference MCP tool plans, especially in live or changing data environments.
 compatibility: Designed for Codex or similar coding agents working in the AIO MCP benchmark repository. Requires access to the benchmark dataset, MCP execution module, and Python environment used by the benchmark runner.
 metadata:
-  author: rosa-yan
+  author: RY
   version: "0.1.0"
 ---
 
@@ -22,7 +22,7 @@ This skill must preserve the methodological rule:
 ## When to Use
 
 Use this skill when the user explicitly asks to recompute ground truth for the benchmark
-Do not use this skill for normal agent benchmark runs
+Do not use this skill for normal agent benchmark runs. Do not use task_runner.py
 
 ## Inputs
 
@@ -33,12 +33,11 @@ Expected input files:
   - `task_id`
   - `prompt`
   - `category`
-  - `raw_output`
+  - `note` -- to store raw output
   - `ref_tool_call`
   - `answer_type`
   - `core_toolset`
   - `ground_truth`
-
 
 - MCP tool call execution module - tool_call.py
 - evaluator schemas for scalar, timeseries, chart, and text answers.
@@ -55,8 +54,9 @@ Expected input files:
    Produce candidate updates in a separate output file.
 
 4. Preserve the existing answer schema.
-   If a task already has a scalar, timeseries, chart, or text schema, regenerated `ground_truth` must follow the same schema. 
-   For text answers, follows the same wording and formatting rules, but update the content based on new tool outputs.
+   If a task already has a scalar, timeseries, chart, or text schema, regenerated `ground_truth` must follow the same schema.
+   For text answers, follows the same wording and formatting rules, but update the content based on new tool outputs. preserve the original level of
+   specificity, do not add external context, do not infer causes beyond tool outputs, and keep uncertainty or missing-data caveats when present.
 
 5. Distinguish raw-output changes from answer-level changes.
    Some raw MCP outputs may differ without changing the final expected answer.
@@ -107,6 +107,17 @@ result = execute_tool_call(
     arguments={"collection": "bluesky"},
     env_file=".env",
 )
+
+
+from tool_call import execute_tool_calls
+
+results = execute_tool_calls(
+    [
+        {"tool_name": "get_collections", "arguments": {}},
+        {"tool_name": "get_collection_summary", "arguments": {"collection": "reddit"}},
+    ]
+)
+
 ```
 
 tool_call.py is responsible only for executing one explicit MCP tool call and returning a normalized payload.
@@ -120,14 +131,12 @@ Many benchmark tasks contain a ref_tool_call list rather than a single call.
 For each task:
 
 1. execute calls in their stored order;
-2. assign a call_index to each returned result;
-3. preserve the original tool_name and arguments;
-4. store the normalized result for each call;
+2. preserve the original tool_name and arguments;
+3. store the normalized result for each call;
 
 ### Step 3: Compare new outputs with stored `raw_output`
 
-Compare the newly returned raw output with the stored `raw_output`.
-
+Compare the newly returned raw output with the stored raw output from `note`, Compare structured_content when present; otherwise compare content_blocks
 
 ### Step 4: Determine whether the final answer changes
 
@@ -160,7 +169,6 @@ Rules:
 For every checked task, output an audit entry containing:
 
 - `task_id`
-- `status`
 - `change_classification`
 - `raw_output_changed`
 - `ground_truth_changed`
@@ -170,8 +178,19 @@ For every checked task, output an audit entry containing:
 - `evidence`
 - `notes`
 
+under /task, output a recompute*<source_csv_stem>*<timestamp>.json of all tasks checked, including counts for each `change_classification` category.
+
 The audit report should make it easy for the researcher to review and accept or reject candidate updates.
 
-
 ### Step 7: Output a new csv file with new candidate ground truth and new raw outputs
-if the user requests it, produce a new CSV file that includes candidate ground truth and new raw outputs for all tasks that were re-executed. This file should be separate from the original benchmark file to avoid confusion.
+
+under /task, output a recompute*<source_csv_stem>*<timestamp>.csv file containing all tasks that had changes in raw output or candidate ground truth. This file should be separate from the original benchmark file to avoid confusion. this candidate CSV is not an accepted benchmark replacement
+Columns should include:
+
+- `task_id`
+- `prompt`
+- `new_raw_output`
+- `candidate_ground_truth`
+- `change_classification`
+- `requires_manual_review`
+- `evidence`
