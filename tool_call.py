@@ -170,7 +170,7 @@ async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) ->
             "execution_success": analyzed["execution_success"],
             "mcp_is_error": analyzed["mcp_is_error"],
             "payload_has_error": analyzed["payload_has_error"],
-            "content_blocks": analyzed["content_blocks"],
+            # "content_blocks": analyzed["content_blocks"],
             "structured_content": analyzed["structured_content"],
             "server_error_message": analyzed["server_error_message"],
         }

@@ -170,12 +170,84 @@ def _parse_any_structured(raw: str | None) -> tuple[Any | None, str | None, str 
     except Exception as json_exc:
         json_error = f"{type(json_exc).__name__}: {json_exc}"
 
+    embedded_json_error: str | None = None
+    extracted = _extract_first_balanced_json(raw)
+    if extracted is not None:
+        extracted_fragment, parsed_fragment = extracted
+        if isinstance(parsed_fragment, (Mapping, list)):
+            return parsed_fragment, None, "json_fragment"
+        embedded_json_error = (
+            f"fragment parsed to unsupported top-level type {type(parsed_fragment).__name__}: "
+            f"{extracted_fragment[:120]!r}"
+        )
+
     try:
         return yaml.safe_load(raw), None, "yaml"
     except Exception as yaml_exc:
         yaml_error = f"{type(yaml_exc).__name__}: {yaml_exc}"
 
-    return None, f"json_parse={json_error}; yaml_parse={yaml_error}", None
+    details = [f"json_parse={json_error}"]
+    if embedded_json_error:
+        details.append(f"embedded_json_parse={embedded_json_error}")
+    details.append(f"yaml_parse={yaml_error}")
+    return None, "; ".join(details), None
+
+
+def _extract_first_balanced_json(raw: str) -> tuple[str, Any] | None:
+    for start_index, opener, closer in _iter_json_start_tokens(raw):
+        candidate = _scan_balanced_json(raw, start_index, opener, closer)
+        if candidate is None:
+            continue
+        try:
+            return candidate, json.loads(candidate)
+        except Exception:
+            continue
+    return None
+
+
+def _iter_json_start_tokens(raw: str) -> list[tuple[int, str, str]]:
+    starts: list[tuple[int, str, str]] = []
+    for index, char in enumerate(raw):
+        if char == "{":
+            starts.append((index, "{", "}"))
+        elif char == "[":
+            starts.append((index, "[", "]"))
+    return starts
+
+
+def _scan_balanced_json(raw: str, start_index: int, opener: str, closer: str) -> str | None:
+    depth = 0
+    in_string = False
+    escape = False
+
+    for index in range(start_index, len(raw)):
+        char = raw[index]
+
+        if in_string:
+            if escape:
+                escape = False
+                continue
+            if char == "\\":
+                escape = True
+                continue
+            if char == '"':
+                in_string = False
+            continue
+
+        if char == '"':
+            in_string = True
+            continue
+        if char == opener:
+            depth += 1
+            continue
+        if char == closer:
+            depth -= 1
+            if depth == 0:
+                return raw[start_index : index + 1]
+            if depth < 0:
+                return None
+
+    return None
 
 
 def _extract_answer_payload(parsed: Any) -> tuple[Any | None, str | None]:

@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-05-08T01:26:42Z",
+  "source_csv": "task\\tasksmall.csv",
+  "summary": {
+    "model": "qwen/qwen3.6-plus",
+    "total_tasks": 1,
+    "finished_with_result_tasks": 1,
+    "Task Completion Rate (TCR)": 1.0,
+    "average_tool_appropriateness": 0.75,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": null,
+    "average_total_tokens": 21147.0,
+    "average_total_steps(temp)": 5.0,
+    "average_total_tool_calls": 4.0,
+    "average_latency": 21.651899200000116
+  },
+  "results": [
+    {
+      "task_id": "B3",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 21147,
+      "total_steps": 5,
+      "total_tool_calls": 4,
+      "latency": 21.651899200000116,
+      "tools_used": [
+        "get_collections",
+        "text_search",
+        "text_search",
+        "get_collection_summary"
+      ],
+      "passed": true,
+      "answer_type": "scalar",
+      "final_answer": "{\"status\":\"success\",\"answer\":{\"value\":91002,\"unit\":\"posts\",\"comment\":\"Number of Twitter posts with hashtag #auspol during Q1 2023 (2023-01-01 to 2023-03-31)\"}}"
+    }
+  ]
+}

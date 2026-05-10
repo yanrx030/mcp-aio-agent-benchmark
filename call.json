@@ -1,10 +1,6 @@
 {
-    "tool_name": "aggregate_by_time",
+    "tool_name": "get_collection_summary",
     "arguments": {
-        "collection": "youtube",
-        "aggregation_level": "month",
-        "startdate": "2024-01-01",
-        "enddate": "2024-12-31",
-        "sentiment": false
+        "collection": "Mastodon"
     }
 }

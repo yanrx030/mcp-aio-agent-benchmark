@@ -68,8 +68,8 @@ STATUS DEFINITIONS:
  "status": "success | partial | unsupported | failed",
   "answer": {
     "value": number | null,
-    "unit": string | null,
-    "comment": string | null
+    "unit": "string | null",
+    "comment": "string | null"
   }
 }
 
@@ -99,7 +99,7 @@ Return the final answer as exactly one JSON object using this schema:
         "points": [
           {
             "x": "string",
-            "value": "number"
+            "value": number
           }
         ]
       }

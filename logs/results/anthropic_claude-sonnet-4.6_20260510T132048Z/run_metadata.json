@@ -1,0 +1,8 @@
+{
+  "task_set_id": "taskset_20260510T132048Z_9c0640",
+  "task_set_dir": "logs\\results\\anthropic_claude-sonnet-4.6_20260510T132048Z",
+  "created_at": "2026-05-10T13:20:48Z",
+  "tool_agent_model": "anthropic/claude-sonnet-4.6",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-05-10T13:20:48Z"
+}
