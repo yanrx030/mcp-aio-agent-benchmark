@@ -13,7 +13,10 @@ from mcp_result_analyzer import analyze_tool_result
 
 
 DEFAULT_TOOLSET = "toolsets/aio_mcp_toolset_v2.json"
-DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+DEFAULT_MODEL = "placeholder"
+DEFAULT_ENV_FILE = ".env"
+
+__all__ = ["execute_tool_call", "main"]
 
 
 class _NullLogger:
@@ -117,6 +120,20 @@ def _parse_call_spec(raw: str) -> dict[str, Any]:
     }
 
 
+def _normalize_call_spec(tool_name: str, arguments: dict[str, Any] | None = None) -> dict[str, Any]:
+    if not isinstance(tool_name, str) or not tool_name.strip():
+        raise ValueError("tool_name must be a non-empty string.")
+    if arguments is None:
+        arguments = {}
+    if not isinstance(arguments, dict):
+        raise ValueError("arguments must be a JSON object.")
+
+    return {
+        "tool_name": tool_name.strip(),
+        "arguments": arguments,
+    }
+
+
 def _read_call_spec(args: argparse.Namespace) -> dict[str, Any]:
     sources = [bool(args.call), bool(args.call_file), not os.isatty(0)]
     if sum(sources) > 1:
@@ -133,7 +150,12 @@ def _read_call_spec(args: argparse.Namespace) -> dict[str, Any]:
     return _parse_call_spec(raw)
 
 
-async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) -> dict[str, Any]:
+async def _run_tool_call(
+    *,
+    call_spec: dict[str, Any],
+    toolset: str = DEFAULT_TOOLSET,
+    raw_result_file: str | Path | None = None,
+) -> dict[str, Any]:
     auth_key = os.environ.get("AIO_AUTH_KEY")
     if not auth_key:
         raise RuntimeError("AIO_AUTH_KEY is not set. Use --env-file or export it before running.")
@@ -149,15 +171,15 @@ async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) ->
     try:
         with contextlib.redirect_stdout(io.StringIO()):
             client.authenticate()
-            client.load_tools(args.toolset)
+            client.load_tools(toolset)
             await client.connect_to_server()
 
         result = await client.session.call_tool(
             call_spec["tool_name"],
             {k: v for k, v in call_spec["arguments"].items() if v is not None},
         )
-        if args.raw_result_file:
-            raw_result_path = Path(args.raw_result_file)
+        if raw_result_file:
+            raw_result_path = Path(raw_result_file)
             raw_result_path.parent.mkdir(parents=True, exist_ok=True)
             raw_result_path.write_text(
                 json.dumps(_to_jsonable(result), ensure_ascii=False, indent=2),
@@ -170,15 +192,37 @@ async def _run_tool_call(args: argparse.Namespace, call_spec: dict[str, Any]) ->
             "execution_success": analyzed["execution_success"],
             "mcp_is_error": analyzed["mcp_is_error"],
             "payload_has_error": analyzed["payload_has_error"],
-            # "content_blocks": analyzed["content_blocks"],
+            "content_blocks": analyzed["content_blocks"],
             "structured_content": analyzed["structured_content"],
             "server_error_message": analyzed["server_error_message"],
         }
-        if args.raw_result_file:
-            payload["raw_result_file"] = str(Path(args.raw_result_file))
+        if raw_result_file:
+            payload["raw_result_file"] = str(Path(raw_result_file))
         return payload
     finally:
         await client.cleanup()
+
+
+def execute_tool_call(
+    tool_name: str,
+    arguments: dict[str, Any] | None = None,
+    *,
+    toolset: str = DEFAULT_TOOLSET,
+    env_file: str | Path | None = DEFAULT_ENV_FILE,
+    raw_result_file: str | Path | None = None,
+) -> dict[str, Any]:
+    """Execute one MCP tool call and return a normalized payload for agent use."""
+    if env_file:
+        _load_env_file(Path(env_file))
+
+    call_spec = _normalize_call_spec(tool_name, arguments)
+    return asyncio.run(
+        _run_tool_call(
+            call_spec=call_spec,
+            toolset=toolset,
+            raw_result_file=raw_result_file,
+        )
+    )
 
 
 def main() -> int:
@@ -201,8 +245,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--env-file",
-        default=".env",
-        help="Optional env file to preload. Default: .env",
+        default=DEFAULT_ENV_FILE,
+        help=f"Optional env file to preload. Default: {DEFAULT_ENV_FILE}",
     )
     parser.add_argument(
         "--pretty",
@@ -215,11 +259,15 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    _load_env_file(Path(args.env_file))
-
     try:
         call_spec = _read_call_spec(args)
-        payload = asyncio.run(_run_tool_call(args, call_spec))
+        payload = execute_tool_call(
+            call_spec["tool_name"],
+            call_spec["arguments"],
+            toolset=args.toolset,
+            env_file=args.env_file,
+            raw_result_file=args.raw_result_file,
+        )
     except Exception as exc:
         error_payload = {
             "execution_success": False,
