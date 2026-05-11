@@ -707,6 +707,7 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
 
     try:
         response = await asyncio.to_thread(client.chat.completions.create, **completion_kwargs)
+        token_usage = _extract_token_usage(response)
         content = (response.choices[0].message.content or "").strip() if response.choices else ""
         parsed, parse_error, parser_used = _parse_any_structured(_strip_code_fences(content))
         if not isinstance(parsed, Mapping):
@@ -714,6 +715,7 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
                 "reason": "judge returned non-object response",
                 "judge_raw_response": content,
                 "judge_parse_error": parse_error,
+                "judge_token_usage": token_usage,
             }
 
         raw_rating = parsed.get("score")
@@ -723,6 +725,7 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
             "raw_rating": raw_rating,
             "reason": parsed.get("reason") or "no reason provided",
             "judge_raw_response": content,
+            "judge_token_usage": token_usage,
             "expected_text": ground_truth,
             "actual_text": agent_answer,
         }
@@ -735,6 +738,49 @@ async def _evaluate_text(context: EvaluationContext) -> tuple[int, dict[str, Any
             "expected_text": ground_truth,
             "actual_text": agent_answer,
         }
+
+
+def _extract_token_usage(response: Any) -> dict[str, int | None]:
+    usage = getattr(response, "usage", None)
+    if not usage:
+        return {
+            "input_tokens": None,
+            "output_tokens": None,
+            "total_tokens": None,
+        }
+
+    input_tokens = _as_int_or_none(
+        getattr(usage, "prompt_tokens", None)
+        if not isinstance(usage, Mapping)
+        else usage.get("prompt_tokens")
+    )
+    output_tokens = _as_int_or_none(
+        getattr(usage, "completion_tokens", None)
+        if not isinstance(usage, Mapping)
+        else usage.get("completion_tokens")
+    )
+    total_tokens = _as_int_or_none(
+        getattr(usage, "total_tokens", None)
+        if not isinstance(usage, Mapping)
+        else usage.get("total_tokens")
+    )
+    if total_tokens is None and input_tokens is not None and output_tokens is not None:
+        total_tokens = input_tokens + output_tokens
+
+    return {
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "total_tokens": total_tokens,
+    }
+
+
+def _as_int_or_none(value: Any) -> int | None:
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _normalize_text_payload(payload: Any) -> dict[str, Any]:

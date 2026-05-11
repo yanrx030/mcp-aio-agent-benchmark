@@ -331,6 +331,13 @@ def _summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
     raw_ratings = Counter()
     judge_failures = 0
     parse_failures = 0
+    judge_token_usage = {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "text_judge_evaluations": len(text_rows),
+        "evaluations_with_usage": 0,
+    }
     for row in text_rows:
         validation = row.get("ground_truth_validation") or {}
         diagnostics = validation.get("diagnostics") or {}
@@ -342,6 +349,20 @@ def _summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
             judge_failures += 1
         if reason == "judge returned non-object response":
             parse_failures += 1
+        usage = diagnostics.get("judge_token_usage")
+        if isinstance(usage, dict):
+            has_usage = False
+            for key in ("input_tokens", "output_tokens", "total_tokens"):
+                value = usage.get(key)
+                if value is None:
+                    continue
+                try:
+                    judge_token_usage[key] += int(value)
+                except (TypeError, ValueError):
+                    continue
+                has_usage = True
+            if has_usage:
+                judge_token_usage["evaluations_with_usage"] += 1
 
     return {
         "total_rows": len(rows),
@@ -356,6 +377,12 @@ def _summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "score_changed_task_ids": [row["task_id"] for row in changed_rows],
         "judge_failure_rows": judge_failures,
         "judge_parse_failure_rows": parse_failures,
+        "judge_token_usage": judge_token_usage,
+        "average_judge_total_tokens": (
+            judge_token_usage["total_tokens"] / judge_token_usage["evaluations_with_usage"]
+            if judge_token_usage["evaluations_with_usage"]
+            else None
+        ),
         "text_raw_rating_distribution": dict(sorted(raw_ratings.items())),
     }
 

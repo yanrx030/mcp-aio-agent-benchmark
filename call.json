@@ -1,6 +1,48 @@
-{
+[
+  {
+    "tool_name": "get_collections",
+    "arguments": {}
+  },
+  {
     "tool_name": "get_collection_summary",
     "arguments": {
-        "collection": "Mastodon"
+      "collection": "bluesky"
     }
-}
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "flickr"
+    }
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "gdelt"
+    }
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "mastodon"
+    }
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "reddit"
+    }
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "twitter"
+    }
+  },
+  {
+    "tool_name": "get_collection_summary",
+    "arguments": {
+      "collection": "youtube"
+    }
+  }
+]

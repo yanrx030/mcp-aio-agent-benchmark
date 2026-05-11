@@ -404,6 +404,7 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     result_list = list(results)
     finished_with_result = sum(1 for result in result_list if result.status == "completed")
     failed = sum(1 for result in result_list if result.status == "failed")
+    judge_token_usage = summarize_judge_token_usage(result_list)
 
     tool_appropriateness_scores = [
         score
@@ -499,6 +500,12 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
             if total_tokens_values
             else None
         ),
+        "judge_token_usage": judge_token_usage,
+        "average_judge_total_tokens": (
+            judge_token_usage["total_tokens"] / judge_token_usage["evaluations_with_usage"]
+            if judge_token_usage["evaluations_with_usage"]
+            else None
+        ),
         "average_total_steps(temp)": (
             sum(total_steps_values) / len(total_steps_values)
             if total_steps_values
@@ -527,6 +534,43 @@ def summarize_results(results: Iterable[TaskRunResult]) -> dict[str, Any]:
     }
 
 
+def summarize_judge_token_usage(results: Iterable[TaskRunResult]) -> dict[str, int]:
+    totals = {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "text_judge_evaluations": 0,
+        "evaluations_with_usage": 0,
+    }
+
+    for result in results:
+        validation = result.ground_truth_validation or {}
+        if validation.get("strategy") != "text_judge":
+            continue
+
+        totals["text_judge_evaluations"] += 1
+        diagnostics = validation.get("diagnostics") or {}
+        usage = diagnostics.get("judge_token_usage")
+        if not isinstance(usage, Mapping):
+            continue
+
+        has_usage = False
+        for key in ("input_tokens", "output_tokens", "total_tokens"):
+            value = usage.get(key)
+            if value is None:
+                continue
+            try:
+                totals[key] += int(value)
+            except (TypeError, ValueError):
+                continue
+            has_usage = True
+
+        if has_usage:
+            totals["evaluations_with_usage"] += 1
+
+    return totals
+
+
 def _build_simple_summary(
     results: list[TaskRunResult],
     *,
@@ -546,6 +590,8 @@ def _build_simple_summary(
             "macro_average_constraint_compliance_rates(CCR)"
         ),
         "average_total_tokens": full_summary.get("average_total_tokens"),
+        "judge_token_usage": full_summary.get("judge_token_usage"),
+        "average_judge_total_tokens": full_summary.get("average_judge_total_tokens"),
         "average_total_steps(temp)": full_summary.get("average_total_steps(temp)"),
         "average_total_tool_calls": full_summary.get("average_total_tool_calls"),
         "average_latency": full_summary.get("average_latency"),
@@ -605,6 +651,7 @@ def write_simple_task_run_report(
     payload = {
         "generated_at": utc_now_iso(),
         "source_csv": str(Path(source_csv)),
+        "judge_token_usage": summarize_judge_token_usage(result_list),
         "summary": _build_simple_summary(
             result_list,
             model=_resolve_report_model(result_list, extra_summary),
@@ -632,9 +679,11 @@ def write_task_run_report(
     summary = summarize_results(result_list)
     if extra_summary:
         summary = {**summary, **dict(extra_summary)}
+    judge_token_usage = summarize_judge_token_usage(result_list)
     payload = {
         "generated_at": utc_now_iso(),
         "source_csv": str(Path(source_csv)),
+        "judge_token_usage": judge_token_usage,
         "summary": summary,
         "results": [asdict(result) for result in result_list],
     }

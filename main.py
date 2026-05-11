@@ -12,6 +12,7 @@ from task_runner import (
     load_benchmark_tasks,
     run_benchmark_tasks,
     select_tasks,
+    summarize_judge_token_usage,
     summarize_results,
     write_task_run_report,
 )
@@ -195,6 +196,12 @@ async def main() -> None:
         openrouter_params=selected_openrouter_params,
         max_concurrency=args.max_concurrency,
         max_retries=1,
+    )
+    judge_token_usage = summarize_judge_token_usage(results)
+    shared_logger.write_run_metadata(
+        extra={
+            "judge_token_usage": judge_token_usage,
+        }
     )
     report_path = write_task_run_report(
         results,
