@@ -144,7 +144,7 @@ If raw output changed, inspect whether the normalized `ground_truth` should chan
 
 Examples:
 
-- A collection count changes: likely answer-level change for scalar metadata tasks.
+- A collection count changes: likely answer-level change for scalar metadata tasks `raw_changed`
 - Raw response contains additional metadata not used in answer: likely `raw_changed_answer_same`.
 - A topic list changes for an exploratory NLP task: likely answer-level change.
 - Tool returns 404 where it previously returned data: likely `missing_data` or `tool_or_api_error`.
@@ -178,19 +178,17 @@ For every checked task, output an audit entry containing:
 - `evidence`
 - `notes`
 
-under /task, output a recompute*<source_csv_stem>*<timestamp>.json of all tasks checked, including counts for each `change_classification` category.
+under /task, output a recompute*<source_csv_stem>*<timestamp>.csv of all tasks checked, including counts for each `change_classification` category.
 
 The audit report should make it easy for the researcher to review and accept or reject candidate updates.
 
 ### Step 7: Output a new csv file with new candidate ground truth and new raw outputs
 
-under /task, output a recompute*<source_csv_stem>*<timestamp>.csv file containing all tasks that had changes in raw output or candidate ground truth. This file should be separate from the original benchmark file to avoid confusion. this candidate CSV is not an accepted benchmark replacement
-Columns should include:
+finally, under /task, output a updated version of the benchmark CSV _<source_csv_stem>_<timestamp>.csv .
+This file should be separate from the original benchmark file to avoid confusion. this candidate CSV is not an accepted benchmark replacement
+Columns should include all original fields from the benchmark CSV plus:
 
-- `task_id`
-- `prompt`
 - `new_raw_output`
 - `candidate_ground_truth`
 - `change_classification`
 - `requires_manual_review`
-- `evidence`
