@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260512T075850Z_14562c",
+  "task_set_dir": "logs\\results\\openai_gpt-5.5_20260512T075850Z",
+  "created_at": "2026-05-12T07:58:50Z",
+  "tool_agent_model": "openai/gpt-5.5",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-05-12T08:03:20Z",
+  "judge_token_usage": {
+    "input_tokens": 27560,
+    "output_tokens": 23287,
+    "total_tokens": 50847,
+    "text_judge_evaluations": 22,
+    "evaluations_with_usage": 22
+  }
+}

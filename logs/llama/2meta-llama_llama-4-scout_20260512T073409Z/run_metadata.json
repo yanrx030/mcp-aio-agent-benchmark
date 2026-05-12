@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260512T073409Z_912a73",
+  "task_set_dir": "logs\\results\\meta-llama_llama-4-scout_20260512T073409Z",
+  "created_at": "2026-05-12T07:34:09Z",
+  "tool_agent_model": "meta-llama/llama-4-scout",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-05-12T07:40:13Z",
+  "judge_token_usage": {
+    "input_tokens": 17299,
+    "output_tokens": 20526,
+    "total_tokens": 37825,
+    "text_judge_evaluations": 20,
+    "evaluations_with_usage": 20
+  }
+}

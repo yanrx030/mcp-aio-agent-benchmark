@@ -4,19 +4,13 @@ openrouter:
   defaults:
     temperature: 0.0
     top_p: 1.0
-    # top_k: 0
-    # min_p: 0.0
-    # frequency_penalty: 0.0
-    # presence_penalty: 0.0
-    # repetition_penalty: 1.0
     stream: false
     tool_choice: "auto"
-    #parallel_tool_calls: false
 
 model_catalog:
   # Tool-using agent candidates
 
-  - id: "qwen/qwen3.6-plus" # doesn't support parameter "parallel_tool_calls"
+  - id: "qwen/qwen3.6-plus" # doesn't support "parallel_tool_calls"
     role: "tool_agent"
     openrouter:
       provider:
@@ -32,7 +26,8 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-  - id: "openai/gpt-5.5"
+
+  - id: "openai/gpt-5.5" #Temperature and top_p parms not supported
     role: "tool_agent"
     openrouter:
       provider:
@@ -40,12 +35,32 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
+        
+  - id: "anthropic/claude-opus-4.6"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["anthropic"]
+        allow_fallbacks: false
+        require_parameters: true
+
+  
+  #open source
+
   - id: "moonshotai/kimi-k2.6"
     role: "tool_agent"
     openrouter:
       provider:
         order: ["deepinfra/fp4"]
         allow_fallbacks: false
+        require_parameters: true
+
+  - id: "meta-llama/llama-4-scout"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["deepinfra/fp8"]
+        allow_fallbacks: true
         require_parameters: true
 
   #for testing only!!!
@@ -56,22 +71,9 @@ model_catalog:
         order: ["nvidia"]
         allow_fallbacks: false
 
-  - id: "meta-llama/llama-3.1-8b-instruct"
-    role: "tool_agent"
-    openrouter:
-      allow_fallbacks: true
 
-  - id: "nvidia/nemotron-3-super-120b-a12b"
-    role: "tool_agent"
 
   # Judge model candidates
-  - id: "openai/gpt-5.4-mini"
-    role: "judge"
-    openrouter:
-      provider:
-        order: ["openai"]
-        allow_fallbacks: false
-        require_parameters: false
 
   - id: "google/gemini-2.5-pro"
     role: "judge"
@@ -84,8 +86,8 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "moonshotai/kimi-k2.6"
-      #- "qwen/qwen3.6-plus"
+      #- "moonshotai/kimi-k2.6"
+      - "anthropic/claude-opus-4.6"
     judge_candidates:
       - "google/gemini-2.5-pro"
     openrouter_override: {}
