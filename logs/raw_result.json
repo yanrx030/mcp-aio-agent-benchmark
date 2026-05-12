@@ -1,0 +1,189 @@
+{
+  "__type__": "CallToolResult",
+  "__model_dump__": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"directed\":true,\"graph\":{},\"links\":[{\"common_terms\":[\"thing\",\"year\",\"famili\",\"car\",\"someon\",\"polic\",\"work\",\"week\",\"time\",\"peopl\",\"someth\",\"christma\",\"way\",\"home\",\"day\"],\"sequences\":[],\"source\":\"20231224-0\",\"target\":\"20231225-0\",\"weight\":15},{\"common_terms\":[\"hama\",\"year\",\"children\",\"war\",\"protest\",\"kid\",\"fuck\",\"time\",\"peopl\",\"christma\",\"way\"],\"sequences\":[],\"source\":\"20231224-1\",\"target\":\"20231225-0\",\"weight\":11}],\"multigraph\":false,\"nodes\":[{\"day\":0,\"id\":\"20231224-0\",\"sequences\":[1],\"sequencesMax\":2,\"size\":403,\"terms\":[\"peopl\",\"year\",\"time\",\"day\",\"christma\",\"hous\",\"thing\",\"car\",\"home\",\"way\",\"someon\",\"dog\",\"week\",\"place\",\"thank\",\"famili\",\"train\",\"work\",\"agent\",\"market\",\"area\",\"polic\",\"shop\",\"properti\",\"lot\",\"someth\",\"http\",\"amp\",\"insur\",\"tomorrow\"]},{\"day\":1,\"id\":\"20231225-0\",\"sequences\":[1],\"sequencesMax\":2,\"size\":51,\"terms\":[\"peopl\",\"day\",\"time\",\"christma\",\"year\",\"famili\",\"thing\",\"way\",\"kid\",\"someon\",\"everyon\",\"someth\",\"home\",\"protest\",\"covid\",\"children\",\"work\",\"car\",\"hama\",\"fuck\",\"noth\",\"anyth\",\"today\",\"week\",\"event\",\"polic\",\"life\",\"war\",\"point\",\"toll\"]},{\"day\":0,\"id\":\"20231224-1\",\"sequences\":[3],\"sequencesMax\":2,\"size\":8,\"terms\":[\"israel\",\"peopl\",\"hama\",\"children\",\"protest\",\"war\",\"palestin\",\"palestinian\",\"kid\",\"gaza\",\"conflict\",\"govern\",\"time\",\"support\",\"caus\",\"world\",\"jesu\",\"civilian\",\"jew\",\"place\",\"australia\",\"stage\",\"year\",\"christma\",\"fuck\",\"way\",\"genocid\",\"countri\",\"idf\",\"isra\"]}]}",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": {
+      "directed": true,
+      "graph": {},
+      "links": [
+        {
+          "common_terms": [
+            "thing",
+            "year",
+            "famili",
+            "car",
+            "someon",
+            "polic",
+            "work",
+            "week",
+            "time",
+            "peopl",
+            "someth",
+            "christma",
+            "way",
+            "home",
+            "day"
+          ],
+          "sequences": [],
+          "source": "20231224-0",
+          "target": "20231225-0",
+          "weight": 15
+        },
+        {
+          "common_terms": [
+            "hama",
+            "year",
+            "children",
+            "war",
+            "protest",
+            "kid",
+            "fuck",
+            "time",
+            "peopl",
+            "christma",
+            "way"
+          ],
+          "sequences": [],
+          "source": "20231224-1",
+          "target": "20231225-0",
+          "weight": 11
+        }
+      ],
+      "multigraph": false,
+      "nodes": [
+        {
+          "day": 0,
+          "id": "20231224-0",
+          "sequences": [
+            1
+          ],
+          "sequencesMax": 2,
+          "size": 403,
+          "terms": [
+            "peopl",
+            "year",
+            "time",
+            "day",
+            "christma",
+            "hous",
+            "thing",
+            "car",
+            "home",
+            "way",
+            "someon",
+            "dog",
+            "week",
+            "place",
+            "thank",
+            "famili",
+            "train",
+            "work",
+            "agent",
+            "market",
+            "area",
+            "polic",
+            "shop",
+            "properti",
+            "lot",
+            "someth",
+            "http",
+            "amp",
+            "insur",
+            "tomorrow"
+          ]
+        },
+        {
+          "day": 1,
+          "id": "20231225-0",
+          "sequences": [
+            1
+          ],
+          "sequencesMax": 2,
+          "size": 51,
+          "terms": [
+            "peopl",
+            "day",
+            "time",
+            "christma",
+            "year",
+            "famili",
+            "thing",
+            "way",
+            "kid",
+            "someon",
+            "everyon",
+            "someth",
+            "home",
+            "protest",
+            "covid",
+            "children",
+            "work",
+            "car",
+            "hama",
+            "fuck",
+            "noth",
+            "anyth",
+            "today",
+            "week",
+            "event",
+            "polic",
+            "life",
+            "war",
+            "point",
+            "toll"
+          ]
+        },
+        {
+          "day": 0,
+          "id": "20231224-1",
+          "sequences": [
+            3
+          ],
+          "sequencesMax": 2,
+          "size": 8,
+          "terms": [
+            "israel",
+            "peopl",
+            "hama",
+            "children",
+            "protest",
+            "war",
+            "palestin",
+            "palestinian",
+            "kid",
+            "gaza",
+            "conflict",
+            "govern",
+            "time",
+            "support",
+            "caus",
+            "world",
+            "jesu",
+            "civilian",
+            "jew",
+            "place",
+            "australia",
+            "stage",
+            "year",
+            "christma",
+            "fuck",
+            "way",
+            "genocid",
+            "countri",
+            "idf",
+            "isra"
+          ]
+        }
+      ]
+    },
+    "isError": false
+  }
+}

@@ -163,14 +163,14 @@ def compact_raw_output(payloads: list[dict[str, Any]]) -> str:
 
 def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    audit_path = csv_path.parent / f"recompute_{csv_path.stem}_{timestamp}.json"
-    changed_csv_path = csv_path.parent / f"recompute_{csv_path.stem}_{timestamp}.csv"
+    audit_path = csv_path.parent / f"recompute_{csv_path.stem}_{timestamp}.csv"
+    candidate_csv_path = csv_path.parent / f"updated_{csv_path.stem}_{timestamp}.csv"
 
     with csv_path.open(newline="", encoding="utf-8-sig") as handle:
         rows = list(csv.DictReader(handle))
 
     audit_entries = []
-    changed_rows = []
+    candidate_rows = []
 
     for row in rows:
         task_id = row.get("task_id", "")
@@ -191,7 +191,7 @@ def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
                 "notes": "Could not parse task record fields.",
             }
             audit_entries.append(entry)
-            changed_rows.append(csv_changed_row(row, "", row.get("ground_truth"), entry))
+            candidate_rows.append(csv_candidate_row(row, "", row.get("ground_truth"), entry))
             continue
 
         note_parse_error = None
@@ -216,7 +216,7 @@ def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
                 "notes": "Could not parse task ground_truth field.",
             }
             audit_entries.append(entry)
-            changed_rows.append(csv_changed_row(row, "", row.get("ground_truth"), entry))
+            candidate_rows.append(csv_candidate_row(row, "", row.get("ground_truth"), entry))
             continue
 
         print(f"recomputing {task_id} ({len(calls)} call(s))", flush=True)
@@ -235,7 +235,7 @@ def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
                 "notes": "Reference calls could not be re-executed.",
             }
             audit_entries.append(entry)
-            changed_rows.append(csv_changed_row(row, "", old_ground_truth, entry))
+            candidate_rows.append(csv_candidate_row(row, "", old_ground_truth, entry))
             continue
 
         raw_output_changed = (
@@ -291,51 +291,72 @@ def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
             "notes": "Original benchmark CSV was not modified.",
         }
         audit_entries.append(entry)
-
-        if raw_output_changed or gt_changed or note_parse_error:
-            changed_rows.append(csv_changed_row(row, compact_raw_output(new_payloads), candidate, entry))
+        candidate_rows.append(csv_candidate_row(row, compact_raw_output(new_payloads), candidate, entry))
 
     counts = Counter(entry["change_classification"] for entry in audit_entries)
-    audit_payload = {
-        "source_csv": str(csv_path),
-        "generated_at": timestamp,
-        "task_count": len(audit_entries),
-        "classification_counts": dict(sorted(counts.items())),
-        "entries": audit_entries,
-    }
-    audit_path.write_text(json.dumps(audit_payload, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    with changed_csv_path.open("w", newline="", encoding="utf-8") as handle:
+    with audit_path.open("w", newline="", encoding="utf-8") as handle:
         fieldnames = [
             "task_id",
-            "prompt",
+            "change_classification",
+            "requires_manual_review",
+            "raw_output_changed",
+            "ground_truth_changed",
+            "old_ground_truth",
+            "candidate_ground_truth",
+            "evidence",
+            "notes",
+            "classification_counts",
+        ]
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        counts_json = json.dumps(dict(sorted(counts.items())), ensure_ascii=False)
+        for entry in audit_entries:
+            writer.writerow(
+                {
+                    "task_id": entry["task_id"],
+                    "change_classification": entry["change_classification"],
+                    "requires_manual_review": str(entry["requires_manual_review"]).lower(),
+                    "raw_output_changed": json.dumps(entry["raw_output_changed"]),
+                    "ground_truth_changed": str(entry["ground_truth_changed"]).lower(),
+                    "old_ground_truth": json.dumps(entry["old_ground_truth"], ensure_ascii=False, indent=2),
+                    "candidate_ground_truth": json.dumps(
+                        entry["candidate_ground_truth"],
+                        ensure_ascii=False,
+                        indent=2,
+                    ),
+                    "evidence": json.dumps(entry["evidence"], ensure_ascii=False),
+                    "notes": entry["notes"],
+                    "classification_counts": counts_json,
+                }
+            )
+
+    with candidate_csv_path.open("w", newline="", encoding="utf-8") as handle:
+        original_fieldnames = list(rows[0].keys()) if rows else []
+        extra_fieldnames = [
             "new_raw_output",
             "candidate_ground_truth",
             "change_classification",
             "requires_manual_review",
-            "evidence",
         ]
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=original_fieldnames + extra_fieldnames)
         writer.writeheader()
-        writer.writerows(changed_rows)
+        writer.writerows(candidate_rows)
 
-    return audit_path, changed_csv_path
+    return audit_path, candidate_csv_path
 
 
-def csv_changed_row(
+def csv_candidate_row(
     source_row: dict[str, str],
     new_raw_output: str,
     candidate_ground_truth: Any,
     audit_entry: dict[str, Any],
 ) -> dict[str, str]:
     return {
-        "task_id": source_row.get("task_id", ""),
-        "prompt": source_row.get("prompt", ""),
+        **source_row,
         "new_raw_output": new_raw_output,
         "candidate_ground_truth": json.dumps(candidate_ground_truth, ensure_ascii=False, indent=2),
         "change_classification": audit_entry["change_classification"],
         "requires_manual_review": str(audit_entry["requires_manual_review"]).lower(),
-        "evidence": json.dumps(audit_entry["evidence"], ensure_ascii=False),
     }
 
 
@@ -346,9 +367,9 @@ def main() -> int:
     parser.add_argument("--toolset", default="toolsets/aio_mcp_toolset_v2.json")
     args = parser.parse_args()
 
-    audit_path, changed_csv_path = recompute(args.csv_path, args.env_file, args.toolset)
-    print(f"Wrote audit JSON: {audit_path}")
-    print(f"Wrote changed CSV: {changed_csv_path}")
+    audit_path, candidate_csv_path = recompute(args.csv_path, args.env_file, args.toolset)
+    print(f"Wrote audit CSV: {audit_path}")
+    print(f"Wrote candidate CSV: {candidate_csv_path}")
     return 0
 
 

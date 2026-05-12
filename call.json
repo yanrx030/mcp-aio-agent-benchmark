@@ -1,0 +1,8 @@
+{
+    "tool_name": "get_topic_groupings",
+    "arguments": {
+        "collection": "reddit",
+        "startdate": "2023-12-24",
+        "enddate": "2023-12-25"
+    }
+}
