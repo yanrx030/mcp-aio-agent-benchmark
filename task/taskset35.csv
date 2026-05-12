@@ -1002,7 +1002,7 @@ C2,"Count the number of #melbourne posts on Mastodon for January 2024, grouped b
         },
         {
           ""x"": ""2024-01-29"",
-          ""value"": 69
+          ""value"": 20
         }
       ]
     }
@@ -1572,7 +1572,7 @@ D1,"for the first five days of 2025, show and compare the daily volume of posts 
       ""points"": [
         {
           ""x"": ""2025-01-01"",
-          ""value"": 18374
+          ""value"": 18399
         },
         {
           ""x"": ""2025-01-02"",
@@ -1580,7 +1580,7 @@ D1,"for the first five days of 2025, show and compare the daily volume of posts 
         },
         {
           ""x"": ""2025-01-03"",
-          ""value"": 1496
+          ""value"": 1498
         },
         {
           ""x"": ""2025-01-04"",

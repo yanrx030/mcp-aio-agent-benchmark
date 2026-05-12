@@ -32,6 +32,22 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
+  - id: "openai/gpt-5.5"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["openai"]
+        allow_fallbacks: false
+        require_parameters: true
+
+  - id: "moonshotai/kimi-k2.6"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["deepinfra/fp4"]
+        allow_fallbacks: false
+        require_parameters: true
+
   #for testing only!!!
   - id: "nvidia/nemotron-3-super-120b-a12b:free"
     role: "tool_agent"
@@ -68,7 +84,7 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "qwen/qwen3.6-plus"
+      - "moonshotai/kimi-k2.6"
     judge_candidates:
       - "google/gemini-2.5-pro"
     openrouter_override: {}

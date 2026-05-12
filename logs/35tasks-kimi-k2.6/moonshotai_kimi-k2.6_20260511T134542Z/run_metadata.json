@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260511T134542Z_0cb7e7",
+  "task_set_dir": "logs\\results\\moonshotai_kimi-k2.6_20260511T134542Z",
+  "created_at": "2026-05-11T13:45:42Z",
+  "tool_agent_model": "moonshotai/kimi-k2.6",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-05-11T13:58:22Z",
+  "judge_token_usage": {
+    "input_tokens": 25527,
+    "output_tokens": 25134,
+    "total_tokens": 50661,
+    "text_judge_evaluations": 22,
+    "evaluations_with_usage": 22
+  }
+}

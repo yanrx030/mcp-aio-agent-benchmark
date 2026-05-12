@@ -100,6 +100,13 @@ def build_evaluation_context(
 
 
 async def evaluate_ground_truth(context: EvaluationContext) -> dict[str, Any]:
+    if _is_missing_final_answer(context.final_answer):
+        return build_task_failure_evaluation(
+            context,
+            reason="missing final answer",
+            failure_category="missing_final_answer",
+        )
+
     # Central dispatcher: each evaluator returns diagnostics, then we collapse to a binary score.
     if context.dispatch_type == "scalar":
         score, diagnostics = _evaluate_scalar(context)
@@ -119,6 +126,49 @@ async def evaluate_ground_truth(context: EvaluationContext) -> dict[str, Any]:
         **diagnostics,
     }
 
+    return _build_evaluation_result(
+        context,
+        score=int(score),
+        strategy=strategy,
+        diagnostics=diagnostics,
+    )
+
+
+def build_task_failure_evaluation(
+    context: EvaluationContext,
+    *,
+    reason: str,
+    failure_category: str,
+    error_type: str | None = None,
+    error_message: str | None = None,
+    source_status: str | None = None,
+) -> dict[str, Any]:
+    diagnostics = {
+        "ground_truth_parse_error": context.ground_truth.parse_error,
+        "final_answer_parse_error": context.final_answer.parse_error,
+        "ground_truth_parser_used": context.ground_truth.parser_used,
+        "final_answer_parser_used": context.final_answer.parser_used,
+        "reason": reason,
+        "failure_category": failure_category,
+        "error_type": error_type,
+        "error_message": error_message,
+        "source_status": source_status,
+    }
+    return _build_evaluation_result(
+        context,
+        score=0,
+        strategy="task_failure",
+        diagnostics=diagnostics,
+    )
+
+
+def _build_evaluation_result(
+    context: EvaluationContext,
+    *,
+    score: int,
+    strategy: str,
+    diagnostics: Mapping[str, Any],
+) -> dict[str, Any]:
     return {
         "score": int(score),
         "passed": bool(score),
@@ -126,7 +176,7 @@ async def evaluate_ground_truth(context: EvaluationContext) -> dict[str, Any]:
         "answer_type": context.answer_type,
         "normalized_answer_type": context.normalized_answer_type,
         "dispatch_type": context.dispatch_type,
-        "diagnostics": diagnostics,
+        "diagnostics": dict(diagnostics),
     }
 
 
@@ -144,6 +194,11 @@ def _normalize_payload(raw: str | None) -> NormalizedPayload:
         parse_error=parse_error,
         parser_used=parser_used,
     )
+
+
+def _is_missing_final_answer(payload: NormalizedPayload) -> bool:
+    cleaned = _strip_code_fences(payload.raw)
+    return cleaned is None
 
 
 def _strip_code_fences(raw: str | None) -> str | None:

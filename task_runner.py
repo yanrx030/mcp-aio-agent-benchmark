@@ -15,7 +15,11 @@ from MCPClient import (
     is_transport_error,
 )
 from eval_logger import JSONLLogger, utc_now_iso
-from ground_truth_evaluation import build_evaluation_context, evaluate_ground_truth
+from ground_truth_evaluation import (
+    build_evaluation_context,
+    build_task_failure_evaluation,
+    evaluate_ground_truth,
+)
 from prompts import resolve_system_prompt
 
 
@@ -269,6 +273,21 @@ async def run_benchmark_tasks(
                     attempt_count=attempt_count,
                     auth_refreshed=auth_refreshed,
                     cleanup_warning=cleanup_warning,
+                    ground_truth_validation=_build_failure_validation(
+                        task,
+                        openrouter_api_key=openrouter_api_key,
+                        judge_model=judge_model,
+                        judge_openrouter_params=judge_openrouter_params,
+                        reason="task execution failed before final answer was produced",
+                        failure_category="task_execution_failed",
+                        error_type=type(final_exc).__name__ if final_exc else "RuntimeError",
+                        error_message=(
+                            str(final_exc)
+                            if final_exc
+                            else "Task failed without explicit exception."
+                        ),
+                        source_status="failed",
+                    ),
                     error_type=type(final_exc).__name__ if final_exc else "RuntimeError",
                     error_message=str(final_exc) if final_exc else "Task failed without explicit exception.",
                 )
@@ -293,6 +312,17 @@ async def run_benchmark_tasks(
                     attempt_count=attempt_count,
                     auth_refreshed=auth_refreshed,
                     cleanup_warning=" | ".join(cleanup_warnings) if cleanup_warnings else None,
+                    ground_truth_validation=_build_failure_validation(
+                        task,
+                        openrouter_api_key=openrouter_api_key,
+                        judge_model=judge_model,
+                        judge_openrouter_params=judge_openrouter_params,
+                        reason="task execution failed while building result",
+                        failure_category="task_execution_failed",
+                        error_type=type(exc).__name__,
+                        error_message=str(exc),
+                        source_status="failed",
+                    ),
                     error_type=type(exc).__name__,
                     error_message=str(exc),
                 )
@@ -326,6 +356,39 @@ async def validate_ground_truth(
     )
     print(f"[task {task.task_id}] evaluating agent answer against ground truth")
     return await evaluate_ground_truth(context)
+
+
+def _build_failure_validation(
+    task: BenchmarkTask,
+    *,
+    openrouter_api_key: str,
+    judge_model: str | None = None,
+    judge_openrouter_params: Mapping[str, Any] | None = None,
+    reason: str,
+    failure_category: str,
+    error_type: str | None = None,
+    error_message: str | None = None,
+    source_status: str | None = None,
+) -> dict[str, Any]:
+    context = build_evaluation_context(
+        task_id=task.task_id,
+        prompt=task.prompt,
+        answer_type=task.answer_type,
+        ground_truth_raw=task.ground_truth,
+        final_answer_raw=None,
+        metadata=task.metadata,
+        openrouter_api_key=openrouter_api_key,
+        judge_model=judge_model,
+        judge_openrouter_params=judge_openrouter_params,
+    )
+    return build_task_failure_evaluation(
+        context,
+        reason=reason,
+        failure_category=failure_category,
+        error_type=error_type,
+        error_message=error_message,
+        source_status=source_status,
+    )
 
 
 
