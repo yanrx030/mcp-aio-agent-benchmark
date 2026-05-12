@@ -27,14 +27,10 @@ _DIRECT_OPENROUTER_KWARGS = {
 # Default tolerance policy for count-like outputs:
 # - small absolute wiggle room for low-volume counts
 # - tiny relative wiggle room for high-volume counts with minor backfill
-# _SERIES_ABS_TOLERANCE_DEFAULT = 1.0
-# _SERIES_REL_TOLERANCE_DEFAULT = 1e-6
-# _SCALAR_ABS_TOLERANCE_DEFAULT = 1.0
-# _SCALAR_REL_TOLERANCE_DEFAULT = 1e-6
-_SERIES_ABS_TOLERANCE_DEFAULT = 0
-_SERIES_REL_TOLERANCE_DEFAULT = 0
-_SCALAR_ABS_TOLERANCE_DEFAULT = 0
-_SCALAR_REL_TOLERANCE_DEFAULT = 0
+_SERIES_ABS_TOLERANCE_DEFAULT = 0.5
+_SERIES_REL_TOLERANCE_DEFAULT = 1e-6
+_SCALAR_ABS_TOLERANCE_DEFAULT = 0.5
+_SCALAR_REL_TOLERANCE_DEFAULT = 1e-6
 
 
 @dataclass(slots=True)
@@ -405,6 +401,9 @@ def _normalize_unit(unit: str | None) -> str | None:
         "posts": "posts",
         "count": "posts",
         "counts": "posts",
+        "records": "posts",
+        "record": "posts",
+        "entries": "posts",
         "%": "percent",
         "percentage": "percent",
         "percent": "percent",

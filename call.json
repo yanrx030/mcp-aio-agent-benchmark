@@ -1,8 +1,7 @@
 {
-    "tool_name": "get_topic_groupings",
+    "tool_name": "text_search",
     "arguments": {
-        "collection": "reddit",
-        "startdate": "2023-12-24",
-        "enddate": "2023-12-25"
+      "collection": "mastodon",
+      "query": "hashtags:melbourne AND date:[2024-01-29 TO 2024-02-04]"
     }
-}
+  }
