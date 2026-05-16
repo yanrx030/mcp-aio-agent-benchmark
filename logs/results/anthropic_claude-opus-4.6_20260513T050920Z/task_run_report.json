@@ -1,0 +1,84 @@
+{
+  "generated_at": "2026-05-13T05:09:21Z",
+  "source_csv": "task\\taskset35.csv",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  },
+  "summary": {
+    "total_tasks": 1,
+    "finished_with_result_tasks": 0,
+    "failed_tasks": 1,
+    "tasks_retried": 0,
+    "tasks_with_auth_refresh": 0,
+    "tasks_with_cleanup_warning": 0,
+    "Evaluated tasks": 1,
+    "Task Completion Rate (TCR)": 0.0,
+    "average_tool_appropriateness": null,
+    "macro_average_parameter_schema_valid_rate(PSV)": null,
+    "macro_average_constraint_compliance_rates(CCR)": null,
+    "average_total_tokens": null,
+    "judge_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "text_judge_evaluations": 0,
+      "evaluations_with_usage": 0
+    },
+    "average_judge_total_tokens": null,
+    "average_total_steps(temp)": null,
+    "average_total_tool_calls": null,
+    "average_latency": 1.1667955997399986,
+    "average_end_to_end_latency": 1.1669315001927316,
+    "average_attempt_count": 1.0,
+    "model": "anthropic/claude-opus-4.6",
+    "jwt_login_count": 1,
+    "jwt_refresh_count": 0
+  },
+  "results": [
+    {
+      "task_id": "D7",
+      "prompt": "Compare Reddit activity between January and September 2024. How much did total post volume change, and did weekday/weekend posting patterns remain similar across the two months?",
+      "status": "failed",
+      "started_at": "2026-05-13T05:09:20Z",
+      "finished_at": "2026-05-13T05:09:21Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": null,
+      "constraint_compliance_rate": null,
+      "total_tokens": null,
+      "total_steps": null,
+      "total_tool_calls": null,
+      "latency": 1.1667955997399986,
+      "end_to_end_latency": 1.1669315001927316,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": null,
+      "ground_truth_validation": {
+        "score": 0,
+        "passed": false,
+        "strategy": "task_failure",
+        "answer_type": "text",
+        "normalized_answer_type": "text",
+        "dispatch_type": "text",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": "missing payload",
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": null,
+          "reason": "task execution failed before final answer was produced",
+          "failure_category": "task_execution_failed",
+          "error_type": "APIStatusError",
+          "error_message": "Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 65536 tokens, but can only afford 41772. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}",
+          "source_status": "failed"
+        }
+      },
+      "tool_appropriateness": null,
+      "error_type": "APIStatusError",
+      "error_message": "Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 65536 tokens, but can only afford 41772. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}"
+    }
+  ]
+}

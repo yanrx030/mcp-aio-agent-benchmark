@@ -1,0 +1,12 @@
+Metric,Value
+Task completion rate,0.8571428571428571
+Pass@3,0.9428571428571428
+Inter-run consistency,0.9333333333333332
+Strict all-run consistency,0.8
+Average Parameter Schema Validity,1.0
+Average Constraint Compliance Rate,0.9115591397849462
+Average Tool Appropriateness,0.8465641225379077
+Average latency (s),82.18782755718345
+Average tokens per task,22033.73786407767
+Tokens per successful task,25216.38888888889
+Cost per successful task (USD),0.012584162500000003

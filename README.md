@@ -58,7 +58,7 @@ uv run --env-file .env main.py --task-id 1 --task-id 4
 Use a custom task CSV:
 
 ```bash
-uv run --env-file .env main.py --task-file task/task35.csv
+uv run --env-file .env main.py --task-file task/taskset35.csv
 ```
 
 Run a single ad hoc prompt:
