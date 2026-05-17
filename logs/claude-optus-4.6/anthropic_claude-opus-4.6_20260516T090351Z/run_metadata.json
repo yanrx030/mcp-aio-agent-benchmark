@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260516T090351Z_0faffc",
+  "task_set_dir": "logs\\results\\anthropic_claude-opus-4.6_20260516T090351Z",
+  "created_at": "2026-05-16T09:03:51Z",
+  "tool_agent_model": "anthropic/claude-opus-4.6",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-05-16T09:08:58Z",
+  "judge_token_usage": {
+    "input_tokens": 29267,
+    "output_tokens": 27659,
+    "total_tokens": 56926,
+    "text_judge_evaluations": 22,
+    "evaluations_with_usage": 22
+  }
+}

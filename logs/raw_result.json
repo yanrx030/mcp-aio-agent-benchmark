@@ -5,182 +5,99 @@
     "content": [
       {
         "type": "text",
-        "text": "{\"directed\":true,\"graph\":{},\"links\":[{\"common_terms\":[\"thing\",\"year\",\"famili\",\"car\",\"someon\",\"polic\",\"work\",\"week\",\"time\",\"peopl\",\"someth\",\"christma\",\"way\",\"home\",\"day\"],\"sequences\":[],\"source\":\"20231224-0\",\"target\":\"20231225-0\",\"weight\":15},{\"common_terms\":[\"hama\",\"year\",\"children\",\"war\",\"protest\",\"kid\",\"fuck\",\"time\",\"peopl\",\"christma\",\"way\"],\"sequences\":[],\"source\":\"20231224-1\",\"target\":\"20231225-0\",\"weight\":11}],\"multigraph\":false,\"nodes\":[{\"day\":0,\"id\":\"20231224-0\",\"sequences\":[1],\"sequencesMax\":2,\"size\":403,\"terms\":[\"peopl\",\"year\",\"time\",\"day\",\"christma\",\"hous\",\"thing\",\"car\",\"home\",\"way\",\"someon\",\"dog\",\"week\",\"place\",\"thank\",\"famili\",\"train\",\"work\",\"agent\",\"market\",\"area\",\"polic\",\"shop\",\"properti\",\"lot\",\"someth\",\"http\",\"amp\",\"insur\",\"tomorrow\"]},{\"day\":1,\"id\":\"20231225-0\",\"sequences\":[1],\"sequencesMax\":2,\"size\":51,\"terms\":[\"peopl\",\"day\",\"time\",\"christma\",\"year\",\"famili\",\"thing\",\"way\",\"kid\",\"someon\",\"everyon\",\"someth\",\"home\",\"protest\",\"covid\",\"children\",\"work\",\"car\",\"hama\",\"fuck\",\"noth\",\"anyth\",\"today\",\"week\",\"event\",\"polic\",\"life\",\"war\",\"point\",\"toll\"]},{\"day\":0,\"id\":\"20231224-1\",\"sequences\":[3],\"sequencesMax\":2,\"size\":8,\"terms\":[\"israel\",\"peopl\",\"hama\",\"children\",\"protest\",\"war\",\"palestin\",\"palestinian\",\"kid\",\"gaza\",\"conflict\",\"govern\",\"time\",\"support\",\"caus\",\"world\",\"jesu\",\"civilian\",\"jew\",\"place\",\"australia\",\"stage\",\"year\",\"christma\",\"fuck\",\"way\",\"genocid\",\"countri\",\"idf\",\"isra\"]}]}",
+        "text": "[{\"id\":\"reddit-20250301\",\"corpus\":{\"start\":\"2025-03-01T00:00:00+11:00\",\"end\":\"2025-03-01T23:59:59+11:00\",\"days\":1,\"ndocuments\":4461},\"processing\":{\"start\":\"2025-03-05T03:48:01+11:00\",\"end\":\"2025-03-05T03:48:44+11:00\",\"procminutes\":0,\"corpussize\":350,\"dictionarysize\":5500,\"parameters\":{\"w2v\":{\"wv_vector_size\":100,\"wv_min_count\":30,\"wv_window_size\":5,\"wv_training_algorithm\":0},\"clustering\":{\"bert_model\":\"w2v\",\"bert_top_n_words\":30,\"bert_min_topic_size\":5}}}},{\"id\":\"reddit-20250302\",\"corpus\":{\"start\":\"2025-03-02T00:00:00+11:00\",\"end\":\"2025-03-02T23:59:59+11:00\",\"days\":1,\"ndocuments\":4997},\"processing\":{\"start\":\"2025-03-05T03:48:15+11:00\",\"end\":\"2025-03-05T03:51:10+11:00\",\"procminutes\":2,\"corpussize\":383,\"dictionarysize\":5954,\"parameters\":{\"w2v\":{\"wv_vector_size\":100,\"wv_min_count\":30,\"wv_window_size\":5,\"wv_training_algorithm\":0},\"clustering\":{\"bert_model\":\"w2v\",\"bert_top_n_words\":30,\"bert_min_topic_size\":5}}}},{\"id\":\"reddit-20250303\",\"corpus\":{\"start\":\"2025-03-03T00:00:00+11:00\",\"end\":\"2025-03-03T23:59:59+11:00\",\"days\":1,\"ndocuments\":4213},\"processing\":{\"start\":\"2025-03-05T03:48:14+11:00\",\"end\":\"2025-03-05T03:48:57+11:00\",\"procminutes\":0,\"corpussize\":391,\"dictionarysize\":5268,\"parameters\":{\"w2v\":{\"wv_vector_size\":100,\"wv_min_count\":30,\"wv_window_size\":5,\"wv_training_algorithm\":0},\"clustering\":{\"bert_model\":\"w2v\",\"bert_top_n_words\":30,\"bert_min_topic_size\":5}}}}]",
         "annotations": null,
         "meta": null
       }
     ],
     "structuredContent": {
-      "directed": true,
-      "graph": {},
-      "links": [
+      "result": [
         {
-          "common_terms": [
-            "thing",
-            "year",
-            "famili",
-            "car",
-            "someon",
-            "polic",
-            "work",
-            "week",
-            "time",
-            "peopl",
-            "someth",
-            "christma",
-            "way",
-            "home",
-            "day"
-          ],
-          "sequences": [],
-          "source": "20231224-0",
-          "target": "20231225-0",
-          "weight": 15
+          "id": "reddit-20250301",
+          "corpus": {
+            "start": "2025-03-01T00:00:00+11:00",
+            "end": "2025-03-01T23:59:59+11:00",
+            "days": 1,
+            "ndocuments": 4461
+          },
+          "processing": {
+            "start": "2025-03-05T03:48:01+11:00",
+            "end": "2025-03-05T03:48:44+11:00",
+            "procminutes": 0,
+            "corpussize": 350,
+            "dictionarysize": 5500,
+            "parameters": {
+              "w2v": {
+                "wv_vector_size": "<max_depth_reached type=int>",
+                "wv_min_count": "<max_depth_reached type=int>",
+                "wv_window_size": "<max_depth_reached type=int>",
+                "wv_training_algorithm": "<max_depth_reached type=int>"
+              },
+              "clustering": {
+                "bert_model": "<max_depth_reached type=str>",
+                "bert_top_n_words": "<max_depth_reached type=int>",
+                "bert_min_topic_size": "<max_depth_reached type=int>"
+              }
+            }
+          }
         },
         {
-          "common_terms": [
-            "hama",
-            "year",
-            "children",
-            "war",
-            "protest",
-            "kid",
-            "fuck",
-            "time",
-            "peopl",
-            "christma",
-            "way"
-          ],
-          "sequences": [],
-          "source": "20231224-1",
-          "target": "20231225-0",
-          "weight": 11
-        }
-      ],
-      "multigraph": false,
-      "nodes": [
-        {
-          "day": 0,
-          "id": "20231224-0",
-          "sequences": [
-            1
-          ],
-          "sequencesMax": 2,
-          "size": 403,
-          "terms": [
-            "peopl",
-            "year",
-            "time",
-            "day",
-            "christma",
-            "hous",
-            "thing",
-            "car",
-            "home",
-            "way",
-            "someon",
-            "dog",
-            "week",
-            "place",
-            "thank",
-            "famili",
-            "train",
-            "work",
-            "agent",
-            "market",
-            "area",
-            "polic",
-            "shop",
-            "properti",
-            "lot",
-            "someth",
-            "http",
-            "amp",
-            "insur",
-            "tomorrow"
-          ]
+          "id": "reddit-20250302",
+          "corpus": {
+            "start": "2025-03-02T00:00:00+11:00",
+            "end": "2025-03-02T23:59:59+11:00",
+            "days": 1,
+            "ndocuments": 4997
+          },
+          "processing": {
+            "start": "2025-03-05T03:48:15+11:00",
+            "end": "2025-03-05T03:51:10+11:00",
+            "procminutes": 2,
+            "corpussize": 383,
+            "dictionarysize": 5954,
+            "parameters": {
+              "w2v": {
+                "wv_vector_size": "<max_depth_reached type=int>",
+                "wv_min_count": "<max_depth_reached type=int>",
+                "wv_window_size": "<max_depth_reached type=int>",
+                "wv_training_algorithm": "<max_depth_reached type=int>"
+              },
+              "clustering": {
+                "bert_model": "<max_depth_reached type=str>",
+                "bert_top_n_words": "<max_depth_reached type=int>",
+                "bert_min_topic_size": "<max_depth_reached type=int>"
+              }
+            }
+          }
         },
         {
-          "day": 1,
-          "id": "20231225-0",
-          "sequences": [
-            1
-          ],
-          "sequencesMax": 2,
-          "size": 51,
-          "terms": [
-            "peopl",
-            "day",
-            "time",
-            "christma",
-            "year",
-            "famili",
-            "thing",
-            "way",
-            "kid",
-            "someon",
-            "everyon",
-            "someth",
-            "home",
-            "protest",
-            "covid",
-            "children",
-            "work",
-            "car",
-            "hama",
-            "fuck",
-            "noth",
-            "anyth",
-            "today",
-            "week",
-            "event",
-            "polic",
-            "life",
-            "war",
-            "point",
-            "toll"
-          ]
-        },
-        {
-          "day": 0,
-          "id": "20231224-1",
-          "sequences": [
-            3
-          ],
-          "sequencesMax": 2,
-          "size": 8,
-          "terms": [
-            "israel",
-            "peopl",
-            "hama",
-            "children",
-            "protest",
-            "war",
-            "palestin",
-            "palestinian",
-            "kid",
-            "gaza",
-            "conflict",
-            "govern",
-            "time",
-            "support",
-            "caus",
-            "world",
-            "jesu",
-            "civilian",
-            "jew",
-            "place",
-            "australia",
-            "stage",
-            "year",
-            "christma",
-            "fuck",
-            "way",
-            "genocid",
-            "countri",
-            "idf",
-            "isra"
-          ]
+          "id": "reddit-20250303",
+          "corpus": {
+            "start": "2025-03-03T00:00:00+11:00",
+            "end": "2025-03-03T23:59:59+11:00",
+            "days": 1,
+            "ndocuments": 4213
+          },
+          "processing": {
+            "start": "2025-03-05T03:48:14+11:00",
+            "end": "2025-03-05T03:48:57+11:00",
+            "procminutes": 0,
+            "corpussize": 391,
+            "dictionarysize": 5268,
+            "parameters": {
+              "w2v": {
+                "wv_vector_size": "<max_depth_reached type=int>",
+                "wv_min_count": "<max_depth_reached type=int>",
+                "wv_window_size": "<max_depth_reached type=int>",
+                "wv_training_algorithm": "<max_depth_reached type=int>"
+              },
+              "clustering": {
+                "bert_model": "<max_depth_reached type=str>",
+                "bert_top_n_words": "<max_depth_reached type=int>",
+                "bert_min_topic_size": "<max_depth_reached type=int>"
+              }
+            }
+          }
         }
       ]
     },
