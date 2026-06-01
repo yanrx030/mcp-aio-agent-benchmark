@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T07:20:12Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 24834,
     "output_tokens": 24757,
@@ -12,7 +12,7 @@
     "model": "qwen/qwen3.6-plus",
     "total_tasks": 35,
     "finished_with_result_tasks": 35,
-    "Task Completion Rate (TCR)": 0.8571428571428571,
+    "Task Completion Rate (TCR)": 0.8857142857142857,
     "average_tool_appropriateness": 0.8373274794551391,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 0.9273073989321129,
@@ -336,7 +336,7 @@
         "text_search",
         "text_search"
       ],
-      "passed": false,
+      "passed": true,
       "answer_type": "timeseries",
       "final_answer": "{\n  \"status\": \"success\",\n  \"answer\": {\n    \"x_axis_type\": \"time\",\n    \"granularity\": \"week\",\n    \"value_unit\": \"count\",\n    \"series\": [\n      {\n        \"label\": \"#melbourne posts on Mastodon\",\n        \"points\": [\n          {\n            \"x\": \"2024-01-01\",\n            \"value\": 69\n          },\n          {\n            \"x\": \"2024-01-08\",\n            \"value\": 52\n          },\n          {\n            \"x\": \"2024-01-15\",\n            \"value\": 64\n          },\n          {\n            \"x\": \"2024-01-22\",\n            \"value\": 57\n          },\n          {\n            \"x\": \"2024-01-29\",\n            \"value\": 20\n          }\n        ]\n      }\n    ],\n    \"comment\": \"Weekly counts of #melbourne posts on Mastodon for January 2024 using strict 7-day baskets starting Jan 1. The final bucket (Jan 29) covers only 3 days (Jan 29-31).\"\n  }\n}"
     },

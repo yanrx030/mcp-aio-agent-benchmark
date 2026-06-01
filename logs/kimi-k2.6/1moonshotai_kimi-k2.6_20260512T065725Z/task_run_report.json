@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T07:09:53Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 25172,
     "output_tokens": 26787,
@@ -2196,7 +2196,7 @@
           "final_answer_parse_error": "missing payload",
           "ground_truth_parser_used": "json",
           "final_answer_parser_used": null,
-          "reason": "task execution failed before final answer was produced",
+          "reason": "source result failed before final answer was produced",
           "failure_category": "task_execution_failed",
           "error_type": "RateLimitError",
           "error_message": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}",

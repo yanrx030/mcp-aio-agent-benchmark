@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T07:35:34Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 26005,
     "output_tokens": 26215,
@@ -12,7 +12,7 @@
     "model": "moonshotai/kimi-k2.6",
     "total_tasks": 35,
     "finished_with_result_tasks": 35,
-    "Task Completion Rate (TCR)": 0.8571428571428571,
+    "Task Completion Rate (TCR)": 0.8857142857142857,
     "average_tool_appropriateness": 0.835289181717753,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 0.9087301587301588,
@@ -349,7 +349,7 @@
         "text_search",
         "text_search"
       ],
-      "passed": false,
+      "passed": true,
       "answer_type": "timeseries",
       "final_answer": " {\"status\":\"success\",\"answer\":{\"x_axis_type\":\"time\",\"granularity\":\"week\",\"value_unit\":null,\"series\":[{\"label\":\"#melbourne posts\",\"points\":[{\"x\":\"2024-01-01\",\"value\":69},{\"x\":\"2024-01-08\",\"value\":52},{\"x\":\"2024-01-15\",\"value\":64},{\"x\":\"2024-01-22\",\"value\":57},{\"x\":\"2024-01-29\",\"value\":20}]}],\"comment\":\"Weekly counts of #melbourne Mastodon posts for January 2024 using 7-day baskets starting on Jan 1. The final basket (starting Jan 29) covers 3 days (Jan 29–31) to remain within the month.\"}}"
     },

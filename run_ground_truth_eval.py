@@ -26,23 +26,41 @@ from task_runner import (
     summarize_results,
 )
 
+_REPORT_FILENAME = "task_run_report.json"
+_SIMPLE_REPORT_FILENAME = "task_run_report_simple.json"
+_DEFAULT_BATCH_GLOB = "*/*/task_run_report.json"
+_EXCLUDED_REPORT_ROOT_NAMES = frozenset({"results"})
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Re-run ground-truth evaluation against an existing task_run_report.json "
-            "and write a new task_run_report-style JSON file."
+            "Re-run ground-truth evaluation against existing task_run_report JSON files "
+            "without re-running the tool-using agent."
         )
     )
     parser.add_argument(
         "--report-file",
-        required=True,
-        help="Path to an existing task_run_report.json file.",
+        default=None,
+        help="Path to a single existing task_run_report.json file.",
+    )
+    parser.add_argument(
+        "--reports-root",
+        default=None,
+        help="Root directory for batch discovery of production reports.",
+    )
+    parser.add_argument(
+        "--report-glob",
+        default=_DEFAULT_BATCH_GLOB,
+        help=(
+            "Glob pattern, relative to --reports-root, used to discover full report files. "
+            f"Default: {_DEFAULT_BATCH_GLOB}"
+        ),
     )
     parser.add_argument(
         "--task-file",
         default=None,
-        help="Benchmark CSV path. Defaults to source_csv from the report file.",
+        help="Benchmark CSV path. Defaults to source_csv from each report file.",
     )
     parser.add_argument(
         "--manifest",
@@ -80,46 +98,34 @@ def parse_args() -> argparse.Namespace:
         "--max-concurrency",
         type=int,
         default=4,
-        help="Maximum number of concurrent ground-truth evaluations.",
+        help="Maximum number of concurrent ground-truth evaluations per report.",
     )
     parser.add_argument(
         "--output",
         default=None,
-        help="Output JSON path. Defaults to <report_dir>/new_task_run_report.json.",
+        help="Output JSON path for single-report mode. Defaults to <report_dir>/new_task_run_report.json.",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite each source task_run_report.json in place.",
+    )
+    parser.add_argument(
+        "--rewrite-simple-report",
+        action="store_true",
+        help="Also rewrite the corresponding task_run_report_simple.json file.",
     )
     return parser.parse_args()
 
 
 async def main() -> None:
     args = parse_args()
+    report_paths = _resolve_report_paths(args)
 
-    report_path = Path(args.report_file)
-    report_payload = _load_json_object(report_path)
-    report_results = report_payload.get("results")
-    if not isinstance(report_results, list):
-        raise RuntimeError("Report file must contain a top-level 'results' array.")
-
-    task_file = _resolve_task_file(args.task_file, report_payload, report_path)
-    tasks = load_benchmark_tasks(task_file)
-    selected_tasks = select_tasks(tasks, task_ids=set(args.task_ids or []), limit=args.limit)
-    if args.only_text:
-        selected_tasks = [
-            task for task in selected_tasks if normalize_answer_type(task.answer_type) == "text"
-        ]
-    if not selected_tasks:
-        raise RuntimeError("No tasks selected. Check --task-id, --limit, --task-file, or --only-text.")
-
-    task_by_id = {task.task_id: task for task in tasks}
-    selected_task_ids = {task.task_id for task in selected_tasks}
-    source_result_by_task_id = {
-        str(item.get("task_id")): item for item in report_results if isinstance(item, dict)
-    }
-    missing_in_report = [task_id for task_id in selected_task_ids if task_id not in source_result_by_task_id]
-    if missing_in_report:
-        print(
-            "Warning: selected task ids were not found in the report and will be skipped: "
-            + ", ".join(sorted(missing_in_report))
-        )
+    if args.overwrite and args.output:
+        raise RuntimeError("Do not combine --overwrite with --output.")
+    if args.output and len(report_paths) != 1:
+        raise RuntimeError("--output can only be used when exactly one report is selected.")
 
     judge_model, judge_openrouter_params, config_source = _resolve_judge_config(
         manifest_path=Path(args.manifest),
@@ -129,56 +135,89 @@ async def main() -> None:
     openrouter_api_key = os.environ.get("OPENROUTER_API_KEY", "")
 
     print(
-        f"Loaded {len(tasks)} task(s) from {task_file}. "
-        f"Selected {len(selected_task_ids)} task(s) for re-evaluation."
-    )
-    print(
-        f"Using judge: {judge_model or 'none'}, "
-        f"parameters: {judge_openrouter_params}, source: {config_source}"
+        f"Selected {len(report_paths)} report(s). "
+        f"Using judge: {judge_model or 'none'}, parameters: {judge_openrouter_params}, source: {config_source}"
     )
 
-    updated_results = copy.deepcopy(report_results)
-    rerun_count = await _rerun_ground_truth_validation(
-        results=updated_results,
-        task_by_id=task_by_id,
-        selected_task_ids=selected_task_ids,
-        openrouter_api_key=openrouter_api_key,
-        judge_model=judge_model,
-        judge_openrouter_params=judge_openrouter_params,
-        max_concurrency=args.max_concurrency,
-    )
+    task_context_cache: dict[Path, tuple[list[BenchmarkTask], dict[str, BenchmarkTask], set[str]]] = {}
+    total_rerun_count = 0
 
-    updated_task_results = [
-        _task_run_result_from_payload(item)
-        for item in updated_results
-        if isinstance(item, dict)
-    ]
-    summary = summarize_results(updated_task_results)
-    summary = {**summary, **_extract_summary_extras(report_payload.get("summary"), summary)}
-    judge_token_usage = summarize_judge_token_usage(updated_task_results)
+    for index, report_path in enumerate(report_paths, start=1):
+        print(f"[report {index}/{len(report_paths)}] loading {report_path}")
+        report_payload = _load_json_object(report_path)
+        report_results = report_payload.get("results")
+        if not isinstance(report_results, list):
+            raise RuntimeError(f"Report file must contain a top-level 'results' array: {report_path}")
 
-    extra_top_level_fields = {
-        key: value
-        for key, value in report_payload.items()
-        if key not in {"generated_at", "source_csv", "judge_token_usage", "summary", "results"}
-    }
-    new_report_payload = {
-        "generated_at": _utc_now_iso(),
-        "source_csv": report_payload.get("source_csv") or str(task_file),
-        "judge_token_usage": judge_token_usage,
-        "summary": summary,
-        "results": updated_results,
-        **extra_top_level_fields,
-    }
+        task_file = _resolve_task_file(args.task_file, report_payload, report_path)
+        task_context = task_context_cache.get(task_file)
+        if task_context is None:
+            task_context = _load_task_context(
+                task_file=task_file,
+                task_ids=set(args.task_ids or []),
+                limit=args.limit,
+                only_text=args.only_text,
+            )
+            task_context_cache[task_file] = task_context
 
-    output_path = _resolve_output_path(args.output, report_path)
-    output_path.write_text(
-        json.dumps(new_report_payload, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+        tasks, task_by_id, selected_task_ids = task_context
+        if not selected_task_ids:
+            raise RuntimeError(
+                "No tasks selected. Check --task-id, --limit, --task-file, or --only-text."
+            )
 
-    print(f"Re-ran ground-truth evaluation for {rerun_count} task(s).")
-    print(f"Wrote task_run_report-style output to {output_path}")
+        source_result_by_task_id = {
+            str(item.get("task_id")): item for item in report_results if isinstance(item, dict)
+        }
+        missing_in_report = [
+            task_id for task_id in selected_task_ids if task_id not in source_result_by_task_id
+        ]
+        if missing_in_report:
+            print(
+                f"[report {index}/{len(report_paths)}] warning: selected task ids were not found and will be skipped: "
+                + ", ".join(sorted(missing_in_report))
+            )
+
+        updated_results = copy.deepcopy(report_results)
+        rerun_count = await _rerun_ground_truth_validation(
+            results=updated_results,
+            task_by_id=task_by_id,
+            selected_task_ids=selected_task_ids,
+            openrouter_api_key=openrouter_api_key,
+            judge_model=judge_model,
+            judge_openrouter_params=judge_openrouter_params,
+            max_concurrency=args.max_concurrency,
+        )
+        total_rerun_count += rerun_count
+
+        generated_at = _utc_now_iso()
+        new_report_payload, updated_task_results = _build_full_report_payload(
+            report_payload=report_payload,
+            task_file=task_file,
+            updated_results=updated_results,
+            generated_at=generated_at,
+        )
+
+        output_path = report_path if args.overwrite else _resolve_output_path(args.output, report_path)
+        _write_json_atomic(output_path, new_report_payload)
+        print(
+            f"[report {index}/{len(report_paths)}] re-ran {rerun_count} task(s); "
+            f"wrote full report to {output_path}"
+        )
+
+        if args.rewrite_simple_report:
+            simple_output_path = _resolve_simple_output_path(output_path, overwrite=args.overwrite)
+            simple_payload = _build_simple_report_payload(
+                full_report_payload=new_report_payload,
+                updated_results=updated_results,
+                generated_at=generated_at,
+            )
+            _write_json_atomic(simple_output_path, simple_payload)
+            print(
+                f"[report {index}/{len(report_paths)}] wrote simple report to {simple_output_path}"
+            )
+
+    print(f"Re-ran ground-truth evaluation for {total_rerun_count} task(s) across {len(report_paths)} report(s).")
 
 
 async def _rerun_ground_truth_validation(
@@ -341,6 +380,98 @@ def _build_failure_validation(
     )
 
 
+def _build_full_report_payload(
+    *,
+    report_payload: dict[str, Any],
+    task_file: Path,
+    updated_results: list[Any],
+    generated_at: str,
+) -> tuple[dict[str, Any], list[TaskRunResult]]:
+    updated_task_results = [
+        _task_run_result_from_payload(item)
+        for item in updated_results
+        if isinstance(item, dict)
+    ]
+    summary = summarize_results(updated_task_results)
+    summary = {**summary, **_extract_summary_extras(report_payload.get("summary"), summary)}
+    judge_token_usage = summarize_judge_token_usage(updated_task_results)
+
+    extra_top_level_fields = {
+        key: value
+        for key, value in report_payload.items()
+        if key not in {"generated_at", "source_csv", "judge_token_usage", "summary", "results"}
+    }
+    new_report_payload = {
+        "generated_at": generated_at,
+        "source_csv": str(task_file),
+        "judge_token_usage": judge_token_usage,
+        "summary": summary,
+        "results": updated_results,
+        **extra_top_level_fields,
+    }
+    return new_report_payload, updated_task_results
+
+
+def _build_simple_report_payload(
+    *,
+    full_report_payload: dict[str, Any],
+    updated_results: list[Any],
+    generated_at: str,
+) -> dict[str, Any]:
+    summary = full_report_payload.get("summary") if isinstance(full_report_payload.get("summary"), dict) else {}
+    simple_summary = {
+        "model": _clean_str(summary.get("model")) or _resolve_report_model_from_results(updated_results),
+        "total_tasks": summary.get("total_tasks"),
+        "finished_with_result_tasks": summary.get("finished_with_result_tasks"),
+        "Task Completion Rate (TCR)": summary.get("Task Completion Rate (TCR)"),
+        "average_tool_appropriateness": summary.get("average_tool_appropriateness"),
+        "macro_average_parameter_schema_valid_rate(PSV)": summary.get(
+            "macro_average_parameter_schema_valid_rate(PSV)"
+        ),
+        "macro_average_constraint_compliance_rates(CCR)": summary.get(
+            "macro_average_constraint_compliance_rates(CCR)"
+        ),
+        "average_total_tokens": summary.get("average_total_tokens"),
+        "judge_token_usage": summary.get("judge_token_usage"),
+        "average_judge_total_tokens": summary.get("average_judge_total_tokens"),
+        "average_total_steps(temp)": summary.get("average_total_steps(temp)"),
+        "average_total_tool_calls": summary.get("average_total_tool_calls"),
+        "average_latency": summary.get("average_latency"),
+    }
+    return {
+        "generated_at": generated_at,
+        "source_csv": full_report_payload.get("source_csv"),
+        "judge_token_usage": full_report_payload.get("judge_token_usage"),
+        "summary": simple_summary,
+        "results": [
+            _build_simple_result_payload(item) for item in updated_results if isinstance(item, dict)
+        ],
+    }
+
+
+def _build_simple_result_payload(result: dict[str, Any]) -> dict[str, Any]:
+    query_trace = result.get("query_trace")
+    if not isinstance(query_trace, dict):
+        query_trace = {}
+    validation = result.get("ground_truth_validation")
+    if not isinstance(validation, dict):
+        validation = {}
+
+    return {
+        "task_id": result.get("task_id"),
+        "parameter_schema_valid_rate": result.get("parameter_schema_valid_rate"),
+        "constraint_compliance_rate": result.get("constraint_compliance_rate"),
+        "total_tokens": result.get("total_tokens"),
+        "total_steps": result.get("total_steps"),
+        "total_tool_calls": result.get("total_tool_calls"),
+        "latency": result.get("latency"),
+        "tools_used": query_trace.get("tools_used") or [],
+        "passed": validation.get("passed"),
+        "answer_type": result.get("answer_type"),
+        "final_answer": query_trace.get("final_answer"),
+    }
+
+
 def _extract_summary_extras(
     original_summary: Any,
     recalculated_summary: dict[str, Any],
@@ -371,6 +502,24 @@ def _task_run_result_from_payload(payload: dict[str, Any]) -> TaskRunResult:
     return TaskRunResult(**filtered)
 
 
+def _load_task_context(
+    *,
+    task_file: Path,
+    task_ids: set[str],
+    limit: int | None,
+    only_text: bool,
+) -> tuple[list[BenchmarkTask], dict[str, BenchmarkTask], set[str]]:
+    tasks = load_benchmark_tasks(task_file)
+    selected_tasks = select_tasks(tasks, task_ids=task_ids, limit=limit)
+    if only_text:
+        selected_tasks = [
+            task for task in selected_tasks if normalize_answer_type(task.answer_type) == "text"
+        ]
+    task_by_id = {task.task_id: task for task in tasks}
+    selected_task_ids = {task.task_id for task in selected_tasks}
+    return tasks, task_by_id, selected_task_ids
+
+
 def _resolve_task_file(
     cli_task_file: str | None,
     report_payload: dict[str, Any],
@@ -399,10 +548,67 @@ def _resolve_task_file(
     )
 
 
+def _resolve_report_paths(args: argparse.Namespace) -> list[Path]:
+    report_file = _clean_str(args.report_file)
+    reports_root = _clean_str(args.reports_root)
+
+    if bool(report_file) == bool(reports_root):
+        raise RuntimeError("Pass exactly one of --report-file or --reports-root.")
+
+    if report_file:
+        return [Path(report_file)]
+
+    root = Path(reports_root or "")
+    if not root.exists():
+        raise RuntimeError(f"Reports root does not exist: {root}")
+
+    report_paths: list[Path] = []
+    for candidate in root.glob(args.report_glob):
+        if not candidate.is_file():
+            continue
+        if candidate.name != _REPORT_FILENAME:
+            continue
+        try:
+            relative = candidate.relative_to(root)
+        except ValueError:
+            continue
+        if len(relative.parts) != 3:
+            continue
+        if relative.parts[0] in _EXCLUDED_REPORT_ROOT_NAMES:
+            continue
+        report_paths.append(candidate)
+
+    report_paths = sorted(set(report_paths))
+    if not report_paths:
+        raise RuntimeError(
+            f"No production reports matched glob {args.report_glob!r} under {root}"
+        )
+    return report_paths
+
+
 def _resolve_output_path(output_arg: str | None, report_path: Path) -> Path:
     if output_arg:
         return Path(output_arg)
     return report_path.parent / "new_task_run_report.json"
+
+
+def _resolve_simple_output_path(full_output_path: Path, *, overwrite: bool) -> Path:
+    if overwrite:
+        return full_output_path.parent / _SIMPLE_REPORT_FILENAME
+    if full_output_path.name == "new_task_run_report.json":
+        return full_output_path.parent / "new_task_run_report_simple.json"
+    return full_output_path.with_name(f"{full_output_path.stem}_simple{full_output_path.suffix}")
+
+
+def _write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = path.with_name(f".{path.name}.tmp")
+    try:
+        temp_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        temp_path.replace(path)
+    finally:
+        if temp_path.exists():
+            temp_path.unlink()
 
 
 def _load_json_object(path: Path) -> dict[str, Any]:
@@ -411,6 +617,19 @@ def _load_json_object(path: Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise RuntimeError(f"Expected JSON object in {path}")
     return payload
+
+
+def _resolve_report_model_from_results(results: list[Any]) -> str | None:
+    for result in results:
+        if not isinstance(result, dict):
+            continue
+        query_trace = result.get("query_trace")
+        if not isinstance(query_trace, dict):
+            continue
+        model = _clean_str(query_trace.get("model"))
+        if model:
+            return model
+    return None
 
 
 def _coerce_raw_payload(value: Any) -> str | None:

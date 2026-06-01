@@ -31,6 +31,9 @@ Run the benchmark with defaults:
 
 ```bash
 uv run --env-file .env main.py
+
+
+uv run --env-file .env main.py --task-id C5 --task-file task/taskset35.csv
 ```
 
 Default behavior:
@@ -104,6 +107,17 @@ Re-run only the ground-truth evaluator against an existing report:
 uv run --env-file .env run_ground_truth_eval.py --report-file logs/results/<run_dir>/task_run_report.json
 ```
 
+Re-run one corrected task across all production reports and overwrite the stored JSON reports in place:
+
+```bash
+uv run --env-file .env run_ground_truth_eval.py \
+  --reports-root logs \
+  --task-file task/taskset35-updated.csv \
+  --task-id C2 \
+  --overwrite \
+  --rewrite-simple-report
+```
+
 Compare multiple LLM judges on just the text tasks:
 
 ```bash
@@ -119,6 +133,32 @@ Notes:
 - `run_ground_truth_eval.py` reuses the original `task_run_report.json` final answers, so it does not re-run the tool-using agent.
 - If `--task-file` is omitted, it uses the `source_csv` recorded in the report.
 - When a `--judge-model` exists in `manifest.yaml`, the script also reuses that model's OpenRouter/provider settings.
+- `--reports-root logs` discovers only production reports that match `logs/<model>/<run>/task_run_report.json`; it skips deeper archival trees such as `logs/results/...`.
+- `--overwrite` updates the full report in place, and `--rewrite-simple-report` refreshes the matching `task_run_report_simple.json`.
+
+Update report summaries after manually replacing one task's report content:
+
+```bash
+uv run python utils/update_task_run_report_summary.py logs/claude-sonnet-4.6/1anthropic_claude-sonnet-4.6_20260512T072817Z
+```
+
+Preview summary changes without writing files:
+
+```bash
+uv run python utils/update_task_run_report_summary.py logs/claude-sonnet-4.6/1anthropic_claude-sonnet-4.6_20260512T072817Z --dry-run
+```
+
+Preserve the existing `generated_at` timestamp:
+
+```bash
+uv run python utils/update_task_run_report_summary.py logs/claude-sonnet-4.6/1anthropic_claude-sonnet-4.6_20260512T072817Z --keep-generated-at
+```
+
+Notes:
+
+- The script recalculates aggregate `summary` fields from the current `task_run_report.json` `results`.
+- It also updates the matching `task_run_report_simple.json` summary when that file exists.
+- It does not re-run the tool-using agent or the ground-truth judge.
 
 Use a non-default manifest path:
 

@@ -1,8 +1,9 @@
 {
-    "tool_name": "get_nlp_metadata",
+    "tool_name": "get_topic_groupings",
     "arguments": {
         "collection": "reddit",
-        "startdate": "2025-03-01",
-        "enddate": "2025-03-03"
+        "startdate": "2023-12-24",
+        "enddate": "2023-12-25",
+        "threshold": 0
     }
 }

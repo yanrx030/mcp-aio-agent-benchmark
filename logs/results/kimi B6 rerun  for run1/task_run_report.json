@@ -1,0 +1,154 @@
+{
+  "generated_at": "2026-06-01T11:06:04Z",
+  "source_csv": "task\\taskset35.csv",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  },
+  "summary": {
+    "total_tasks": 1,
+    "finished_with_result_tasks": 1,
+    "failed_tasks": 0,
+    "tasks_retried": 0,
+    "tasks_with_auth_refresh": 0,
+    "tasks_with_cleanup_warning": 0,
+    "Evaluated tasks": 1,
+    "Task Completion Rate (TCR)": 1.0,
+    "average_tool_appropriateness": 0.75,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": 1.0,
+    "average_total_tokens": 13494.0,
+    "judge_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "text_judge_evaluations": 0,
+      "evaluations_with_usage": 0
+    },
+    "average_judge_total_tokens": null,
+    "average_total_steps(temp)": 3.0,
+    "average_total_tool_calls": 2.0,
+    "average_latency": 19.90932339988649,
+    "average_end_to_end_latency": 19.92395059997216,
+    "average_attempt_count": 1.0,
+    "model": "moonshotai/kimi-k2.6",
+    "jwt_login_count": 1,
+    "jwt_refresh_count": 0
+  },
+  "results": [
+    {
+      "task_id": "B6",
+      "prompt": "For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",
+      "status": "completed",
+      "started_at": "2026-06-01T11:05:44Z",
+      "finished_at": "2026-06-01T11:06:04Z",
+      "answer_type": "scalar",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 13494,
+      "total_steps": 3,
+      "total_tool_calls": 2,
+      "latency": 19.90932339988649,
+      "end_to_end_latency": 19.92395059997216,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_8a92c4b0d26d",
+        "task_set_id": "taskset_20260601T110543Z_d7526d",
+        "task_id": "B6",
+        "session_id": "session_d7531d0d916f",
+        "user_query": "For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",
+        "final_answer": " {\"status\":\"success\",\"answer\":{\"value\":13528,\"unit\":\"posts\",\"comment\":\"Size of the largest topic cluster in the bluesky collection across 2025-02-01 to 2025-02-03\"}}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 1,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collections",
+          "get_nlp_topics"
+        ],
+        "input_tokens": 12664,
+        "output_tokens": 830,
+        "total_tokens": 13494,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110543Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110543Z\\tool_calls\\B6.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 1,
+        "passed": true,
+        "strategy": "scalar_deterministic",
+        "answer_type": "scalar",
+        "normalized_answer_type": "scalar",
+        "dispatch_type": "scalar",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "expected": {
+            "value": 13528.0,
+            "unit": "posts"
+          },
+          "actual": {
+            "value": 13528.0,
+            "unit": "posts"
+          },
+          "tolerance": {
+            "abs": 0.5,
+            "rel": 1e-06
+          },
+          "value_match": true,
+          "unit_match": true,
+          "abs_error": 0.0,
+          "rel_error": 0.0
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "get_nlp_topics"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110543Z\\tool_calls\\B6.jsonl",
+        "query_id": "query_8a92c4b0d26d",
+        "tool_call_count": 2,
+        "core_call_count": 1,
+        "helper_call_count": 1,
+        "other_call_count": 0,
+        "weighted_score": 1.5,
+        "average_score": 0.75,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_nlp_topics",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    }
+  ]
+}

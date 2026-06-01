@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T07:44:03Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 16811,
     "output_tokens": 18914,

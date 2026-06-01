@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T07:07:36Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 23988,
     "output_tokens": 22252,
@@ -16,7 +16,7 @@
     "tasks_with_auth_refresh": 0,
     "tasks_with_cleanup_warning": 0,
     "Evaluated tasks": 35,
-    "Task Completion Rate (TCR)": 0.8,
+    "Task Completion Rate (TCR)": 0.8285714285714286,
     "average_tool_appropriateness": 0.8388569973443923,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 0.9117424242424242,
@@ -2233,8 +2233,8 @@
         "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260512T065857Z\\tool_calls\\C2.jsonl"
       },
       "ground_truth_validation": {
-        "score": 0,
-        "passed": false,
+        "score": 1,
+        "passed": true,
         "strategy": "series_deterministic",
         "answer_type": "timeseries",
         "normalized_answer_type": "timeseries",
@@ -2257,10 +2257,8 @@
             }
           ],
           "unmatched_actual_series": [],
-          "mismatch_count": 1,
-          "mismatches": [
-            "series[0] value mismatch at point[4]: expected 69.0, got 20.0"
-          ]
+          "mismatch_count": 0,
+          "mismatches": []
         }
       },
       "tool_appropriateness": {

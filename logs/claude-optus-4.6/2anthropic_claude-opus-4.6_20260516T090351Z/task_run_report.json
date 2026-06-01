@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T09:08:58Z",
+  "generated_at": "2026-05-22T06:09:39Z",
   "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 29267,
@@ -16,7 +16,7 @@
     "tasks_with_auth_refresh": 0,
     "tasks_with_cleanup_warning": 0,
     "Evaluated tasks": 35,
-    "Task Completion Rate (TCR)": 0.9142857142857143,
+    "Task Completion Rate (TCR)": 0.9428571428571428,
     "average_tool_appropriateness": 0.8473057644110275,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 0.9151515151515152,
@@ -2130,8 +2130,8 @@
         "tool_calls_path": "logs\\results\\anthropic_claude-opus-4.6_20260516T090351Z\\tool_calls\\C2.jsonl"
       },
       "ground_truth_validation": {
-        "score": 0,
-        "passed": false,
+        "score": 1,
+        "passed": true,
         "strategy": "series_deterministic",
         "answer_type": "timeseries",
         "normalized_answer_type": "timeseries",
@@ -2154,10 +2154,8 @@
             }
           ],
           "unmatched_actual_series": [],
-          "mismatch_count": 1,
-          "mismatches": [
-            "series[0] value mismatch at point[4]: expected 69.0, got 20.0"
-          ]
+          "mismatch_count": 0,
+          "mismatches": []
         }
       },
       "tool_appropriateness": {

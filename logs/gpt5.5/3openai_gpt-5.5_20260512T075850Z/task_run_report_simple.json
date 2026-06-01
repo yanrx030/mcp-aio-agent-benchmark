@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-12T08:03:21Z",
-  "source_csv": "task\\taskset35.csv",
+  "generated_at": "2026-05-22T06:09:39Z",
+  "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 27560,
     "output_tokens": 23287,
@@ -12,7 +12,7 @@
     "model": "openai/gpt-5.5",
     "total_tasks": 35,
     "finished_with_result_tasks": 35,
-    "Task Completion Rate (TCR)": 0.8857142857142857,
+    "Task Completion Rate (TCR)": 0.9142857142857143,
     "average_tool_appropriateness": 0.9119264069264067,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 1.0,
@@ -322,7 +322,7 @@
         "text_search",
         "text_search"
       ],
-      "passed": false,
+      "passed": true,
       "answer_type": "timeseries",
       "final_answer": "{\"status\":\"success\",\"answer\":{\"x_axis_type\":\"time\",\"granularity\":\"week\",\"value_unit\":\"posts\",\"series\":[{\"label\":\"#melbourne Mastodon posts\",\"points\":[{\"x\":\"2024-01-01\",\"value\":69},{\"x\":\"2024-01-08\",\"value\":52},{\"x\":\"2024-01-15\",\"value\":64},{\"x\":\"2024-01-22\",\"value\":57},{\"x\":\"2024-01-29\",\"value\":20}]}],\"comment\":\"Counts use strict 7-day bucket start labels anchored on 2024-01-01; the final bucket is limited to January 29-31 because the request is for January 2024.\"}}"
     },
