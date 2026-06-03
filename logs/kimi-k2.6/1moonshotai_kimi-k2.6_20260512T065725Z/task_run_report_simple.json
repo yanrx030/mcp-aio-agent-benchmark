@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-05-22T06:09:39Z",
+  "generated_at": "2026-06-01T11:47:51Z",
   "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
-    "input_tokens": 25172,
-    "output_tokens": 26787,
-    "total_tokens": 51959,
-    "text_judge_evaluations": 22,
-    "evaluations_with_usage": 22
+    "input_tokens": 26299,
+    "output_tokens": 27972,
+    "total_tokens": 54271,
+    "text_judge_evaluations": 23,
+    "evaluations_with_usage": 23
   },
   "summary": {
     "model": "moonshotai/kimi-k2.6",
     "total_tasks": 35,
-    "finished_with_result_tasks": 33,
-    "Task Completion Rate (TCR)": 0.8857142857142857,
-    "average_tool_appropriateness": 0.8499425598001309,
+    "finished_with_result_tasks": 35,
+    "Task Completion Rate (TCR)": 0.9428571428571428,
+    "average_tool_appropriateness": 0.8559198680712922,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
-    "macro_average_constraint_compliance_rates(CCR)": 0.9166666666666666,
-    "average_total_tokens": 22019.18181818182,
+    "macro_average_constraint_compliance_rates(CCR)": 0.9206349206349206,
+    "average_total_tokens": 22477.485714285714,
     "judge_token_usage": {
-      "input_tokens": 25172,
-      "output_tokens": 26787,
-      "total_tokens": 51959,
-      "text_judge_evaluations": 22,
-      "evaluations_with_usage": 22
+      "input_tokens": 26299,
+      "output_tokens": 27972,
+      "total_tokens": 54271,
+      "text_judge_evaluations": 23,
+      "evaluations_with_usage": 23
     },
-    "average_judge_total_tokens": 2361.7727272727275,
-    "average_total_steps(temp)": 4.303030303030303,
-    "average_total_tool_calls": 6.696969696969697,
-    "average_latency": 75.37144932575258
+    "average_judge_total_tokens": 2359.608695652174,
+    "average_total_steps(temp)": 4.314285714285714,
+    "average_total_tool_calls": 6.685714285714286,
+    "average_latency": 79.41517587716558
   },
   "results": [
     {
@@ -260,16 +260,19 @@
     },
     {
       "task_id": "B6",
-      "parameter_schema_valid_rate": null,
-      "constraint_compliance_rate": null,
-      "total_tokens": null,
-      "total_steps": null,
-      "total_tool_calls": null,
-      "latency": 13.093973700422794,
-      "tools_used": [],
-      "passed": false,
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 13494,
+      "total_steps": 3,
+      "total_tool_calls": 2,
+      "latency": 19.90932339988649,
+      "tools_used": [
+        "get_collections",
+        "get_nlp_topics"
+      ],
+      "passed": true,
       "answer_type": "scalar",
-      "final_answer": null
+      "final_answer": " {\"status\":\"success\",\"answer\":{\"value\":13528,\"unit\":\"posts\",\"comment\":\"Size of the largest topic cluster in the bluesky collection across 2025-02-01 to 2025-02-03\"}}"
     },
     {
       "task_id": "B7",
@@ -323,16 +326,28 @@
     },
     {
       "task_id": "C2",
-      "parameter_schema_valid_rate": null,
+      "parameter_schema_valid_rate": 1.0,
       "constraint_compliance_rate": null,
-      "total_tokens": null,
-      "total_steps": null,
-      "total_tool_calls": null,
-      "latency": 2.254811500199139,
-      "tools_used": [],
-      "passed": false,
+      "total_tokens": 49391,
+      "total_steps": 6,
+      "total_tool_calls": 11,
+      "latency": 145.64189160009846,
+      "tools_used": [
+        "get_collections",
+        "get_collection_summary",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
       "answer_type": "timeseries",
-      "final_answer": null
+      "final_answer": " {\"status\":\"success\",\"answer\":{\"x_axis_type\":\"time\",\"granularity\":\"week\",\"value_unit\":\"posts\",\"series\":[{\"label\":\"#melbourne posts\",\"points\":[{\"x\":\"2024-01-01\",\"value\":69},{\"x\":\"2024-01-08\",\"value\":52},{\"x\":\"2024-01-15\",\"value\":64},{\"x\":\"2024-01-22\",\"value\":57},{\"x\":\"2024-01-29\",\"value\":69}]}],\"comment\":\"Weekly counts of Mastodon posts tagged with #melbourne using strict 7-day baskets starting on each date. The final basket (starting 2024-01-29) spans 7 days through 2024-02-04.\"}}"
     },
     {
       "task_id": "C3",

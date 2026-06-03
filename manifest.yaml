@@ -86,7 +86,8 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "moonshotai/kimi-k2.6"
+      - "qwen/qwen3.6-plus"
+      #- "moonshotai/kimi-k2.6"
       #- "anthropic/claude-sonnet-4.6"
     judge_candidates:
       - "google/gemini-2.5-pro"

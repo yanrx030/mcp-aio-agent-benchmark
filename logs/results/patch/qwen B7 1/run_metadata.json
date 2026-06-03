@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260601T115157Z_8c8279",
+  "task_set_dir": "logs\\results\\qwen_qwen3.6-plus_20260601T115157Z",
+  "created_at": "2026-06-01T11:51:57Z",
+  "tool_agent_model": "qwen/qwen3.6-plus",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-06-01T11:54:37Z",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  }
+}

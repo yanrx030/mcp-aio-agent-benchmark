@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-22T06:09:39Z",
+  "generated_at": "2026-06-01T12:03:29Z",
   "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
     "input_tokens": 24834,
@@ -12,11 +12,11 @@
     "model": "qwen/qwen3.6-plus",
     "total_tasks": 35,
     "finished_with_result_tasks": 35,
-    "Task Completion Rate (TCR)": 0.8857142857142857,
-    "average_tool_appropriateness": 0.8373274794551391,
+    "Task Completion Rate (TCR)": 0.9142857142857143,
+    "average_tool_appropriateness": 0.8384385905662501,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
     "macro_average_constraint_compliance_rates(CCR)": 0.9273073989321129,
-    "average_total_tokens": 23953.4,
+    "average_total_tokens": 24453.257142857143,
     "judge_token_usage": {
       "input_tokens": 24834,
       "output_tokens": 24757,
@@ -25,9 +25,9 @@
       "evaluations_with_usage": 22
     },
     "average_judge_total_tokens": 2254.1363636363635,
-    "average_total_steps(temp)": 4.171428571428572,
-    "average_total_tool_calls": 6.314285714285714,
-    "average_latency": 47.94907305999659
+    "average_total_steps(temp)": 4.257142857142857,
+    "average_total_tool_calls": 6.4,
+    "average_latency": 48.98413169428739
   },
   "results": [
     {
@@ -274,10 +274,10 @@
       "task_id": "B7",
       "parameter_schema_valid_rate": 1.0,
       "constraint_compliance_rate": null,
-      "total_tokens": 19312,
-      "total_steps": 4,
-      "total_tool_calls": 15,
-      "latency": 41.39854799996829,
+      "total_tokens": 36807,
+      "total_steps": 7,
+      "total_tool_calls": 18,
+      "latency": 77.62560020014644,
       "tools_used": [
         "get_collections",
         "text_search",
@@ -293,11 +293,14 @@
         "get_collection_summary",
         "get_collection_summary",
         "get_collection_summary",
-        "get_collection_summary"
+        "get_collection_summary",
+        "text_search",
+        "text_search",
+        "text_search"
       ],
-      "passed": false,
+      "passed": true,
       "answer_type": "scalar",
-      "final_answer": "{\n \"status\": \"success\",\n  \"answer\": {\n    \"value\": 28850,\n    \"unit\": \"posts\",\n    \"comment\": \"The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020, with 28,850 posts. All other available collections (bluesky, flickr, mastodon, reddit, twitter, youtube) returned 0 results for this keyword in 2020.\"\n  }\n}"
+      "final_answer": "{\n \"status\": \"success\",\n \"answer\": {\n    \"value\": 28845,\n    \"unit\": \"posts\",\n    \"comment\": \"The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020. Other collections (bluesky, flickr, mastodon, reddit, twitter, youtube) either had no data in 2020 or returned 0 results for the keyword 'inflation' in that year.\"\n  }\n}"
     },
     {
       "task_id": "C1",

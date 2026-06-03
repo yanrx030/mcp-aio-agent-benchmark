@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-06-01T11:45:13Z",
+  "source_csv": "task\\taskset35.csv",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  },
+  "summary": {
+    "model": "moonshotai/kimi-k2.6",
+    "total_tasks": 1,
+    "finished_with_result_tasks": 1,
+    "Task Completion Rate (TCR)": 1.0,
+    "average_tool_appropriateness": 0.9090909090909091,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": null,
+    "average_total_tokens": 49391.0,
+    "judge_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "text_judge_evaluations": 0,
+      "evaluations_with_usage": 0
+    },
+    "average_judge_total_tokens": null,
+    "average_total_steps(temp)": 6.0,
+    "average_total_tool_calls": 11.0,
+    "average_latency": 145.64189160009846
+  },
+  "results": [
+    {
+      "task_id": "C2",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 49391,
+      "total_steps": 6,
+      "total_tool_calls": 11,
+      "latency": 145.64189160009846,
+      "tools_used": [
+        "get_collections",
+        "get_collection_summary",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
+      "answer_type": "timeseries",
+      "final_answer": " {\"status\":\"success\",\"answer\":{\"x_axis_type\":\"time\",\"granularity\":\"week\",\"value_unit\":\"posts\",\"series\":[{\"label\":\"#melbourne posts\",\"points\":[{\"x\":\"2024-01-01\",\"value\":69},{\"x\":\"2024-01-08\",\"value\":52},{\"x\":\"2024-01-15\",\"value\":64},{\"x\":\"2024-01-22\",\"value\":57},{\"x\":\"2024-01-29\",\"value\":69}]}],\"comment\":\"Weekly counts of Mastodon posts tagged with #melbourne using strict 7-day baskets starting on each date. The final basket (starting 2024-01-29) spans 7 days through 2024-02-04.\"}}"
+    }
+  ]
+}

@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-05-22T06:09:39Z",
+  "generated_at": "2026-06-01T11:47:51Z",
   "source_csv": "task\\taskset35-updated.csv",
   "judge_token_usage": {
-    "input_tokens": 25172,
-    "output_tokens": 26787,
-    "total_tokens": 51959,
-    "text_judge_evaluations": 22,
-    "evaluations_with_usage": 22
+    "input_tokens": 26299,
+    "output_tokens": 27972,
+    "total_tokens": 54271,
+    "text_judge_evaluations": 23,
+    "evaluations_with_usage": 23
   },
   "summary": {
     "total_tasks": 35,
-    "finished_with_result_tasks": 33,
-    "failed_tasks": 2,
+    "finished_with_result_tasks": 35,
+    "failed_tasks": 0,
     "tasks_retried": 0,
     "tasks_with_auth_refresh": 0,
     "tasks_with_cleanup_warning": 0,
     "Evaluated tasks": 35,
-    "Task Completion Rate (TCR)": 0.8857142857142857,
-    "average_tool_appropriateness": 0.8499425598001309,
+    "Task Completion Rate (TCR)": 0.9428571428571428,
+    "average_tool_appropriateness": 0.8559198680712922,
     "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
-    "macro_average_constraint_compliance_rates(CCR)": 0.9166666666666666,
-    "average_total_tokens": 22019.18181818182,
+    "macro_average_constraint_compliance_rates(CCR)": 0.9206349206349206,
+    "average_total_tokens": 22477.485714285714,
     "judge_token_usage": {
-      "input_tokens": 25172,
-      "output_tokens": 26787,
-      "total_tokens": 51959,
-      "text_judge_evaluations": 22,
-      "evaluations_with_usage": 22
+      "input_tokens": 26299,
+      "output_tokens": 27972,
+      "total_tokens": 54271,
+      "text_judge_evaluations": 23,
+      "evaluations_with_usage": 23
     },
-    "average_judge_total_tokens": 2361.7727272727275,
-    "average_total_steps(temp)": 4.303030303030303,
-    "average_total_tool_calls": 6.696969696969697,
-    "average_latency": 75.37144932575258,
-    "average_end_to_end_latency": 82.71329165431005,
+    "average_judge_total_tokens": 2359.608695652174,
+    "average_total_steps(temp)": 4.314285714285714,
+    "average_total_tool_calls": 6.685714285714286,
+    "average_latency": 79.41517587716558,
+    "average_end_to_end_latency": 87.07512101429914,
     "average_attempt_count": 1.0,
     "model": "moonshotai/kimi-k2.6",
     "jwt_login_count": 1,
@@ -1744,45 +1744,125 @@
       "error_message": null
     },
     {
-      "task_id": "B6",
-      "prompt": "For BlueSky from 2025-02-01 to 2025-02-03, retrieve the topic clusters and report the size of the largest cluster.",
-      "status": "failed",
-      "started_at": "2026-05-12T06:59:10Z",
-      "finished_at": "2026-05-12T06:59:24Z",
-      "answer_type": "scalar",
-      "parameter_schema_valid_rate": null,
-      "constraint_compliance_rate": null,
-      "total_tokens": null,
-      "total_steps": null,
-      "total_tool_calls": null,
-      "latency": 13.093973700422794,
-      "end_to_end_latency": 13.094103700015694,
+      "task_id": "C1",
+      "prompt": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+      "status": "completed",
+      "started_at": "2026-06-01T11:07:03Z",
+      "finished_at": "2026-06-01T11:07:25Z",
+      "answer_type": "text",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": 1.0,
+      "total_tokens": 10688,
+      "total_steps": 3,
+      "total_tool_calls": 2,
+      "latency": 11.237322899978608,
+      "end_to_end_latency": 22.357830999884754,
       "attempt_count": 1,
       "auth_refreshed": false,
       "cleanup_warning": null,
-      "query_trace": null,
+      "query_trace": {
+        "query_id": "query_3fa395d45ba4",
+        "task_set_id": "taskset_20260601T110703Z_85594b",
+        "task_id": "C1",
+        "session_id": "session_811677b03ca6",
+        "user_query": "Find out when the Twitter collection started, and then show the daily activity for its first 10 days of data",
+        "final_answer": " {\"status\":\"success\",\"answer\":{\"summary\":\"The Twitter collection started on 2021-06-21. Over its first 10 days (2021-06-21 to 2021-06-30), daily post counts were available for seven of those days, with no data returned for 2021-06-25 through 2021-06-27. Activity began at 227,781 posts on day one and rose to a peak of 302,848 posts by 2021-06-30.\",\"key_points\":[\"The Twitter collection startDate is 2021-06-21 with a total collection count of 185,873,222 posts.\",\"Daily counts for the first 10 days: 2021-06-21 = 227,781; 2021-06-22 = 266,920; 2021-06-23 = 270,177; 2021-06-24 = 255,432; 2021-06-28 = 2; 2021-06-29 = 299,017; 2021-06-30 = 302,848.\",\"No daily count data was returned for 2021-06-25, 2021-06-26, and 2021-06-27.\",\"The highest daily count in this initial period was 302,848 on 2021-06-30, and the lowest reported count was 2 on 2021-06-28.\"]}}",
+        "total_steps": 3,
+        "total_tool_calls": 2,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 1,
+        "ccr_true_calls": 1,
+        "constraint_compliance_rate": 1.0,
+        "tools_used": [
+          "get_collection_summary",
+          "aggregate_by_time"
+        ],
+        "input_tokens": 10050,
+        "output_tokens": 638,
+        "total_tokens": 10688,
+        "system_prompt_label": "text",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110703Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110703Z\\tool_calls\\C1.jsonl"
+      },
       "ground_truth_validation": {
-        "score": 0,
-        "passed": false,
-        "strategy": "task_failure",
-        "answer_type": "scalar",
-        "normalized_answer_type": "scalar",
-        "dispatch_type": "scalar",
+        "score": 1,
+        "passed": true,
+        "strategy": "text_judge",
+        "answer_type": "text",
+        "normalized_answer_type": "text",
+        "dispatch_type": "text",
         "diagnostics": {
           "ground_truth_parse_error": null,
-          "final_answer_parse_error": "missing payload",
+          "final_answer_parse_error": null,
           "ground_truth_parser_used": "json",
-          "final_answer_parser_used": null,
-          "reason": "task execution failed before final answer was produced",
-          "failure_category": "task_execution_failed",
-          "error_type": "RateLimitError",
-          "error_message": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}",
-          "source_status": "failed"
+          "final_answer_parser_used": "json",
+          "raw_rating": 2,
+          "reason": "The agent's answer correctly identifies the start date of the collection, provides the correct daily counts for the first 10 days, and correctly notes the three specific dates for which no data was available. All key information from the ground truth is present and accurate.",
+          "judge_raw_response": "```json\n{\n  \"score\": 2,\n  \"main_conclusion_match\": true,\n  \"has_substantive_contradiction\": false,\n  \"missing_or_changed_limitations\": false,\n  \"reason\": \"The agent's answer correctly identifies the start date of the collection, provides the correct daily counts for the first 10 days, and correctly notes the three specific dates for which no data was available. All key information from the ground truth is present and accurate.\"\n}\n```",
+          "judge_token_usage": {
+            "input_tokens": 1127,
+            "output_tokens": 1185,
+            "total_tokens": 2312
+          },
+          "expected_text": {
+            "summary": "The Twitter collection started on 2021-06-21. Daily activity is available for 7 of the first 10 calendar days. No records were returned for 2021-06-25, 2021-06-26, and 2021-06-27.",
+            "key_points": [
+              "Collection start date: 2021-06-21.",
+              "Available daily counts: 2021-06-21: 227781; 2021-06-22: 266920; 2021-06-23: 270177; 2021-06-24: 255432; 2021-06-28: 2; 2021-06-29: 299017; 2021-06-30: 302848.",
+              "Missing dates within the first 10 calendar days: 2021-06-25, 2021-06-26, 2021-06-27. The aggregation tool returned no buckets for those dates"
+            ]
+          },
+          "actual_text": {
+            "summary": "The Twitter collection started on 2021-06-21. Over its first 10 days (2021-06-21 to 2021-06-30), daily post counts were available for seven of those days, with no data returned for 2021-06-25 through 2021-06-27. Activity began at 227,781 posts on day one and rose to a peak of 302,848 posts by 2021-06-30.",
+            "key_points": [
+              "The Twitter collection startDate is 2021-06-21 with a total collection count of 185,873,222 posts.",
+              "Daily counts for the first 10 days: 2021-06-21 = 227,781; 2021-06-22 = 266,920; 2021-06-23 = 270,177; 2021-06-24 = 255,432; 2021-06-28 = 2; 2021-06-29 = 299,017; 2021-06-30 = 302,848.",
+              "No daily count data was returned for 2021-06-25, 2021-06-26, and 2021-06-27.",
+              "The highest daily count in this initial period was 302,848 on 2021-06-30, and the lowest reported count was 2 on 2021-06-28."
+            ]
+          }
         }
       },
-      "tool_appropriateness": null,
-      "error_type": "RateLimitError",
-      "error_message": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}"
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "get_collection_summary",
+          "aggregate_by_time"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T110703Z\\tool_calls\\C1.jsonl",
+        "query_id": "query_3fa395d45ba4",
+        "tool_call_count": 2,
+        "core_call_count": 2,
+        "helper_call_count": 0,
+        "other_call_count": 0,
+        "weighted_score": 2.0,
+        "average_score": 1.0,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collection_summary",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 2,
+            "tool_name": "aggregate_by_time",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
     },
     {
       "task_id": "B7",
@@ -2169,43 +2249,184 @@
     {
       "task_id": "C2",
       "prompt": "Count the number of #melbourne posts on Mastodon for January 2024, grouped by week. Use a strict 7-day 'basket' logic starting on Jan 1st, so that the reporting periods begin on 01-01, 01-08, 01-15, 01-22, and 01-29",
-      "status": "failed",
-      "started_at": "2026-05-12T06:59:24Z",
-      "finished_at": "2026-05-12T06:59:26Z",
+      "status": "completed",
+      "started_at": "2026-06-01T11:42:47Z",
+      "finished_at": "2026-06-01T11:45:13Z",
       "answer_type": "timeseries",
-      "parameter_schema_valid_rate": null,
+      "parameter_schema_valid_rate": 1.0,
       "constraint_compliance_rate": null,
-      "total_tokens": null,
-      "total_steps": null,
-      "total_tool_calls": null,
-      "latency": 2.254811500199139,
-      "end_to_end_latency": 2.255127999931574,
+      "total_tokens": 49391,
+      "total_steps": 6,
+      "total_tool_calls": 11,
+      "latency": 145.64189160009846,
+      "end_to_end_latency": 145.65542829968035,
       "attempt_count": 1,
       "auth_refreshed": false,
       "cleanup_warning": null,
-      "query_trace": null,
+      "query_trace": {
+        "query_id": "query_ee17df59c738",
+        "task_set_id": "taskset_20260601T114247Z_cd2b99",
+        "task_id": "C2",
+        "session_id": "session_89e6ca86fc12",
+        "user_query": "Count the number of #melbourne posts on Mastodon for January 2024, grouped by week. Use a strict 7-day 'basket' logic starting on Jan 1st, so that the reporting periods begin on 01-01, 01-08, 01-15, 01-22, and 01-29",
+        "final_answer": " {\"status\":\"success\",\"answer\":{\"x_axis_type\":\"time\",\"granularity\":\"week\",\"value_unit\":\"posts\",\"series\":[{\"label\":\"#melbourne posts\",\"points\":[{\"x\":\"2024-01-01\",\"value\":69},{\"x\":\"2024-01-08\",\"value\":52},{\"x\":\"2024-01-15\",\"value\":64},{\"x\":\"2024-01-22\",\"value\":57},{\"x\":\"2024-01-29\",\"value\":69}]}],\"comment\":\"Weekly counts of Mastodon posts tagged with #melbourne using strict 7-day baskets starting on each date. The final basket (starting 2024-01-29) spans 7 days through 2024-02-04.\"}}",
+        "total_steps": 6,
+        "total_tool_calls": 11,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "get_collection_summary",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search"
+        ],
+        "input_tokens": 41812,
+        "output_tokens": 7579,
+        "total_tokens": 49391,
+        "system_prompt_label": "timeseries",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T114247Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T114247Z\\tool_calls\\C2.jsonl"
+      },
       "ground_truth_validation": {
-        "score": 0,
-        "passed": false,
-        "strategy": "task_failure",
+        "score": 1,
+        "passed": true,
+        "strategy": "series_deterministic",
         "answer_type": "timeseries",
         "normalized_answer_type": "timeseries",
         "dispatch_type": "series",
         "diagnostics": {
           "ground_truth_parse_error": null,
-          "final_answer_parse_error": "missing payload",
+          "final_answer_parse_error": null,
           "ground_truth_parser_used": "json",
-          "final_answer_parser_used": null,
-          "reason": "source result failed before final answer was produced",
-          "failure_category": "task_execution_failed",
-          "error_type": "RateLimitError",
-          "error_message": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}",
-          "source_status": "failed"
+          "final_answer_parser_used": "json",
+          "expected_mode": "timeseries",
+          "actual_mode": "timeseries",
+          "tolerance": {
+            "abs": 0.5,
+            "rel": 1e-06
+          },
+          "series_mapping": [
+            {
+              "expected_index": 0,
+              "actual_index": 0
+            }
+          ],
+          "unmatched_actual_series": [],
+          "mismatch_count": 0,
+          "mismatches": []
         }
       },
-      "tool_appropriateness": null,
-      "error_type": "RateLimitError",
-      "error_message": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6 is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False}}, 'user_id': 'user_2v6alf6yzbmixaR4WGi90mCRI0l'}"
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\moonshotai_kimi-k2.6_20260601T114247Z\\tool_calls\\C2.jsonl",
+        "query_id": "query_ee17df59c738",
+        "tool_call_count": 11,
+        "core_call_count": 9,
+        "helper_call_count": 2,
+        "other_call_count": 0,
+        "weighted_score": 10.0,
+        "average_score": 0.9090909090909091,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 2,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 3,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 6,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 7,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 8,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 9,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 10,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 11,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
     },
     {
       "task_id": "C3",

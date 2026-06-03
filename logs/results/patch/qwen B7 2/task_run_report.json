@@ -1,0 +1,283 @@
+{
+  "generated_at": "2026-06-01T11:50:28Z",
+  "source_csv": "task\\taskset35.csv",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  },
+  "summary": {
+    "total_tasks": 1,
+    "finished_with_result_tasks": 1,
+    "failed_tasks": 0,
+    "tasks_retried": 0,
+    "tasks_with_auth_refresh": 0,
+    "tasks_with_cleanup_warning": 0,
+    "Evaluated tasks": 1,
+    "Task Completion Rate (TCR)": 1.0,
+    "average_tool_appropriateness": 0.8055555555555556,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": null,
+    "average_total_tokens": 36807.0,
+    "judge_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "text_judge_evaluations": 0,
+      "evaluations_with_usage": 0
+    },
+    "average_judge_total_tokens": null,
+    "average_total_steps(temp)": 7.0,
+    "average_total_tool_calls": 18.0,
+    "average_latency": 77.62560020014644,
+    "average_end_to_end_latency": 77.64196130027995,
+    "average_attempt_count": 1.0,
+    "model": "qwen/qwen3.6-plus",
+    "jwt_login_count": 1,
+    "jwt_refresh_count": 0
+  },
+  "results": [
+    {
+      "task_id": "B7",
+      "prompt": "In 2020, which available collection had the highest number of posts or records mentioning the keyword inflation, give me the count?",
+      "status": "completed",
+      "started_at": "2026-06-01T11:49:11Z",
+      "finished_at": "2026-06-01T11:50:28Z",
+      "answer_type": "scalar",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 36807,
+      "total_steps": 7,
+      "total_tool_calls": 18,
+      "latency": 77.62560020014644,
+      "end_to_end_latency": 77.64196130027995,
+      "attempt_count": 1,
+      "auth_refreshed": false,
+      "cleanup_warning": null,
+      "query_trace": {
+        "query_id": "query_1346dd1001e2",
+        "task_set_id": "taskset_20260601T114910Z_ac48b6",
+        "task_id": "B7",
+        "session_id": "session_72b830115fdb",
+        "user_query": "In 2020, which available collection had the highest number of posts or records mentioning the keyword inflation, give me the count?",
+        "final_answer": "{\n \"status\": \"success\",\n \"answer\": {\n    \"value\": 28845,\n    \"unit\": \"posts\",\n    \"comment\": \"The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020. Other collections (bluesky, flickr, mastodon, reddit, twitter, youtube) either had no data in 2020 or returned 0 results for the keyword 'inflation' in that year.\"\n  }\n}",
+        "total_steps": 7,
+        "total_tool_calls": 18,
+        "parameter_schema_valid_rate": 1.0,
+        "ccr_applicable_calls": 0,
+        "ccr_true_calls": 0,
+        "constraint_compliance_rate": null,
+        "tools_used": [
+          "get_collections",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "text_search",
+          "get_collection_summary",
+          "get_collection_summary",
+          "get_collection_summary",
+          "get_collection_summary",
+          "get_collection_summary",
+          "get_collection_summary",
+          "get_collection_summary",
+          "text_search",
+          "text_search",
+          "text_search"
+        ],
+        "input_tokens": 33154,
+        "output_tokens": 3653,
+        "total_tokens": 36807,
+        "system_prompt_label": "scalar",
+        "system_prompt_overridden": true,
+        "query_runs_path": "logs\\results\\qwen_qwen3.6-plus_20260601T114910Z\\query_runs.jsonl",
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260601T114910Z\\tool_calls\\B7.jsonl"
+      },
+      "ground_truth_validation": {
+        "score": 1,
+        "passed": true,
+        "strategy": "scalar_deterministic",
+        "answer_type": "scalar",
+        "normalized_answer_type": "scalar",
+        "dispatch_type": "scalar",
+        "diagnostics": {
+          "ground_truth_parse_error": null,
+          "final_answer_parse_error": null,
+          "ground_truth_parser_used": "json",
+          "final_answer_parser_used": "json",
+          "expected": {
+            "value": 28845.0,
+            "unit": "posts"
+          },
+          "actual": {
+            "value": 28845.0,
+            "unit": "posts"
+          },
+          "tolerance": {
+            "abs": 0.5,
+            "rel": 1e-06
+          },
+          "value_match": true,
+          "unit_match": true,
+          "abs_error": 0.0,
+          "rel_error": 0.0
+        }
+      },
+      "tool_appropriateness": {
+        "metric": "tool_appropriateness",
+        "formula": "(1*core_call_count + 0.5*helper_call_count) / total_tool_call_count",
+        "core_toolset": [
+          "text_search",
+          "get_collections"
+        ],
+        "helper_capable_tools": [
+          "get_api_version",
+          "get_collections",
+          "get_collection_summary"
+        ],
+        "tool_calls_path": "logs\\results\\qwen_qwen3.6-plus_20260601T114910Z\\tool_calls\\B7.jsonl",
+        "query_id": "query_1346dd1001e2",
+        "tool_call_count": 18,
+        "core_call_count": 11,
+        "helper_call_count": 7,
+        "other_call_count": 0,
+        "weighted_score": 14.5,
+        "average_score": 0.8055555555555556,
+        "scored_calls": [
+          {
+            "call_index": 1,
+            "tool_name": "get_collections",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 2,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 3,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 4,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 5,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 6,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 7,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 8,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 9,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 10,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 11,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 12,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 13,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 14,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 15,
+            "tool_name": "get_collection_summary",
+            "category": "helper",
+            "appropriateness": "helper",
+            "score": 0.5
+          },
+          {
+            "call_index": 16,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 17,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          },
+          {
+            "call_index": 18,
+            "tool_name": "text_search",
+            "category": "core",
+            "appropriateness": "core",
+            "score": 1.0
+          }
+        ]
+      },
+      "error_type": null,
+      "error_message": null
+    }
+  ]
+}

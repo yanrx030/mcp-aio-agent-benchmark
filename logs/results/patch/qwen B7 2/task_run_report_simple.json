@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-06-01T11:50:28Z",
+  "source_csv": "task\\taskset35.csv",
+  "judge_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "text_judge_evaluations": 0,
+    "evaluations_with_usage": 0
+  },
+  "summary": {
+    "model": "qwen/qwen3.6-plus",
+    "total_tasks": 1,
+    "finished_with_result_tasks": 1,
+    "Task Completion Rate (TCR)": 1.0,
+    "average_tool_appropriateness": 0.8055555555555556,
+    "macro_average_parameter_schema_valid_rate(PSV)": 1.0,
+    "macro_average_constraint_compliance_rates(CCR)": null,
+    "average_total_tokens": 36807.0,
+    "judge_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "text_judge_evaluations": 0,
+      "evaluations_with_usage": 0
+    },
+    "average_judge_total_tokens": null,
+    "average_total_steps(temp)": 7.0,
+    "average_total_tool_calls": 18.0,
+    "average_latency": 77.62560020014644
+  },
+  "results": [
+    {
+      "task_id": "B7",
+      "parameter_schema_valid_rate": 1.0,
+      "constraint_compliance_rate": null,
+      "total_tokens": 36807,
+      "total_steps": 7,
+      "total_tool_calls": 18,
+      "latency": 77.62560020014644,
+      "tools_used": [
+        "get_collections",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "text_search",
+        "get_collection_summary",
+        "get_collection_summary",
+        "get_collection_summary",
+        "get_collection_summary",
+        "get_collection_summary",
+        "get_collection_summary",
+        "get_collection_summary",
+        "text_search",
+        "text_search",
+        "text_search"
+      ],
+      "passed": true,
+      "answer_type": "scalar",
+      "final_answer": "{\n \"status\": \"success\",\n \"answer\": {\n    \"value\": 28845,\n    \"unit\": \"posts\",\n    \"comment\": \"The gdelt collection had the highest number of posts mentioning the keyword 'inflation' in 2020. Other collections (bluesky, flickr, mastodon, reddit, twitter, youtube) either had no data in 2020 or returned 0 results for the keyword 'inflation' in that year.\"\n  }\n}"
+    }
+  ]
+}
