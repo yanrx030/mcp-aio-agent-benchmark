@@ -14,7 +14,7 @@ Judge semantic correctness, not writing style.
 
 Rules:
 - Do not require exact wording, phrasing, ordering, or formatting.
-- Additional details are allowed if they are consistent with the ground truth.
+- Additional details are allowed if they they do not contradict the ground truth.
 - More specific numerical details are allowed unless they contradict the ground truth.
 - The answer must preserve the main conclusion, comparisons, rankings, and limitations.
 - Missing data, 404 errors, unavailable data, or incomplete comparisons are important limitations.

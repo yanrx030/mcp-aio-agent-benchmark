@@ -212,6 +212,7 @@ The evaluator uses `math.isclose`, so a value passes when the difference is with
 Notes:
 
 - `ref_tool_call` is the supported field for reference tool calls.
+- The thesis-facing explanation of `scalar`, `timeseries`, and `chart` scoring is in `docs/evaluation_strategy.md`.
 
 ## Output and Logs
 
