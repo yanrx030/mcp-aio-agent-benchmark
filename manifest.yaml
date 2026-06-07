@@ -26,7 +26,6 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-
   - id: "openai/gpt-5.5" #Temperature and top_p parms not supported
     role: "tool_agent"
     openrouter:
@@ -35,7 +34,6 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-        
   - id: "anthropic/claude-opus-4.6"
     role: "tool_agent"
     openrouter:
@@ -44,8 +42,7 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-  
-  #open source
+  #open weight
 
   - id: "moonshotai/kimi-k2.6"
     role: "tool_agent"
@@ -55,13 +52,17 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-  - id: "meta-llama/llama-4-scout"
+  - id: "meta-llama/llama-4-scout" #This provider labels this endpoint version as "meta-llama/Llama-4-Scout-17B-16E-Instruct"
     role: "tool_agent"
     openrouter:
       provider:
-        order: ["deepinfra/fp8"]
-        allow_fallbacks: true
+        order: ["google-vertex/us-east5"]
+        allow_fallbacks: false
         require_parameters: true
+
+        # order: ["deepinfra/fp8"] #"meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        # allow_fallbacks: true
+        # require_parameters: true
 
   #for testing only!!!
   - id: "nvidia/nemotron-3-super-120b-a12b:free"
@@ -70,8 +71,6 @@ model_catalog:
       provider:
         order: ["nvidia"]
         allow_fallbacks: false
-
-
 
   # Judge model candidates
 
@@ -86,7 +85,8 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "qwen/qwen3.6-plus"
+      - "meta-llama/llama-4-scout"
+      #- "qwen/qwen3.6-plus"
       #- "moonshotai/kimi-k2.6"
       #- "anthropic/claude-sonnet-4.6"
     judge_candidates:

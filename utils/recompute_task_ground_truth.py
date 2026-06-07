@@ -161,13 +161,26 @@ def compact_raw_output(payloads: list[dict[str, Any]]) -> str:
     return "\n\n".join(json.dumps(payload, ensure_ascii=False) for payload in payloads)
 
 
-def recompute(csv_path: Path, env_file: str, toolset: str) -> tuple[Path, Path]:
+def recompute(
+    csv_path: Path,
+    env_file: str,
+    toolset: str,
+    exclude_categories: set[str] | None = None,
+) -> tuple[Path, Path]:
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     audit_path = csv_path.parent / f"recompute_{csv_path.stem}_{timestamp}.csv"
     candidate_csv_path = csv_path.parent / f"updated_{csv_path.stem}_{timestamp}.csv"
 
     with csv_path.open(newline="", encoding="utf-8-sig") as handle:
         rows = list(csv.DictReader(handle))
+
+    exclude_categories = {category.upper() for category in (exclude_categories or set())}
+    if exclude_categories:
+        rows = [
+            row
+            for row in rows
+            if (row.get("category") or "").strip().upper() not in exclude_categories
+        ]
 
     audit_entries = []
     candidate_rows = []
@@ -365,9 +378,20 @@ def main() -> int:
     parser.add_argument("csv_path", type=Path)
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--toolset", default="toolsets/aio_mcp_toolset_v2.json")
+    parser.add_argument(
+        "--exclude-category",
+        action="append",
+        default=[],
+        help="Category label to skip. Can be passed multiple times.",
+    )
     args = parser.parse_args()
 
-    audit_path, candidate_csv_path = recompute(args.csv_path, args.env_file, args.toolset)
+    audit_path, candidate_csv_path = recompute(
+        args.csv_path,
+        args.env_file,
+        args.toolset,
+        exclude_categories=set(args.exclude_category),
+    )
     print(f"Wrote audit CSV: {audit_path}")
     print(f"Wrote candidate CSV: {candidate_csv_path}")
     return 0
