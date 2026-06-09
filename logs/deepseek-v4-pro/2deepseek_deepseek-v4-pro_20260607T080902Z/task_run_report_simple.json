@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-07T08:26:12Z",
+  "generated_at": "2026-06-09T05:27:14Z",
   "source_csv": "task\\taskset35-updated0607.csv",
   "judge_token_usage": {
     "input_tokens": 27579,
-    "output_tokens": 25553,
-    "total_tokens": 53132,
+    "output_tokens": 25571,
+    "total_tokens": 53150,
     "text_judge_evaluations": 22,
     "evaluations_with_usage": 22
   },
@@ -19,12 +19,12 @@
     "average_total_tokens": 26217.02857142857,
     "judge_token_usage": {
       "input_tokens": 27579,
-      "output_tokens": 25553,
-      "total_tokens": 53132,
+      "output_tokens": 25571,
+      "total_tokens": 53150,
       "text_judge_evaluations": 22,
       "evaluations_with_usage": 22
     },
-    "average_judge_total_tokens": 2415.090909090909,
+    "average_judge_total_tokens": 2415.909090909091,
     "average_total_steps(temp)": 4.171428571428572,
     "average_total_tool_calls": 6.428571428571429,
     "average_latency": 51.631136077163475
