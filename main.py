@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-concurrency",
         type=int,
-        default=4,
+        default=2,
         help="Maximum number of benchmark tasks to run concurrently.",
     )
     parser.add_argument(

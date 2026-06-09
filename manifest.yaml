@@ -26,7 +26,7 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-  - id: "openai/gpt-5.5" #Temperature and top_p parms not supported
+  - id: "openai/gpt-5.5" #Temperature and top_p parms not supported This provider labels this endpoint version as "gpt-5.5-2026-04-23"
     role: "tool_agent"
     openrouter:
       provider:
@@ -60,9 +60,25 @@ model_catalog:
         allow_fallbacks: false
         require_parameters: true
 
-        # order: ["deepinfra/fp8"] #"meta-llama/Llama-4-Scout-17B-16E-Instruct"
-        # allow_fallbacks: true
-        # require_parameters: true
+  # order: ["deepinfra/fp8"] #"meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  # allow_fallbacks: true
+  # require_parameters: true
+
+  - id: "z-ai/glm-5.1" #This provider labels this endpoint version as "zai-org/GLM-5.1-FP8"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["gmicloud/fp8"]
+        allow_fallbacks: false
+        require_parameters: true
+
+  - id: "deepseek/deepseek-v4-pro" #This provider labels this endpoint version as "deepseek-ai/DeepSeek-V4-Pro"
+    role: "tool_agent"
+    openrouter:
+      provider:
+        order: ["deepinfra/fp4"]
+        allow_fallbacks: false
+        require_parameters: true
 
   #for testing only!!!
   - id: "nvidia/nemotron-3-super-120b-a12b:free"
@@ -85,7 +101,8 @@ model_catalog:
 profiles:
   default:
     tool_agent_candidates:
-      - "meta-llama/llama-4-scout"
+      - "deepseek/deepseek-v4-pro"
+      #- "meta-llama/llama-4-scout"
       #- "qwen/qwen3.6-plus"
       #- "moonshotai/kimi-k2.6"
       #- "anthropic/claude-sonnet-4.6"

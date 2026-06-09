@@ -1,0 +1,15 @@
+{
+  "task_set_id": "taskset_20260607T074126Z_d312fa",
+  "task_set_dir": "logs\\results\\deepseek_deepseek-v4-pro_20260607T074126Z",
+  "created_at": "2026-06-07T07:41:26Z",
+  "tool_agent_model": "deepseek/deepseek-v4-pro",
+  "judge_model": "google/gemini-2.5-pro",
+  "updated_at": "2026-06-07T07:50:05Z",
+  "judge_token_usage": {
+    "input_tokens": 27540,
+    "output_tokens": 25242,
+    "total_tokens": 52782,
+    "text_judge_evaluations": 22,
+    "evaluations_with_usage": 22
+  }
+}

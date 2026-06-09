@@ -32,8 +32,11 @@ Run the benchmark with defaults:
 ```bash
 uv run --env-file .env main.py
 
+uv run --env-file .env main.py --prompt "what collections are available?"
 
-uv run --env-file .env main.py --task-id C5 --task-file task/taskset35.csv
+uv run --env-file .env main.py --task-file task/taskset35-updated0607.csv
+
+
 ```
 
 Default behavior:
